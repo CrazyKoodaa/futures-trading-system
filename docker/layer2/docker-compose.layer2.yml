@@ -1,0 +1,15 @@
+﻿version: '3.8'
+
+services:
+  realtime_processor:
+    build:
+      context: ../../
+      dockerfile: docker/layer2/Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - POSTGRES_HOST=timescaledb
+      - POSTGRES_PORT=5432
+    volumes:
+      - ../../data/models:/app/models
+      - ../../data/logs:/app/logs

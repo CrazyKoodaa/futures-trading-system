@@ -1,0 +1,15 @@
+﻿# Layer 3 visualization configuration
+dashboard:
+  host: 0.0.0.0
+  port: 8050
+  debug: false
+  
+chart_settings:
+  update_interval: 5000  # milliseconds
+  max_data_points: 10000
+  default_timeframe: "1h"
+
+colors:
+  bullish: "#00ff00"
+  bearish: "#ff0000"
+  neutral: "#ffff00"

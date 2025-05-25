@@ -1,0 +1,22 @@
+﻿connection:
+  timeout: 30
+  retry_attempts: 3
+  heartbeat_interval: 30
+
+instruments:
+  NQ:
+    full_name: "E-mini NASDAQ 100"
+    tick_size: 0.25
+    point_value: 20
+    margin_requirement: 14000
+  ES:
+    full_name: "E-mini S&P 500"
+    tick_size: 0.25
+    point_value: 50
+    margin_requirement: 12000
+
+data_types:
+  - tick
+  - quote
+  - trade
+  - time_and_sales

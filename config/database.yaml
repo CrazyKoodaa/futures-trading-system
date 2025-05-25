@@ -1,0 +1,17 @@
+﻿timescaledb:
+  hypertables:
+    market_data:
+      time_column: timestamp
+      chunk_time_interval: 1h
+    predictions:
+      time_column: timestamp
+      chunk_time_interval: 1d
+    trades:
+      time_column: timestamp
+      chunk_time_interval: 1d
+
+indexes:
+  - table: market_data
+    columns: [symbol, timestamp]
+  - table: predictions
+    columns: [symbol, timestamp, model_version]

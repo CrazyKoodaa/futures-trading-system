@@ -1,0 +1,1 @@
+﻿# Price chart component

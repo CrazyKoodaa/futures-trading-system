@@ -1,0 +1,34 @@
+﻿database:
+  host: timescaledb
+  port: 5432
+  name: trading_db
+  user: trading_user
+  password: secure_password
+
+rithmic:
+  system_name: your_system_name
+  user: your_username
+  password: your_password
+  exchange: CME
+
+trading:
+  instruments:
+    - NQ
+    - ES
+  timeframes:
+    - 1s
+    - 5s
+    - 1m
+    - 5m
+
+models:
+  direction_prediction:
+    lookback_minutes: 60
+    prediction_horizon: 10
+  pip_movement:
+    target_pips: 40
+    timeframe_minutes: 5
+
+logging:
+  level: WARNING
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"

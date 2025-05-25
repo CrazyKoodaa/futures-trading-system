@@ -1,0 +1,8 @@
+﻿# Additional Layer 1 specific dependencies
+jupyterlab>=3.4.0
+matplotlib>=3.5.0
+seaborn>=0.11.0
+yfinance>=0.1.70
+ipykernel>=6.15.0
+black>=22.0.0
+flake8>=5.0.0

@@ -1,0 +1,11 @@
+﻿global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'trading-realtime'
+    static_configs:
+      - targets: ['realtime_processor:8000']
+    
+  - job_name: 'trading-dashboard'
+    static_configs:
+      - targets: ['dashboard:8050']

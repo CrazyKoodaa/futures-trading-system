@@ -1,0 +1,12 @@
+﻿version: '3.8'
+
+services:
+  dashboard:
+    build:
+      context: ../../
+      dockerfile: docker/layer3/Dockerfile
+    ports:
+      - "8050:8050"
+    environment:
+      - POSTGRES_HOST=timescaledb
+      - POSTGRES_PORT=5432

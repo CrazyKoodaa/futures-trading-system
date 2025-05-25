@@ -1,0 +1,1 @@
+﻿# Historical data download script

@@ -1,0 +1,13 @@
+﻿# Layer 2 real-time processing configuration
+api:
+  host: 0.0.0.0
+  port: 8000
+  
+realtime:
+  update_interval: 1  # seconds
+  batch_size: 100
+  max_queue_size: 1000
+
+prediction:
+  confidence_threshold: 0.6
+  model_update_interval: 3600  # seconds
