@@ -160,6 +160,7 @@ class DatabaseManager:
                 await session.execute(text("CREATE EXTENSION IF NOT EXISTS timescaledb CASCADE;"))
                 # Create additional extensions
                 await session.execute(text("CREATE EXTENSION IF NOT EXISTS pg_stat_statements;"))
+                await session.commit()
                 logger.info("Database extensions initialized successfully")
         except Exception as e:
             logger.error(f"Error initializing database: {e}")
@@ -284,11 +285,11 @@ class DatabaseManager:
                 PRIMARY KEY (timestamp, symbol, contract, exchange, model_version)
             );
             """,
-            # Trades table
+            # Trades table - Fixed to work with TimescaleDB partitioning
             """
             CREATE TABLE IF NOT EXISTS trades (
-                trade_id SERIAL PRIMARY KEY,
                 timestamp TIMESTAMPTZ NOT NULL,
+                trade_id BIGINT NOT NULL,
                 symbol VARCHAR(10) NOT NULL,
                 contract VARCHAR(10) NOT NULL,
                 exchange VARCHAR(10) NOT NULL,
@@ -307,17 +308,22 @@ class DatabaseManager:
                 trade_type VARCHAR(20) DEFAULT 'ALGO',
                 notes TEXT,
                 created_at TIMESTAMPTZ DEFAULT NOW(),
-                updated_at TIMESTAMPTZ DEFAULT NOW()
+                updated_at TIMESTAMPTZ DEFAULT NOW(),
+                PRIMARY KEY (timestamp, trade_id, symbol, exchange)
             );
+            """,
+            # Create sequence for trade_id
+            """
+            CREATE SEQUENCE IF NOT EXISTS trades_trade_id_seq;
             """
         ]
 
         try:
-            async with self.get_async_session() as session:
-                for sql in tables_sql:
+            for sql in tables_sql:
+                async with self.get_async_session() as session:
                     await session.execute(text(sql))
                     await session.commit()
-                logger.info("All tables created successfully")
+            logger.info("All tables created successfully")
         except Exception as e:
             logger.error(f"Error creating tables: {e}")
             raise
@@ -357,9 +363,9 @@ class DatabaseManager:
             }
         ]
 
-        async with self.get_async_session() as session:
-            for hypertable in hypertables:
-                try:
+        for hypertable in hypertables:
+            try:
+                async with self.get_async_session() as session:
                     # Check if table exists and is not already a hypertable
                     check_sql = text("""
                         SELECT EXISTS (
@@ -385,9 +391,9 @@ class DatabaseManager:
                     else:
                         logger.info(f"Hypertable {hypertable['table']} already exists or table not found")
                         
-                except Exception as e:
-                    logger.warning(f"Could not create hypertable {hypertable['table']}: {e}")
-                    # Don't rollback here, continue with other hypertables
+            except Exception as e:
+                logger.warning(f"Could not create hypertable {hypertable['table']}: {e}")
+                # Continue with other hypertables
 
     async def setup_retention_policies(self):
         """Set up data retention policies"""
@@ -398,9 +404,9 @@ class DatabaseManager:
             {'table': 'predictions', 'interval': "INTERVAL '6 months'"}
         ]
 
-        async with self.get_async_session() as session:
-            for policy in retention_policies:
-                try:
+        for policy in retention_policies:
+            try:
+                async with self.get_async_session() as session:
                     # Check if table is a hypertable before adding retention policy
                     check_sql = text("""
                         SELECT EXISTS (
@@ -413,15 +419,29 @@ class DatabaseManager:
                     is_hypertable = result.scalar()
                     
                     if is_hypertable:
-                        query = text(f"SELECT add_retention_policy('{policy['table']}', {policy['interval']});")
-                        await session.execute(query)
-                        await session.commit()
-                        logger.info(f"Added retention policy for {policy['table']}: {policy['interval']}")
+                        # Check if retention policy already exists
+                        policy_check_sql = text("""
+                            SELECT EXISTS (
+                                SELECT FROM timescaledb_information.drop_chunks_policies 
+                                WHERE hypertable_name = :table_name
+                            );
+                        """)
+                        
+                        result = await session.execute(policy_check_sql, {'table_name': policy['table']})
+                        policy_exists = result.scalar()
+                        
+                        if not policy_exists:
+                            query = text(f"SELECT add_retention_policy('{policy['table']}', {policy['interval']});")
+                            await session.execute(query)
+                            await session.commit()
+                            logger.info(f"Added retention policy for {policy['table']}: {policy['interval']}")
+                        else:
+                            logger.info(f"Retention policy for {policy['table']} already exists")
                     else:
                         logger.warning(f"Skipping retention policy for {policy['table']} - not a hypertable")
                         
-                except Exception as e:
-                    logger.warning(f"Retention policy for {policy['table']} may already exist: {e}")
+            except Exception as e:
+                logger.warning(f"Could not set retention policy for {policy['table']}: {e}")
 
     async def close_connections(self):
         if self._async_engine:
@@ -457,19 +477,37 @@ class TimescaleDBHelper:
         if not data:
             return
         try:
-            # Convert to DataFrame for efficient insertion
+            # Use raw SQL for bulk insert instead of pandas
             df = pd.DataFrame(data)
-            # Use pandas to_sql with method='multi' for bulk insert
-            if hasattr(self.session, 'connection'):
-                # Sync session
-                df.to_sql(table_name, self.session.connection(),
-                         if_exists='append', index=False, method='multi')
-            else:
-                # Async session - use raw connection
-                connection = await self.session.connection()
-                df.to_sql(table_name, connection.sync_connection,
-                         if_exists='append', index=False, method='multi')
-            logger.debug(f"Bulk inserted {len(data)} records to {table_name}")
+            columns = list(df.columns)
+            values_list = []
+            
+            for _, row in df.iterrows():
+                values = []
+                for col in columns:
+                    val = row[col]
+                    if pd.isna(val):
+                        values.append('NULL')
+                    elif isinstance(val, str):
+                        values.append(f"'{val}'")
+                    else:
+                        values.append(str(val))
+                values_list.append(f"({', '.join(values)})")
+            
+            if values_list:
+                columns_str = ', '.join(columns)
+                values_str = ', '.join(values_list)
+                
+                sql = text(f"""
+                    INSERT INTO {table_name} ({columns_str}) 
+                    VALUES {values_str}
+                    ON CONFLICT DO NOTHING
+                """)
+                
+                await self.session.execute(sql)
+                await self.session.commit()
+                logger.debug(f"Bulk inserted {len(data)} records to {table_name}")
+                
         except Exception as e:
             logger.error(f"Error in bulk insert to {table_name}: {e}")
             raise
@@ -486,14 +524,10 @@ class TimescaleDBHelper:
         params = {'symbol': symbol, 'limit': limit}
         if exchange:
             params['exchange'] = exchange
-        if hasattr(self.session, 'execute'):
-            # Async session
-            result = await self.session.execute(text(query), params)
-            data = result.fetchall()
-        else:
-            # Sync session
-            result = self.session.execute(text(query), params)
-            data = result.fetchall()
+            
+        result = await self.session.execute(text(query), params)
+        data = result.fetchall()
+        
         if data:
             return pd.DataFrame([dict(row._mapping) for row in data])
         else:
@@ -501,7 +535,6 @@ class TimescaleDBHelper:
 
     async def insert_second_data(self, record: Dict[str, Any], table_name: str = 'market_data_seconds') -> None:
         try:
-            # Use bulk_insert_market_data with a single record
             await self.bulk_insert_market_data([record], table_name)
             logger.debug(f"Inserted 1 record to {table_name}")
         except Exception as e:
@@ -526,10 +559,8 @@ class TimescaleDBHelper:
         params = {'symbol': symbol}
         if date:
             params['date'] = date
-        if hasattr(self.session, 'execute'):
-            result = await self.session.execute(text(query), params)
-        else:
-            result = self.session.execute(text(query), params)
+            
+        result = await self.session.execute(text(query), params)
         data = result.fetchall()
         return pd.DataFrame([dict(row._mapping) for row in data])
 
@@ -541,7 +572,7 @@ class ExchangeDataManager:
     async def get_exchange_rankings(self, symbol: str) -> Dict[str, Dict]:
         volume_data = await self.timescale_helper.get_volume_by_exchange(symbol)
         rankings = {}
-        # Use enumerate to get a proper integer index
+        
         for idx, (_, row) in enumerate(volume_data.iterrows()):
             rankings[row['exchange']] = {
                 'rank': idx + 1,
@@ -573,10 +604,8 @@ class ExchangeDataManager:
             ORDER BY a.timestamp DESC, price_diff_pct DESC
             LIMIT 100
         """
-        if hasattr(self.session, 'execute'):
-            result = await self.session.execute(text(query), {'symbol': symbol, 'threshold': threshold})
-        else:
-            result = self.session.execute(text(query), {'symbol': symbol, 'threshold': threshold})
+        
+        result = await self.session.execute(text(query), {'symbol': symbol, 'threshold': threshold})
         data = result.fetchall()
         return pd.DataFrame([dict(row._mapping) for row in data])
 
@@ -629,15 +658,18 @@ async def test_database_setup():
                 'data_quality_score': 1.0,
                 'is_regular_hours': True
             }]
+            
             helper = TimescaleDBHelper(session)
             await helper.bulk_insert_market_data(test_data)
             logger.info("[SUCCESS] Test data insertion successful")
+            
             # Test data retrieval
             latest_data = await helper.get_latest_data('NQ', 'CME', limit=1)
             if not latest_data.empty:
                 logger.info(f"[SUCCESS] Test data retrieval successful: {len(latest_data)} records")
             else:
                 logger.warning("[WARNING] No data retrieved in test")
+                
         return True
     except Exception as e:
         logger.error(f"[ERROR] Database setup test failed: {e}")
