@@ -7,7 +7,7 @@ Specifically configured for Rithmic Paper Trading via Gateway Chicago
 import asyncio
 import logging
 from datetime import datetime, timedelta, timezone
-from typing import List, Dict, Optional, Tuple, AsyncGenerator, Union
+from typing import List, Dict, Optional, Tuple, AsyncGenerator, Union, Any
 import pandas as pd
 import numpy as np
 from dataclasses import dataclass, field
@@ -19,11 +19,40 @@ from contextlib import asynccontextmanager
 
 try:
     import async_rithmic
-    from async_rithmic import RithmicClient, LoginParams, TickParams, HistoryParams
-    from async_rithmic.client import TickData, QuoteData
+    # Import the base components
+    from async_rithmic import RithmicClient, Gateway, TimeBarType, InstrumentType, DataType
+    from async_rithmic import ReconnectionSettings, RetrySettings
+    # Import our extended RithmicClient if needed
+    import sys
+    import os
+    # Add the project root to the path to import admin_rithmic
+    sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
+    from admin_rithmic import get_front_month_contract
 except ImportError:
     logging.error("async_rithmic not installed. Install with: pip install async_rithmic")
     raise
+
+# Define our own data structures for tick data
+class TickData:
+    """Tick data structure"""
+    def __init__(self, symbol, price, size, timestamp, exchange=None, tick_type=None):
+        self.symbol = symbol
+        self.price = price
+        self.size = size
+        self.timestamp = timestamp
+        self.exchange = exchange
+        self.tick_type = tick_type
+
+class QuoteData:
+    """Quote data structure"""
+    def __init__(self, symbol, bid, ask, bid_size=0, ask_size=0, timestamp=None, exchange=None):
+        self.symbol = symbol
+        self.bid = bid
+        self.ask = ask
+        self.bid_size = bid_size
+        self.ask_size = ask_size
+        self.timestamp = timestamp
+        self.exchange = exchange
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -198,7 +227,7 @@ class AsyncRithmicTickCollector:
         """
         try:
             # Rithmic Paper Trading via Chicago Gateway
-            login_params = LoginParams(
+            self.client = RithmicClient(
                 user=self.rithmic_config['user'],
                 password=self.rithmic_config['password'],
                 system_name=self.rithmic_config['system_name'],
@@ -208,11 +237,9 @@ class AsyncRithmicTickCollector:
                 app_version=self.rithmic_config.get('app_version', '1.0.0')
             )
             
-            self.client = RithmicClient()
-            
             # Connect with Chicago-specific settings
             await asyncio.wait_for(
-                self.client.connect(login_params),
+                self.client.connect(),
                 timeout=self.rithmic_config.get('connection_timeout', 30)
             )
             
@@ -224,9 +251,13 @@ class AsyncRithmicTickCollector:
             
         except asyncio.TimeoutError:
             logger.error("❌ Connection timeout to Chicago Gateway")
+            self.client = None
+            self.is_connected = False
             return False
         except Exception as e:
             logger.error(f"❌ Connection failed to Chicago Gateway: {e}")
+            self.client = None
+            self.is_connected = False
             return False
     
     async def disconnect(self):
@@ -287,20 +318,51 @@ class AsyncRithmicTickCollector:
         Args:
             contracts: List of contract strings (e.g., ['NQZ24', 'ESZ24'])
         """
-        if not self.is_connected:
+        if not self.is_connected or self.client is None:
             raise RuntimeError("Not connected to Rithmic")
+        
+        # Register the tick data callback
+        self.client.on_tick += self._handle_tick_data
         
         for contract in contracts:
             try:
                 # Subscribe to tick data
-                tick_params = TickParams(
-                    symbol=contract,
-                    tick_types=['trade', 'bid', 'ask'],  # All tick types
-                    include_volume=True,
-                    include_timestamp=True
-                )
+                exchange = self._get_exchange_for_contract(contract)
                 
-                await self.client.subscribe_ticks(tick_params, self._handle_tick_data)
+                # Use the RithmicClient's method to subscribe to market data
+                data_type = DataType.LAST_TRADE | DataType.BBO
+                
+                # Use a generic approach to handle different client implementations
+                try:
+                    # Try the most common method name first
+                    if hasattr(self.client, 'subscribe_to_market_data'):
+                        # Type ignore to suppress Pylance warning
+                        await self.client.subscribe_to_market_data(  # type: ignore
+                            contract,
+                            exchange,
+                            data_type
+                        )
+                    elif hasattr(self.client, 'subscribe'):
+                        # Alternative method name that might be used
+                        await self.client.subscribe(  # type: ignore
+                            contract,
+                            exchange,
+                            data_type
+                        )
+                    else:
+                        # Try a more generic approach - call the method dynamically
+                        method_names = ['subscribe_to_market_data', 'subscribe', 'market_data_subscribe']
+                        for method_name in method_names:
+                            if hasattr(self.client, method_name):
+                                method = getattr(self.client, method_name)
+                                await method(contract, exchange, data_type)
+                                break
+                        else:  # No break occurred in the loop
+                            logger.error(f"❌ Client has no method to subscribe to market data for {contract}")
+                            raise AttributeError("RithmicClient has no method to subscribe to market data")
+                except Exception as e:
+                    logger.error(f"❌ Error subscribing to {contract}: {e}")
+                    raise
                 
                 # Initialize buffers
                 self.tick_buffer[contract] = []
@@ -311,25 +373,66 @@ class AsyncRithmicTickCollector:
             except Exception as e:
                 logger.error(f"❌ Failed to subscribe to {contract}: {e}")
     
-    async def _handle_tick_data(self, tick_data: TickData):
+    async def _handle_tick_data(self, data: dict):
         """
         Handle incoming tick data from Rithmic
         
         Args:
-            tick_data: Tick data from Rithmic
+            data: Tick data from Rithmic in dictionary format
         """
         try:
-            # Convert Rithmic tick data to our format
+            # Extract relevant information from the data dictionary
+            symbol = data.get('symbol')
+            if not symbol:
+                return
+                
+            # Create a TickData object from the dictionary
+            if data.get('data_type') == DataType.LAST_TRADE:
+                # Handle trade data
+                tick_data = TickData(
+                    symbol=symbol,
+                    price=data.get('price', 0),
+                    size=data.get('size', 0),
+                    timestamp=data.get('timestamp', datetime.now()),
+                    exchange=data.get('exchange'),
+                    tick_type='trade'
+                )
+            elif data.get('data_type') == DataType.BBO:
+                # Handle quote data (we'll create separate tick data for bid and ask)
+                if 'bid' in data:
+                    tick_data = TickData(
+                        symbol=symbol,
+                        price=data.get('bid', 0),
+                        size=data.get('bid_size', 0),
+                        timestamp=data.get('timestamp', datetime.now()),
+                        exchange=data.get('exchange'),
+                        tick_type='bid'
+                    )
+                elif 'ask' in data:
+                    tick_data = TickData(
+                        symbol=symbol,
+                        price=data.get('ask', 0),
+                        size=data.get('ask_size', 0),
+                        timestamp=data.get('timestamp', datetime.now()),
+                        exchange=data.get('exchange'),
+                        tick_type='ask'
+                    )
+                else:
+                    return
+            else:
+                return
+                
+            # Convert to our internal format
             tick = TickDataPoint(
-                timestamp=tick_data.timestamp or datetime.now(),
+                timestamp=tick_data.timestamp,
                 symbol=self._extract_symbol(tick_data.symbol),
                 contract=tick_data.symbol,
-                exchange=self._get_exchange_for_contract(tick_data.symbol),
+                exchange=tick_data.exchange or self._get_exchange_for_contract(tick_data.symbol),
                 price=tick_data.price,
                 size=tick_data.size or 0,
-                tick_type=tick_data.tick_type,
-                exchange_timestamp=tick_data.exchange_timestamp,
-                sequence=tick_data.sequence
+                tick_type=tick_data.tick_type if tick_data.tick_type else "trade",
+                exchange_timestamp=data.get('exchange_timestamp'),
+                sequence=data.get('sequence', 0)
             )
             
             # Add to buffer
@@ -370,6 +473,23 @@ class AsyncRithmicTickCollector:
         """
         symbol = self._extract_symbol(contract)
         return self.INSTRUMENT_SPECS.get(symbol, {}).get('exchange', 'CME')
+    
+    def _extract_symbol(self, contract: str) -> str:
+        """
+        Extract the base symbol from a contract string
+        
+        Args:
+            contract: Contract string (e.g., 'NQZ24', 'ESM25')
+            
+        Returns:
+            str: Base symbol (e.g., 'NQ', 'ES')
+        """
+        # Extract the base symbol (letters at the beginning)
+        import re
+        match = re.match(r'^([A-Za-z]+)', contract)
+        if match:
+            return match.group(1)
+        return contract  # Return original if no match
     
     def _get_exchange_code_for_contract(self, contract: str) -> str:
         """
@@ -488,9 +608,8 @@ class AsyncRithmicTickCollector:
             if not second_data:
                 return
             
-            # Import SQLAlchemy models
-            from shared.database.models import MarketDataSeconds, DatabaseManager
-            from shared.database.connection import get_async_session
+            # Import database connection
+            from shared.database.connection import get_async_session, TimescaleDBHelper, get_database_manager
             
             # Convert to database format
             data_records = []
@@ -521,8 +640,11 @@ class AsyncRithmicTickCollector:
             
             # Save to database using async session
             async with get_async_session() as session:
-                db_manager = DatabaseManager(session)
-                await db_manager.bulk_insert_market_data(data_records, MarketDataSeconds)
+                # Use the TimescaleDBHelper directly instead of DatabaseManager
+                helper = TimescaleDBHelper(session)
+                # Insert the data records directly
+                for record in data_records:
+                    await helper.insert_second_data(record)
             
             # Clear buffer
             self.second_data_buffer[contract] = []
@@ -585,23 +707,38 @@ class AsyncRithmicTickCollector:
             tick: Individual tick data point
         """
         try:
-            from shared.database.models import RawTickData
-            from shared.database.connection import get_async_session
+            # Import database connection
+            from shared.database.connection import get_async_session, TimescaleDBHelper
             
+            # Create a dictionary for the tick data
+            tick_data = {
+                'timestamp': tick.timestamp,
+                'symbol': tick.symbol,
+                'contract': tick.contract,
+                'exchange': tick.exchange,
+                'sequence_number': tick.sequence or int(time.time() * 1000000),  # Microsecond timestamp
+                'price': float(tick.price),
+                'size': tick.size,
+                'tick_type': tick.tick_type,
+                'exchange_timestamp': tick.exchange_timestamp
+            }
+            
+            # Save to database using async session
             async with get_async_session() as session:
-                raw_tick = RawTickData(
-                    timestamp=tick.timestamp,
-                    symbol=tick.symbol,
-                    contract=tick.contract,
-                    exchange=tick.exchange,
-                    sequence_number=tick.sequence or int(time.time() * 1000000),  # Microsecond timestamp
-                    price=float(tick.price),
-                    size=tick.size,
-                    tick_type=tick.tick_type,
-                    exchange_timestamp=tick.exchange_timestamp
-                )
+                # Create a raw tick object and add it to the session directly
+                # This is a more generic approach that doesn't rely on specific helper methods
+                from sqlalchemy import text
                 
-                session.add(raw_tick)
+                # Create an SQL statement to insert the tick data
+                sql = text("""
+                    INSERT INTO market_data_ticks 
+                    (timestamp, symbol, contract, exchange, sequence_number, price, size, tick_type, exchange_timestamp)
+                    VALUES 
+                    (:timestamp, :symbol, :contract, :exchange, :sequence_number, :price, :size, :tick_type, :exchange_timestamp)
+                """)
+                
+                # Execute the statement
+                await session.execute(sql, tick_data)
                 await session.commit()
                 
         except Exception as e:
@@ -615,8 +752,15 @@ class AsyncRithmicTickCollector:
             contracts: List of contracts to collect (e.g., ['NQZ24', 'ESZ24'])
         """
         if not self.is_connected:
-            await self.connect()
+            connection_success = await self.connect()
+            if not connection_success:
+                logger.error("❌ Failed to connect to Rithmic. Cannot start tick collection.")
+                return False
         
+        if self.client is None:
+            logger.error("❌ Rithmic client is not initialized. Cannot start tick collection.")
+            return False
+            
         logger.info(f"🚀 Starting tick collection for {contracts}")
         
         # Subscribe to tick data
@@ -628,6 +772,7 @@ class AsyncRithmicTickCollector:
         asyncio.create_task(self._periodic_aggregation())
         
         logger.info("✅ Tick collection started")
+        return True
     
     async def _periodic_aggregation(self):
         """Periodic aggregation task (every second)"""
@@ -678,7 +823,7 @@ class AsyncRithmicTickCollector:
             'buffer_sizes': {k: len(v) for k, v in self.tick_buffer.items()}
         }
     
-    def generate_current_contracts(self, symbols: List[str] = None) -> List[str]:
+    def generate_current_contracts(self, symbols: Optional[List[str]] = None) -> List[str]:
         """Generate current active contracts"""
         if symbols is None:
             symbols = ['NQ', 'ES']
@@ -702,7 +847,9 @@ class AsyncRithmicTickCollector:
                 if next_quarterly < month:
                     year += 1
                 
-                month_letter = self.MONTH_CODES.get(next_quarterly, 'Z')
+                # Create a reverse mapping of month numbers to codes
+                month_to_code = {v: k for k, v in self.MONTH_CODES.items()}
+                month_letter = month_to_code.get(next_quarterly, 'Z')
                 year_suffix = str(year)[-2:]
                 
                 contract = f"{symbol}{month_letter}{year_suffix}"
@@ -770,8 +917,12 @@ async def main():
         print(f"Active contracts: {contracts}")
         
         # Start collecting tick data
-        await collector.start_tick_collection(contracts)
+        collection_started = await collector.start_tick_collection(contracts)
         
+        if not collection_started:
+            print("❌ Failed to start tick collection. Exiting.")
+            return
+            
         # Collect for 5 minutes (for testing)
         print("🔄 Collecting tick data for 5 minutes...")
         await asyncio.sleep(300)  # 5 minutes

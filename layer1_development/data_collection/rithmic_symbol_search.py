@@ -5,7 +5,10 @@ Utility script to search for symbols and retrieve front month contracts from Rit
 import asyncio
 import logging
 from config.chicago_gateway_config import get_chicago_gateway_config
-from async_rithmic import RithmicClient, InstrumentType
+# Import the base components
+from async_rithmic import InstrumentType
+# Import our extended RithmicClient
+from admin_rithmic import RithmicClient
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, 
@@ -84,7 +87,9 @@ async def get_front_month_contracts(client, symbols, exchange="CME"):
     
     for symbol in symbols:
         try:
-            contract = await client.get_front_month_contract(symbol, exchange)
+            # Use the utility function instead of the method
+            from admin_rithmic import get_front_month_contract
+            contract = await get_front_month_contract(client, symbol, exchange)
             logger.info(f"Front month contract for {symbol}: {contract}")
             results[symbol] = contract
         except Exception as e:

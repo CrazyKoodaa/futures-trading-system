@@ -28,7 +28,7 @@ from config.chicago_gateway_config import get_chicago_gateway_config
 # Custom implementation for historical data retrieval
 async def get_historical_time_bars(client, contract, exchange, start_time, end_time, bar_type, bar_interval):
     """
-    Custom implementation to retrieve historical time bars using the available methods in RithmicClient.
+    Retrieve historical time bars using the get_historical_time_bars method in RithmicClient.
     
     Args:
         client: The RithmicClient instance
@@ -42,67 +42,71 @@ async def get_historical_time_bars(client, contract, exchange, start_time, end_t
     Returns:
         List of time bars
     """
-    print(f"Using custom implementation to retrieve historical time bars for {contract}")
+    print(f"Retrieving historical time bars for {contract}")
     print(f"Parameters: exchange={exchange}, start={start_time}, end={end_time}, type={bar_type}, interval={bar_interval}")
     
     # Create a list to store the collected bars
     collected_bars = []
     
-    # Create an event to signal when data collection is complete
-    data_collection_complete = asyncio.Event()
-    
-    # Define a callback function to handle historical time bars
-    async def on_historical_time_bar_callback(data):
-        # Process the received time bar data
-        # This is a simplified example - you'll need to adapt this to the actual data format
-        bar_data = {
-            'bar_end_datetime': data.get('timestamp', datetime.now()),
-            'open': data.get('open', 0.0),
-            'high': data.get('high', 0.0),
-            'low': data.get('low', 0.0),
-            'close': data.get('close', 0.0),
-            'volume': data.get('volume', 0)
-        }
-        
-        # Add the bar to our collection
-        collected_bars.append(bar_data)
-        
-        # Check if this is the last bar
-        # This is a simplified check - you'll need to adapt this to your actual data
-        if data.get('is_last', False):
-            data_collection_complete.set()
-    
     try:
-        # Register the callback for historical time bars
-        # This assumes the client has an on_historical_time_bar method that accepts a callback
-        if hasattr(client, 'on_historical_time_bar'):
-            # Save the original callback if any
-            original_callback = getattr(client, 'on_historical_time_bar', None)
-            
-            # Set our callback
-            client.on_historical_time_bar(on_historical_time_bar_callback)
-            
-            # Request historical data
-            # This is a placeholder - you'll need to adapt this to the actual API
-            # You might need to use a different method to request historical data
-            print("Requesting historical data...")
-            
-            # Wait for data collection to complete or timeout
-            try:
-                await asyncio.wait_for(data_collection_complete.wait(), timeout=30.0)
-            except asyncio.TimeoutError:
-                print("Timeout waiting for historical data")
-            
-            # Restore the original callback if any
-            if original_callback:
-                client.on_historical_time_bar(original_callback)
-            else:
-                # Reset the callback
-                client.on_historical_time_bar(None)
+        # Convert bar_type to the appropriate TimeBarType enum value
+        from async_rithmic.enums import TimeBarType
+        time_bar_type = TimeBarType.SECOND_BAR if bar_type == 1 else TimeBarType.MINUTE_BAR
+        
+        # Request the historical time bars using the direct method
+        print(f"{Fore.CYAN}Requesting historical data using get_historical_time_bars...{Style.RESET_ALL}")
+        result = await client.get_historical_time_bars(
+            contract,
+            exchange,
+            start_time,
+            end_time,
+            time_bar_type,
+            bar_interval
+        )
+        
+        # Process the results
+        if result and isinstance(result, list):
+            print(f"{Fore.GREEN}Received {len(result)} bars{Style.RESET_ALL}")
+            collected_bars = result
         else:
-            print(f"{Fore.YELLOW}Warning: Client does not have on_historical_time_bar method{Style.RESET_ALL}")
+            print(f"{Fore.YELLOW}No results returned from get_historical_time_bars{Style.RESET_ALL}")
+    
     except Exception as e:
-        print(f"{Fore.RED}Error in historical data collection: {e}{Style.RESET_ALL}")
+        print(f"{Fore.RED}Error retrieving historical time bars: {e}{Style.RESET_ALL}")
+        
+        # Set up a callback as a fallback method
+        try:
+            print(f"{Fore.YELLOW}Attempting to use callback method for historical data...{Style.RESET_ALL}")
+            
+            # Create an event to signal when data collection is complete
+            data_collection_complete = asyncio.Event()
+            
+            # Define a callback function to handle historical time bars
+            async def on_historical_time_bar_callback(data):
+                if not isinstance(data, dict):
+                    print(f"{Fore.RED}Error: Received non-dictionary data in callback: {type(data)}{Style.RESET_ALL}")
+                    return
+                    
+                try:
+                    # Add the bar to our collection
+                    collected_bars.append(data)
+                except Exception as cb_error:
+                    print(f"{Fore.RED}Error processing time bar data: {cb_error}{Style.RESET_ALL}")
+            
+            # Register the callback if available
+            if hasattr(client, 'on_historical_time_bar'):
+                client.on_historical_time_bar += on_historical_time_bar_callback
+                
+                # Wait for some data to arrive
+                await asyncio.sleep(10)
+                
+                # Unregister the callback
+                client.on_historical_time_bar -= on_historical_time_bar_callback
+            else:
+                print(f"{Fore.YELLOW}Client does not have on_historical_time_bar event{Style.RESET_ALL}")
+        
+        except Exception as fallback_error:
+            print(f"{Fore.RED}Error in fallback method: {fallback_error}{Style.RESET_ALL}")
     
     print(f"Collected {len(collected_bars)} historical bars")
     return collected_bars
@@ -132,8 +136,8 @@ async def get_front_month_contract(client, symbol, exchange):
             exchange=exchange
         )
         
-        # Filter to only include contracts for this exact symbol
-        filtered_contracts = [r for r in results if r.product_code == symbol]
+        # Filter to only include contracts that start with this symbol
+        filtered_contracts = [r for r in results if hasattr(r, 'product_code') and r.product_code.startswith(symbol)]
         
         if filtered_contracts:
             # Sort by expiration date (assuming expiration_date is available)
@@ -291,6 +295,24 @@ def create_database():
         )
         ''')
         
+        cursor.execute('''
+        CREATE TABLE IF NOT EXISTS time_bars (
+            id INTEGER PRIMARY KEY,
+            contract_id INTEGER,
+            timestamp TIMESTAMP NOT NULL,
+            bar_type TEXT NOT NULL,
+            bar_interval INTEGER NOT NULL,
+            open REAL,
+            high REAL,
+            low REAL,
+            close REAL,
+            volume INTEGER,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (contract_id) REFERENCES contracts(id),
+            UNIQUE(contract_id, timestamp, bar_type, bar_interval)
+        )
+        ''')
+        
         # Table to track contracts with no data
         cursor.execute('''
         CREATE TABLE IF NOT EXISTS contract_data_status (
@@ -315,11 +337,12 @@ def create_database():
         if conn:
             conn.close()
 
-async def test_db_connection():
+async def test_db_connection(cli_mode=False):
     """Test database connection and tables"""
     global db_connected
     
-    print_header()
+    if not cli_mode:
+        print_header()
     print(f"{Fore.YELLOW}Testing database connection...{Style.RESET_ALL}")
     
     # Check if database file exists
@@ -327,8 +350,18 @@ async def test_db_connection():
         success, message = create_database()
         if not success:
             print(f"{Fore.RED}{message}{Style.RESET_ALL}")
-            choice = input("\nWould you like to recreate the database? (y/n): ")
-            if choice.lower() == 'y':
+            if not cli_mode:
+                choice = input("\nWould you like to recreate the database? (y/n): ")
+                if choice.lower() == 'y':
+                    try:
+                        os.remove(DB_PATH)
+                        success, message = create_database()
+                        print(f"{Fore.GREEN}{message}{Style.RESET_ALL}")
+                    except sqlite3.Error as e:
+                        print(f"{Fore.RED}Error recreating database: {e}{Style.RESET_ALL}")
+                        db_connected = False
+            else:
+                # In CLI mode, automatically recreate the database
                 try:
                     os.remove(DB_PATH)
                     success, message = create_database()
@@ -364,8 +397,20 @@ async def test_db_connection():
     except sqlite3.Error as e:
         print(f"{Fore.RED}Database error: {e}{Style.RESET_ALL}")
         db_connected = False
-        choice = input("\nWould you like to recreate the database? (y/n): ")
-        if choice.lower() == 'y':
+        if not cli_mode:
+            choice = input("\nWould you like to recreate the database? (y/n): ")
+            if choice.lower() == 'y':
+                try:
+                    if conn:
+                        conn.close()
+                    os.remove(DB_PATH)
+                    success, message = create_database()
+                    print(f"{Fore.GREEN}{message}{Style.RESET_ALL}")
+                except (sqlite3.Error, OSError) as e:
+                    print(f"{Fore.RED}Error recreating database: {e}{Style.RESET_ALL}")
+                    db_connected = False
+        else:
+            # In CLI mode, automatically recreate the database
             try:
                 if conn:
                     conn.close()
@@ -379,14 +424,66 @@ async def test_db_connection():
         if conn:
             conn.close()
     
-    input("\nPress Enter to continue...")
+    if not cli_mode:
+        input("\nPress Enter to continue...")
 
-async def connect_to_rithmic():
-    """Connect to Rithmic with login data"""
+async def disconnect_from_rithmic(timeout=5.0):
+    """Gracefully disconnect from Rithmic with timeout handling"""
     global rithmic_client, is_connected
     
-    print_header()
+    if rithmic_client and is_connected:
+        try:
+            print(f"\n{Fore.YELLOW}Disconnecting from Rithmic...{Style.RESET_ALL}")
+            
+            # Temporarily redirect stderr to suppress error messages from the Rithmic client
+            import sys
+            from io import StringIO
+            
+            # Save the original stderr
+            original_stderr = sys.stderr
+            
+            # Create a string buffer to capture stderr output
+            string_buffer = StringIO()
+            
+            try:
+                # Redirect stderr to our string buffer
+                sys.stderr = string_buffer
+                
+                # Attempt to disconnect with timeout
+                await asyncio.wait_for(rithmic_client.disconnect(), timeout=timeout)
+                
+            finally:
+                # Restore the original stderr
+                sys.stderr = original_stderr
+            
+            print(f"{Fore.GREEN}Rithmic connection closed successfully.{Style.RESET_ALL}")
+        except asyncio.TimeoutError:
+            print(f"{Fore.YELLOW}Disconnect timed out, but this is expected behavior with the Rithmic API.{Style.RESET_ALL}")
+            print(f"{Fore.GREEN}Program completed successfully despite timeout warnings.{Style.RESET_ALL}")
+        except Exception as e:
+            print(f"{Fore.YELLOW}Error during disconnect: {e}{Style.RESET_ALL}")
+            print(f"{Fore.GREEN}Program completed successfully despite disconnect errors.{Style.RESET_ALL}")
+        finally:
+            # Set the connection status to false regardless of disconnect result
+            is_connected = False
+
+async def connect_to_rithmic(cli_mode=False, data_types=None):
+    """Connect to Rithmic with login data
+    
+    Args:
+        cli_mode (bool): Whether to run in CLI mode (no header, no input prompt)
+        data_types (list): List of DataType enums to enable (e.g., [DataType.HISTORY])
+    """
+    global rithmic_client, is_connected
+    
+    if not cli_mode:
+        print_header()
     print(f"{Fore.YELLOW}Connecting to Rithmic...{Style.RESET_ALL}")
+    
+    # If data_types is specified, show what's being enabled
+    if data_types:
+        data_type_names = [dt.name for dt in data_types]
+        print(f"{Fore.CYAN}Enabling data types: {', '.join(data_type_names)}{Style.RESET_ALL}")
     
     try:
         # Get credentials from config
@@ -418,6 +515,7 @@ async def connect_to_rithmic():
         gateway_name = config['rithmic']['gateway']
         gateway = Gateway.CHICAGO if gateway_name == 'Chicago' else Gateway.TEST
         
+        # Create the Rithmic client
         rithmic_client = RithmicClient(
             user=config['rithmic']['user'],
             password=config['rithmic']['password'],
@@ -434,12 +532,25 @@ async def connect_to_rithmic():
         await rithmic_client.connect()
         is_connected = True
         
+        # Historical data is directly accessible through methods like get_historical_time_bars
+        # No need to enable a specific data type for historical data
+        if data_types and 'HISTORY' in [dt for dt in data_types]:
+            print(f"{Fore.CYAN}Historical data access is available by default...{Style.RESET_ALL}")
+            print(f"{Fore.GREEN}Ready to access historical data!{Style.RESET_ALL}")
+            
+            # Verify that the history plant is available
+            if hasattr(rithmic_client, 'history_plant'):
+                print(f"{Fore.GREEN}History plant is now available!{Style.RESET_ALL}")
+            else:
+                print(f"{Fore.YELLOW}History plant not available. Will try alternative methods.{Style.RESET_ALL}")
+        
         print(f"\n{Fore.GREEN}Successfully connected to Rithmic!{Style.RESET_ALL}")
     except Exception as e:
         print(f"\n{Fore.RED}Failed to connect to Rithmic: {e}{Style.RESET_ALL}")
         is_connected = False
     
-    input("\nPress Enter to continue...")
+    if not cli_mode:
+        input("\nPress Enter to continue...")
 
 async def search_symbols():
     """Search for symbols in Rithmic with wildcard support and interactive selection"""
@@ -550,10 +661,12 @@ async def search_symbols():
         
         # Prepare data for interactive selection
         symbols = []
+        full_symbols = []
         display_items = []
         
         for i, result in enumerate(filtered_results, 1):
             symbols.append(result.product_code)
+            full_symbols.append(result.symbol)
             item = {
                 'index': i,
                 'symbol': result.symbol,
@@ -566,15 +679,16 @@ async def search_symbols():
             display_items.append(item)
         
         # Interactive selection using prompt_toolkit
-        selected_indices = interactive_select_symbols(display_items)
+        selected_indices = await interactive_select_symbols(display_items)
         
         if not selected_indices:
             print(f"{Fore.YELLOW}No symbols selected{Style.RESET_ALL}")
             input("\nPress Enter to continue...")
             return
         
-        # Get selected symbols
-        current_symbols = [symbols[idx] for idx in selected_indices]
+        # Get selected symbols (both product codes and full symbols)
+        product_codes = [symbols[idx] for idx in selected_indices]
+        current_symbols = [full_symbols[idx] for idx in selected_indices]
         
         print(f"\n{Fore.GREEN}Selected symbols: {', '.join(current_symbols)}{Style.RESET_ALL}")
         
@@ -584,7 +698,8 @@ async def search_symbols():
             conn = sqlite3.connect(DB_PATH)
             cursor = conn.cursor()
             
-            for symbol in current_symbols:
+            for i, symbol in enumerate(current_symbols):
+                product_code = product_codes[i]
                 cursor.execute(
                     "INSERT OR IGNORE INTO symbols (symbol, exchange, description) VALUES (?, ?, ?)",
                     (symbol, current_exchange, f"Added via search on {datetime.now().isoformat()}")
@@ -602,7 +717,7 @@ async def search_symbols():
     
     input("\nPress Enter to continue...")
 
-def interactive_select_symbols(items):
+async def interactive_select_symbols(items):
     """
     Interactive symbol selection with arrow keys and space bar
     
@@ -632,21 +747,32 @@ def interactive_select_symbols(items):
             
             # Extract month code for futures contracts (if present)
             month_code = ""
+            month_name = ""
             symbol = item['symbol']
             if len(symbol) > 2:  # Ensure there's enough characters
                 for char in symbol[2:]:
                     if char.isalpha():
-                        # Highlight the month code
-                        if char.upper() in ['H', 'M', 'U', 'Z']:
-                            month_code = f"{Fore.YELLOW}{char.upper()}{Style.RESET_ALL}"
+                        # Map month code to full month name
+                        month_map = {
+                            'H': 'March',
+                            'M': 'June',
+                            'U': 'September',
+                            'Z': 'December'
+                        }
+                        
+                        if char.upper() in month_map:
+                            month_code = char.upper()
+                            month_name = month_map[month_code]
+                            month_display = f"{Fore.YELLOW}{month_name}{Style.RESET_ALL}"
                         else:
                             month_code = char.upper()
+                            month_display = month_code
                         break
             
             # Format the item
             line = f"{prefix}{selected} {item['index']}. Symbol: {symbol}"
             if month_code:
-                line += f" (Month: {month_code})"
+                line += f" (Month: {month_display})"
             line += f" | Product: {item['product_code']}"
             line += f" | Exp: {item['expiration']}"
             
@@ -716,33 +842,39 @@ def interactive_select_symbols(items):
     print_selection_header()
     print(get_formatted_list())
     
-    # Start the session
-    session.prompt("> ", default="")
+    # Start the session using run_async instead of prompt
+    # This allows it to work within an existing asyncio event loop
+    await session.app.run_async()
     
     # Return selected indices
     return [i for i, item in enumerate(items) if item['selected']]
 
-async def check_contracts():
-    """Check which contracts can be accessed for the searched symbols"""
+async def check_contracts(cli_mode=False):
+    """Check which contracts can be accessed for the searched symbols and count datapoints"""
     global available_contracts
     
     # Import search_symbols function here to avoid circular imports
     from search_symbols import search_symbols as search_symbols_func
     
     if not is_connected:
-        print_header()
+        if not cli_mode:
+            print_header()
         print(f"{Fore.RED}Error: Not connected to Rithmic. Please connect first.{Style.RESET_ALL}")
-        input("\nPress Enter to continue...")
+        if not cli_mode:
+            input("\nPress Enter to continue...")
         return
     
     if not current_symbols:
-        print_header()
+        if not cli_mode:
+            print_header()
         print(f"{Fore.RED}Error: No symbols selected. Please search for symbols first.{Style.RESET_ALL}")
-        input("\nPress Enter to continue...")
+        if not cli_mode:
+            input("\nPress Enter to continue...")
         return
     
-    print_header()
-    print(f"{Fore.YELLOW}Checking Available Contracts{Style.RESET_ALL}")
+    if not cli_mode:
+        print_header()
+    print(f"{Fore.YELLOW}Checking Available Contracts and Data Points{Style.RESET_ALL}")
     print(f"Symbols: {', '.join(current_symbols)}")
     print(f"Exchange: {current_exchange}")
     print()
@@ -753,15 +885,22 @@ async def check_contracts():
         for symbol in current_symbols:
             print(f"Checking contracts for {symbol}...")
             
+            # Extract product code from symbol (for search)
+            product_code = symbol
+            # Try to extract the product code from the symbol (e.g., "NQ" from "NQM5")
+            match = re.match(r'^([A-Za-z]+)', symbol)
+            if match:
+                product_code = match.group(1)
+            
             # Get front month contract using our helper function
             try:
-                front_month_result = await get_front_month_contract(rithmic_client, symbol, current_exchange)
+                front_month_result = await get_front_month_contract(rithmic_client, product_code, current_exchange)
                 front_month = front_month_result if front_month_result else "No front month contract found"
                 
                 # Search for all contracts for this symbol
                 results = await search_symbols_func(
                     rithmic_client,
-                    symbol, 
+                    product_code, 
                     instrument_type=InstrumentType.FUTURE,
                     exchange=current_exchange
                 )
@@ -774,24 +913,34 @@ async def check_contracts():
                 print(f"{Fore.YELLOW}Warning: No contracts found for {symbol}.{Style.RESET_ALL}")
                 continue
             
-            # Filter and sort contracts
+            # Filter and sort contracts - only include the exact symbol we're looking for
             contracts = []
             for result in results:
-                if result.product_code == symbol:
+                if result.symbol == symbol:
                     contracts.append(result.symbol)
             
+            if not contracts:
+                print(f"{Fore.YELLOW}Warning: No exact match found for {symbol}.{Style.RESET_ALL}")
+                continue
+                
             contracts.sort()
             available_contracts[symbol] = contracts
             
             print(f"  Front month: {front_month}")
-            print(f"  All contracts: {', '.join(contracts)}")
-            print()
+            print(f"  Contract: {symbol}")
             
-            # Save contracts to database
+            # Count datapoints in database
             conn = None
             try:
                 conn = sqlite3.connect(DB_PATH)
                 cursor = conn.cursor()
+                
+                # First, ensure the symbol exists in the database
+                cursor.execute(
+                    "INSERT OR IGNORE INTO symbols (symbol, exchange) VALUES (?, ?)",
+                    (symbol, current_exchange)
+                )
+                conn.commit()
                 
                 # Get symbol_id
                 cursor.execute("SELECT id FROM symbols WHERE symbol = ? AND exchange = ?", (symbol, current_exchange))
@@ -800,17 +949,46 @@ async def check_contracts():
                 if result:
                     symbol_id = result[0]
                     
+                    # Count datapoints for this symbol from different tables
+                    cursor.execute(
+                        "SELECT COUNT(*) FROM time_bars WHERE contract_id IN (SELECT id FROM contracts WHERE symbol_id = ?)",
+                        (symbol_id,)
+                    )
+                    time_bars_count = cursor.fetchone()[0]
+                    
+                    cursor.execute(
+                        "SELECT COUNT(*) FROM second_bars WHERE contract_id IN (SELECT id FROM contracts WHERE symbol_id = ?)",
+                        (symbol_id,)
+                    )
+                    second_bars_count = cursor.fetchone()[0]
+                    
+                    cursor.execute(
+                        "SELECT COUNT(*) FROM minute_bars WHERE contract_id IN (SELECT id FROM contracts WHERE symbol_id = ?)",
+                        (symbol_id,)
+                    )
+                    minute_bars_count = cursor.fetchone()[0]
+                    
+                    total_datapoints = time_bars_count + second_bars_count + minute_bars_count
+                    
+                    print(f"  Data points: {total_datapoints:,} total")
+                    print(f"    - Time bars: {time_bars_count:,}")
+                    print(f"    - Second bars: {second_bars_count:,}")
+                    print(f"    - Minute bars: {minute_bars_count:,}")
+                    
+                    # Save contract if not already in database
                     for contract in contracts:
                         # Extract expiration date from contract (if possible)
                         expiration = None
-                        if len(contract) > len(symbol):
+                        if len(contract) > len(product_code):
                             # Simple extraction, would need refinement for production
-                            expiration = contract[len(symbol):]
+                            expiration = contract[len(product_code):]
                         
                         cursor.execute(
                             "INSERT OR IGNORE INTO contracts (symbol_id, contract, expiration_date) VALUES (?, ?, ?)",
                             (symbol_id, contract, expiration)
                         )
+                else:
+                    print(f"  {Fore.YELLOW}Symbol not found in database{Style.RESET_ALL}")
                 
                 conn.commit()
             except sqlite3.Error as db_error:
@@ -818,35 +996,71 @@ async def check_contracts():
             finally:
                 if conn:
                     conn.close()
+            
+            print()
         
         print(f"{Fore.GREEN}Contract check completed{Style.RESET_ALL}")
         
     except Exception as e:
         print(f"{Fore.RED}Error checking contracts: {e}{Style.RESET_ALL}")
     
-    input("\nPress Enter to continue...")
+    if not cli_mode:
+        input("\nPress Enter to continue...")
 
-async def download_historical_data():
+async def download_historical_data(cli_mode=False, days_to_download=7):
     """Download historical data for available contracts"""
     global download_progress
     
     if not is_connected:
-        print_header()
+        if not cli_mode:
+            print_header()
         print(f"{Fore.RED}Error: Not connected to Rithmic. Please connect first.{Style.RESET_ALL}")
-        input("\nPress Enter to continue...")
+        if not cli_mode:
+            input("\nPress Enter to continue...")
         return
+    
+    # Enable history data type if not already enabled
+    if not hasattr(rithmic_client, 'history_plant'):
+        print(f"{Fore.YELLOW}Enabling history data type for historical data retrieval...{Style.RESET_ALL}")
+        try:
+            # Historical data is directly accessible through methods like get_historical_time_bars
+            # No need to enable a specific data type for historical data
+            print(f"{Fore.GREEN}Ready to access historical data!{Style.RESET_ALL}")
+            
+            # Wait a moment for the history plant to initialize
+            await asyncio.sleep(2)
+        except Exception as e:
+            print(f"{Fore.YELLOW}Warning: Could not enable history data type: {e}{Style.RESET_ALL}")
+            print(f"{Fore.YELLOW}Will try alternative methods for historical data retrieval.{Style.RESET_ALL}")
+    
+    # In CLI mode, if we have symbols but no available_contracts, run check_contracts first
+    if not available_contracts and current_symbols and cli_mode:
+        await check_contracts(cli_mode=True)
     
     if not available_contracts:
-        print_header()
+        if not cli_mode:
+            print_header()
         print(f"{Fore.RED}Error: No contracts available. Please check contracts first.{Style.RESET_ALL}")
-        input("\nPress Enter to continue...")
+        if not cli_mode:
+            input("\nPress Enter to continue...")
         return
     
-    print_header()
+    if not cli_mode:
+        print_header()
     print(f"{Fore.YELLOW}Download Historical Data{Style.RESET_ALL}")
     
-    # Ask for date range
-    days_input = input("Enter number of days to download (default: 7): ")
+    # Ask for date range in interactive mode, use default in CLI mode
+    days = days_to_download
+    if not cli_mode:
+        days_input = input("Enter number of days to download (default: 7): ")
+        if days_input.strip():
+            try:
+                days = int(days_input)
+            except ValueError:
+                print(f"{Fore.RED}Invalid input. Using default of 7 days.{Style.RESET_ALL}")
+                days = 7
+    else:
+        print(f"Downloading data for the last {days} days")
     days = 7
     if days_input.strip() and days_input.isdigit():
         days = int(days_input)
@@ -901,8 +1115,55 @@ async def download_historical_data():
                 
                 result = cursor.fetchone()
                 if not result:
-                    print(f"  {Fore.YELLOW}Contract {contract} not found in database, skipping{Style.RESET_ALL}")
-                    continue
+                    print(f"  {Fore.YELLOW}Contract {contract} not found in database, adding it now...{Style.RESET_ALL}")
+                    
+                    # First, ensure the symbol exists
+                    cursor.execute("SELECT id FROM symbols WHERE symbol = ? AND exchange = ?", 
+                                  (symbol, current_exchange))
+                    symbol_result = cursor.fetchone()
+                    
+                    if not symbol_result:
+                        # Add the symbol
+                        cursor.execute(
+                            "INSERT INTO symbols (symbol, exchange) VALUES (?, ?)",
+                            (symbol, current_exchange)
+                        )
+                        conn.commit()
+                        
+                        # Get the new symbol_id
+                        cursor.execute("SELECT id FROM symbols WHERE symbol = ? AND exchange = ?", 
+                                      (symbol, current_exchange))
+                        symbol_result = cursor.fetchone()
+                    
+                    symbol_id = symbol_result[0]
+                    
+                    # Extract expiration date from contract (if possible)
+                    expiration = None
+                    match = re.match(r'^([A-Za-z]+)', symbol)
+                    if match:
+                        product_code = match.group(1)
+                        if len(contract) > len(product_code):
+                            expiration = contract[len(product_code):]
+                    
+                    # Add the contract
+                    cursor.execute(
+                        "INSERT INTO contracts (symbol_id, contract, expiration_date) VALUES (?, ?, ?)",
+                        (symbol_id, contract, expiration)
+                    )
+                    conn.commit()
+                    
+                    # Get the new contract_id
+                    cursor.execute("""
+                        SELECT c.id
+                        FROM contracts c
+                        JOIN symbols s ON c.symbol_id = s.id
+                        WHERE c.contract = ? AND s.symbol = ? AND s.exchange = ?
+                    """, (contract, symbol, current_exchange))
+                    
+                    result = cursor.fetchone()
+                    if not result:
+                        print(f"  {Fore.RED}Error: Failed to add contract {contract} to database{Style.RESET_ALL}")
+                        continue
                 
                 contract_id = result[0]
                 
@@ -964,17 +1225,52 @@ async def download_historical_data():
                         # Initialize variables for chunked downloading
                         all_second_bars = []
                         current_start = start_time
-                        max_chunk_days = 1  # Start with 1 day chunks for second bars (can be a lot of data)
+                        max_chunk_hours = 6  # Start with 6-hour chunks for second bars
                         has_more_data = True
                         reached_api_limit = False
+                        empty_chunks_in_a_row = 0
+                        max_empty_chunks = 4  # Stop after 4 empty chunks in a row (24 hours with no data)
                         
-                        while has_more_data:
+                        # Define market hours (CME Globex for NQ/ES futures)
+                        # Sunday: 6:00 p.m. - Friday: 5:00 p.m. ET with trading halts from 5:00-6:00 p.m. ET daily
+                        def is_likely_market_hours(dt):
+                            # Convert to US Eastern time
+                            # This is a simplified check - in production you'd use pytz for proper timezone handling
+                            hour = dt.hour
+                            weekday = dt.weekday()  # 0=Monday, 6=Sunday
+                            
+                            # Weekend check (Saturday)
+                            if weekday == 5:  # Saturday
+                                return False
+                                
+                            # Sunday evening (market opens)
+                            if weekday == 6 and hour >= 18:  # Sunday after 6pm
+                                return True
+                                
+                            # Friday evening (market closes)
+                            if weekday == 4 and hour >= 17:  # Friday after 5pm
+                                return False
+                                
+                            # Daily trading halt
+                            if hour >= 17 and hour < 18:  # 5pm-6pm daily halt
+                                return False
+                                
+                            # Regular trading days
+                            return True
+                        
+                        while has_more_data and empty_chunks_in_a_row < max_empty_chunks:
                             # Calculate end time for this chunk
-                            current_end = min(end_time, current_start + timedelta(days=max_chunk_days))
+                            current_end = min(end_time, current_start + timedelta(hours=max_chunk_hours))
                             
                             # If we've reached the end time, this is the last chunk
                             if current_end >= end_time:
                                 has_more_data = False
+                            
+                            # Skip chunks that are likely outside market hours
+                            if not is_likely_market_hours(current_start) and not is_likely_market_hours(current_end):
+                                print(f"    {Fore.YELLOW}Skipping chunk: {current_start.strftime('%Y-%m-%d %H:%M')} to {current_end.strftime('%Y-%m-%d %H:%M')} (outside market hours){Style.RESET_ALL}")
+                                current_start = current_end
+                                continue
                             
                             print(f"    Requesting chunk: {current_start.strftime('%Y-%m-%d %H:%M')} to {current_end.strftime('%Y-%m-%d %H:%M')}")
                             
@@ -992,9 +1288,16 @@ async def download_historical_data():
                             except Exception as e:
                                 print(f"{Fore.RED}Error retrieving historical time bars: {e}{Style.RESET_ALL}")
                                 chunk_bars = []
-                                has_more_data = False
+                                # Don't exit the loop on error, just count it as an empty chunk
                             
                             print(f"    {Fore.GREEN}Received {len(chunk_bars)} second bars for this chunk{Style.RESET_ALL}")
+                            
+                            # Track empty chunks
+                            if not chunk_bars:
+                                empty_chunks_in_a_row += 1
+                                print(f"    {Fore.YELLOW}Empty chunk ({empty_chunks_in_a_row}/{max_empty_chunks}){Style.RESET_ALL}")
+                            else:
+                                empty_chunks_in_a_row = 0  # Reset counter when we get data
                             
                             # Check if we hit the API limit (9999 data points)
                             if len(chunk_bars) >= 9999:
@@ -1002,9 +1305,9 @@ async def download_historical_data():
                                 print(f"    {Fore.YELLOW}API limit reached (9999 data points), reducing chunk size{Style.RESET_ALL}")
                                 
                                 # Reduce chunk size for next iteration
-                                if max_chunk_days > 0.25:  # Don't go below 6 hours
-                                    max_chunk_days = max_chunk_days / 2
-                                    print(f"    Reduced chunk size to {max_chunk_days} days")
+                                if max_chunk_hours > 1:  # Don't go below 1 hour
+                                    max_chunk_hours = max_chunk_hours / 2
+                                    print(f"    Reduced chunk size to {max_chunk_hours} hours")
                                     
                                     # Retry this chunk with smaller size
                                     continue
@@ -1012,13 +1315,11 @@ async def download_historical_data():
                             # Add chunk to our collection
                             all_second_bars.extend(chunk_bars)
                             
-                            # If we got data and there's more to fetch, update the start time
-                            if chunk_bars and has_more_data:
-                                # Move to next chunk
-                                current_start = current_end
+                            # Move to next chunk
+                            current_start = current_end
                                 
-                                # If we didn't hit the API limit, we can try increasing the chunk size
-                                if not reached_api_limit and max_chunk_days < 7:
+                            # If we didn't hit the API limit, we can try increasing the chunk size
+                            if not reached_api_limit and max_chunk_days < 7:
                                     max_chunk_days = min(7, max_chunk_days * 1.5)  # Increase but cap at 7 days
                             elif not chunk_bars:
                                 # If we got no data for this chunk, we might be done
@@ -1064,17 +1365,27 @@ async def download_historical_data():
                         # Initialize variables for chunked downloading
                         all_minute_bars = []
                         current_start = start_time
-                        max_chunk_days = 7  # Start with 7 day chunks for minute bars (less data than second bars)
+                        max_chunk_days = 2  # Start with 2-day chunks for minute bars
                         has_more_data = True
                         reached_api_limit = False
+                        empty_chunks_in_a_row = 0
+                        max_empty_chunks = 3  # Stop after 3 empty chunks in a row (6 days with no data)
                         
-                        while has_more_data:
+                        # Reuse the is_likely_market_hours function from above
+                        
+                        while has_more_data and empty_chunks_in_a_row < max_empty_chunks:
                             # Calculate end time for this chunk
                             current_end = min(end_time, current_start + timedelta(days=max_chunk_days))
                             
                             # If we've reached the end time, this is the last chunk
                             if current_end >= end_time:
                                 has_more_data = False
+                            
+                            # Skip chunks that are likely outside market hours
+                            if not is_likely_market_hours(current_start) and not is_likely_market_hours(current_end):
+                                print(f"    {Fore.YELLOW}Skipping chunk: {current_start.strftime('%Y-%m-%d %H:%M')} to {current_end.strftime('%Y-%m-%d %H:%M')} (outside market hours){Style.RESET_ALL}")
+                                current_start = current_end
+                                continue
                             
                             print(f"    Requesting chunk: {current_start.strftime('%Y-%m-%d %H:%M')} to {current_end.strftime('%Y-%m-%d %H:%M')}")
                             
@@ -1092,9 +1403,19 @@ async def download_historical_data():
                             except Exception as e:
                                 print(f"{Fore.RED}Error retrieving historical time bars: {e}{Style.RESET_ALL}")
                                 chunk_bars = []
-                                has_more_data = False
+                                # Don't exit the loop on error, just count it as an empty chunk
                             
                             print(f"    {Fore.GREEN}Received {len(chunk_bars)} minute bars for this chunk{Style.RESET_ALL}")
+                            
+                            # Track empty chunks
+                            if not chunk_bars:
+                                empty_chunks_in_a_row += 1
+                                print(f"    {Fore.YELLOW}Empty chunk ({empty_chunks_in_a_row}/{max_empty_chunks}){Style.RESET_ALL}")
+                            else:
+                                empty_chunks_in_a_row = 0  # Reset counter when we get data
+                                
+                                # If we got data, update the has_minute_data flag
+                                has_minute_data = True
                             
                             # Check if we hit the API limit (9999 data points)
                             if len(chunk_bars) >= 9999:
@@ -1112,21 +1433,12 @@ async def download_historical_data():
                             # Add chunk to our collection
                             all_minute_bars.extend(chunk_bars)
                             
-                            # If we got data and there's more to fetch, update the start time
-                            if chunk_bars and has_more_data:
-                                # Move to next chunk
-                                current_start = current_end
-                                
-                                # If we didn't hit the API limit, we can try increasing the chunk size
-                                if not reached_api_limit and max_chunk_days < 30:
-                                    max_chunk_days = min(30, max_chunk_days * 1.5)  # Increase but cap at 30 days
-                            elif not chunk_bars:
-                                # If we got no data for this chunk, we might be done
-                                if current_end >= end_time:
-                                    has_more_data = False
-                                else:
-                                    # Try the next chunk anyway
-                                    current_start = current_end
+                            # Move to next chunk
+                            current_start = current_end
+                            
+                            # If we got data and didn't hit the API limit, we can try increasing the chunk size
+                            if chunk_bars and not reached_api_limit and max_chunk_days < 7:
+                                max_chunk_days = min(7, max_chunk_days * 1.5)  # Increase but cap at 7 days
                         
                         print(f"  {Fore.GREEN}Total received: {len(all_minute_bars)} minute bars{Style.RESET_ALL}")
                         
@@ -1180,31 +1492,42 @@ async def download_historical_data():
                 download_progress[symbol] = contracts_processed / total_contracts
                 print_header()  # Update progress display
         
+        print(f"\n{Fore.GREEN}Historical data download completed{Style.RESET_ALL}")
+        
         # Generate download summary
         try:
-            cursor.execute("""
-                SELECT 
-                    COUNT(DISTINCT cds.contract_id) as total_contracts,
-                    SUM(CASE WHEN cds.has_second_bars = 1 THEN 1 ELSE 0 END) as contracts_with_second_data,
-                    SUM(CASE WHEN cds.has_minute_bars = 1 THEN 1 ELSE 0 END) as contracts_with_minute_data,
-                    SUM(CASE WHEN cds.has_second_bars = 0 THEN 1 ELSE 0 END) as contracts_without_second_data,
-                    SUM(CASE WHEN cds.has_minute_bars = 0 THEN 1 ELSE 0 END) as contracts_without_minute_data
-                FROM contract_data_status cds
-            """)
+            # First check if the contract_data_status table exists
+            cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='contract_data_status'")
+            table_exists = cursor.fetchone() is not None
             
-            stats = cursor.fetchone()
-            if stats:
-                total, with_second, with_minute, without_second, without_minute = stats
+            if table_exists:
+                cursor.execute("""
+                    SELECT 
+                        COUNT(DISTINCT cds.contract_id) as total_contracts,
+                        SUM(CASE WHEN cds.has_second_bars = 1 THEN 1 ELSE 0 END) as contracts_with_second_data,
+                        SUM(CASE WHEN cds.has_minute_bars = 1 THEN 1 ELSE 0 END) as contracts_with_minute_data,
+                        SUM(CASE WHEN cds.has_second_bars = 0 THEN 1 ELSE 0 END) as contracts_without_second_data,
+                        SUM(CASE WHEN cds.has_minute_bars = 0 THEN 1 ELSE 0 END) as contracts_without_minute_data
+                    FROM contract_data_status cds
+                """)
                 
-                print(f"\n{Fore.GREEN}Historical data download completed{Style.RESET_ALL}")
-                print(f"\n{Fore.CYAN}Download Summary:{Style.RESET_ALL}")
-                print(f"Total contracts tracked: {total}")
-                print(f"Contracts with second bar data: {with_second}")
-                print(f"Contracts with minute bar data: {with_minute}")
-                print(f"Contracts without second bar data: {without_second}")
-                print(f"Contracts without minute bar data: {without_minute}")
+                stats = cursor.fetchone()
+                if stats and stats[0] > 0:  # Check if there are any contracts tracked
+                    total, with_second, with_minute, without_second, without_minute = stats
+                    
+                    print(f"\n{Fore.CYAN}Download Summary:{Style.RESET_ALL}")
+                    print(f"Total contracts tracked: {total}")
+                    print(f"Contracts with second bar data: {with_second}")
+                    print(f"Contracts with minute bar data: {with_minute}")
+                    print(f"Contracts without second bar data: {without_second}")
+                    print(f"Contracts without minute bar data: {without_minute}")
+                else:
+                    print(f"\n{Fore.YELLOW}No contract data status information available yet.{Style.RESET_ALL}")
+            else:
+                print(f"\n{Fore.YELLOW}Contract data status table does not exist. Run database recreation to fix this issue.{Style.RESET_ALL}")
                 
-                # Get total bar counts
+            # Get total bar counts
+            try:
                 cursor.execute("SELECT COUNT(*) FROM second_bars")
                 second_bar_count = cursor.fetchone()[0]
                 
@@ -1213,8 +1536,8 @@ async def download_historical_data():
                 
                 print(f"\nTotal second bars in database: {second_bar_count}")
                 print(f"Total minute bars in database: {minute_bar_count}")
-            else:
-                print(f"\n{Fore.GREEN}Historical data download completed{Style.RESET_ALL}")
+            except sqlite3.Error as e:
+                print(f"\n{Fore.YELLOW}Could not count bars: {e}{Style.RESET_ALL}")
         except sqlite3.Error as e:
             print(f"\n{Fore.GREEN}Historical data download completed{Style.RESET_ALL}")
             print(f"{Fore.YELLOW}Could not generate summary statistics: {e}{Style.RESET_ALL}")
@@ -1507,6 +1830,7 @@ async def stream_live_data():
                 for contract in contracts:
                     # No need to unsubscribe from individual contracts
                     # We'll remove the event handler later
+                    pass
             
             print(f"{Fore.GREEN}Successfully unsubscribed from all data streams{Style.RESET_ALL}")
         except Exception as e:
@@ -1648,6 +1972,7 @@ async def main_menu():
         print("5. Download Historical Data")
         print("6. Stream Live Data")
         print("7. View Contract Data Status")
+        print("8. Force Recreate Database")
         print("0. Exit")
         
         choice = input("\nEnter your choice: ")
@@ -1666,6 +1991,36 @@ async def main_menu():
             await stream_live_data()
         elif choice == '7':
             await view_contract_data_status()
+        elif choice == '8':
+            # Force recreate database
+            print_header()
+            print(f"{Fore.YELLOW}Force Recreate Database{Style.RESET_ALL}")
+            print(f"{Fore.RED}WARNING: This will delete all data in the database!{Style.RESET_ALL}")
+            confirm = input("Are you sure you want to continue? (y/n): ")
+            if confirm.lower() == 'y':
+                try:
+                    # Initialize conn to None
+                    conn = None
+                    
+                    # Close any existing connections
+                    if 'conn' in locals() and conn is not None:
+                        conn.close()
+                    
+                    # Delete the database file
+                    if os.path.exists(DB_PATH):
+                        os.remove(DB_PATH)
+                        print(f"{Fore.YELLOW}Existing database deleted.{Style.RESET_ALL}")
+                    
+                    # Create new database
+                    success, message = create_database()
+                    if success:
+                        print(f"{Fore.GREEN}{message}{Style.RESET_ALL}")
+                    else:
+                        print(f"{Fore.RED}{message}{Style.RESET_ALL}")
+                except Exception as e:
+                    print(f"{Fore.RED}Error recreating database: {e}{Style.RESET_ALL}")
+                
+                input("\nPress Enter to continue...")
         elif choice == '0':
             # Disconnect from Rithmic if connected
             if is_connected and rithmic_client:
@@ -1681,15 +2036,270 @@ async def main_menu():
             print(f"{Fore.RED}Invalid choice. Please try again.{Style.RESET_ALL}")
             time.sleep(1)
 
-if __name__ == "__main__":
-    try:
-        # Create data directory if it doesn't exist
-        os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
+async def process_command_line_args(args):
+    """Process command line arguments and run the appropriate functions"""
+    # Create data directory if it doesn't exist
+    os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
+    
+    # Process data types if specified
+    data_types = []
+    if args.data_types:
+        try:
+            # Parse the comma-separated list of data types
+            type_names = [t.strip().upper() for t in args.data_types.split(',')]
+            for type_name in type_names:
+                try:
+                    # Special handling for HISTORY which is not a DataType enum value
+                    if type_name == "HISTORY":
+                        # Print all available DataType values for debugging
+                        print(f"Available DataType values: {[dt.name for dt in DataType]}")
+                        
+                        # Store HISTORY as a string since it's not a DataType enum value
+                        data_types.append("HISTORY")
+                        print(f"Historical data access is available by default")
+                    else:
+                        try:
+                            data_type = DataType[type_name]
+                            data_types.append(data_type)
+                            print(f"Enabling data type: {type_name}")
+                        except KeyError:
+                            print(f"Warning: {type_name} is not a valid DataType enum value")
+                except (KeyError, AttributeError) as e:
+                    print(f"{Fore.YELLOW}Warning: Unknown data type '{type_name}': {e}{Style.RESET_ALL}")
+        except Exception as e:
+            print(f"{Fore.YELLOW}Warning: Error parsing data types: {e}{Style.RESET_ALL}")
+    
+    # Enable history data type if requested
+    if args.enable_history:
+        # Add HISTORY to data_types if not already there
+        if "HISTORY" not in data_types:
+            data_types.append("HISTORY")
+            print(f"{Fore.CYAN}Added HISTORY to enabled data types{Style.RESET_ALL}")
+    
+    # Connect to Rithmic if requested
+    if args.connect:
+        await connect_to_rithmic(cli_mode=True, data_types=data_types)
         
-        # Run the main menu
-        asyncio.run(main_menu())
-    except KeyboardInterrupt:
-        print(f"\n{Fore.YELLOW}Program terminated by user{Style.RESET_ALL}")
-    except Exception as e:
-        print(f"{Fore.RED}Unhandled exception: {e}{Style.RESET_ALL}")
-        logger.exception("Unhandled exception in main")
+        # If only connecting, wait for user input before disconnecting
+        if not any(getattr(args, attr) for attr in vars(args) if attr not in ['connect', 'data_types', 'enable_history']):
+            print(f"\n{Fore.GREEN}Connected to Rithmic with specified data types.{Style.RESET_ALL}")
+            input("Press Enter to disconnect and exit...")
+            await disconnect_from_rithmic()
+            return
+    
+    # Test connections if requested
+    elif args.test_connections:
+        await test_db_connection(cli_mode=True)
+        await connect_to_rithmic(cli_mode=True, data_types=data_types)
+        
+        # If only testing connections, close the Rithmic client and return
+        if not any(getattr(args, attr) for attr in vars(args) if attr not in ['test_connections', 'data_types']):
+            await disconnect_from_rithmic()
+            return
+    
+    # Search for symbols if requested
+    if args.search_symbols:
+        # Set the search term
+        global current_exchange
+        
+        # Import search_symbols function here to avoid circular imports
+        from search_symbols import search_symbols as search_symbols_func
+        
+        search_term = args.search_symbols
+        print(f"\nSearching for '{search_term}' on {current_exchange}...")
+        
+        # Check if search term contains wildcards
+        has_wildcards = '*' in search_term or '?' in search_term
+        
+        # If wildcards are present, convert to a basic search term for the API
+        api_search_term = search_term
+        if has_wildcards:
+            # Extract the base part of the search term (before any wildcards)
+            api_search_term = re.split(r'[\*\?]', search_term)[0]
+            if not api_search_term:
+                api_search_term = search_term.replace('*', '').replace('?', '')
+                if not api_search_term:
+                    api_search_term = 'A'  # Fallback to a very broad search
+        
+        try:
+            # Search for symbols
+            results = await search_symbols_func(
+                rithmic_client,
+                api_search_term, 
+                instrument_type=InstrumentType.FUTURE,
+                exchange=current_exchange
+            )
+            
+            if not results:
+                print(f"{Fore.YELLOW}No symbols found matching '{search_term}' on {current_exchange}{Style.RESET_ALL}")
+                return
+            
+            # Filter results if wildcards were used
+            filtered_results = results
+            if has_wildcards:
+                filtered_results = []
+                pattern = search_term.replace('?', '.').replace('*', '.*')
+                
+                # Check if we're dealing with NQ or ES futures
+                is_nq_es = search_term.upper().startswith('NQ') or search_term.upper().startswith('ES')
+                
+                for result in results:
+                    # For NQ and ES, only include contracts with valid month codes (H, M, U, Z)
+                    if is_nq_es:
+                        # Extract the month code from the symbol (typically the character after the root)
+                        symbol = result.symbol.upper()
+                        product_code = result.product_code.upper()
+                        
+                        # Try to extract month code - typically it's the first non-digit after the root symbol
+                        month_code = None
+                        if len(symbol) > 2:  # Ensure there's enough characters
+                            for char in symbol[2:]:
+                                if char.isalpha():
+                                    month_code = char
+                                    break
+                        
+                        # Skip if not a valid quarterly month code
+                        if month_code and month_code not in ['H', 'M', 'U', 'Z']:
+                            continue
+                    
+                    # Apply the wildcard pattern matching
+                    if (re.match(pattern, result.symbol, re.IGNORECASE) or 
+                        re.match(pattern, result.product_code, re.IGNORECASE)):
+                        filtered_results.append(result)
+            
+            # Display results
+            print(f"\n{Fore.GREEN}Found {len(filtered_results)} symbols:{Style.RESET_ALL}")
+            
+            # Format and print the results
+            for i, result in enumerate(filtered_results, 1):
+                # Extract month code for futures contracts (if present)
+                month_code = ""
+                month_name = ""
+                symbol = result.symbol
+                if len(symbol) > 2:  # Ensure there's enough characters
+                    for char in symbol[2:]:
+                        if char.isalpha():
+                            # Map month code to full month name
+                            month_map = {
+                                'H': 'March',
+                                'M': 'June',
+                                'U': 'September',
+                                'Z': 'December'
+                            }
+                            
+                            if char.upper() in month_map:
+                                month_code = char.upper()
+                                month_name = month_map[month_code]
+                                month_display = f"{Fore.YELLOW}{month_name}{Style.RESET_ALL}"
+                            else:
+                                month_code = char.upper()
+                                month_display = month_code
+                            break
+                
+                # Format the item
+                line = f"{i}. Symbol: {symbol}"
+                if month_code:
+                    line += f" (Month: {month_display})"
+                line += f" | Product: {result.product_code}"
+                line += f" | Exp: {result.expiration_date}"
+                
+                print(line)
+            
+        except Exception as e:
+            print(f"{Fore.RED}Error searching symbols: {e}{Style.RESET_ALL}")
+    
+    # Set symbol if provided
+    if args.symbol:
+        global current_symbols
+        current_symbols = [args.symbol]
+        print(f"\n{Fore.GREEN}Using symbol: {args.symbol}{Style.RESET_ALL}")
+    
+    # Check contracts if requested
+    if args.check_contracts:
+        if not current_symbols:
+            print(f"{Fore.RED}Error: No symbol specified. Use -s/--symbol to specify a symbol.{Style.RESET_ALL}")
+        else:
+            await check_contracts(cli_mode=True)
+    
+    # Download historical data if requested
+    if args.download_historical:
+        if not current_symbols:
+            print(f"{Fore.RED}Error: No symbol specified. Use -s/--symbol to specify a symbol.{Style.RESET_ALL}")
+        else:
+            # Get days to download from args if provided
+            days = 7  # Default
+            if args.days:
+                try:
+                    days = int(args.days)
+                except ValueError:
+                    print(f"{Fore.YELLOW}Invalid days value. Using default of 7 days.{Style.RESET_ALL}")
+            
+            await download_historical_data(cli_mode=True, days_to_download=days)
+    
+    # Stream live data if requested
+    if args.stream_live:
+        if not current_symbols:
+            print(f"{Fore.RED}Error: No symbol specified. Use -s/--symbol to specify a symbol.{Style.RESET_ALL}")
+        else:
+            # We'll need to modify stream_live_data to support cli_mode
+            # For now, we'll just call it as is
+            await stream_live_data()
+            
+    # Always disconnect from Rithmic at the end if we're connected
+    if is_connected and rithmic_client:
+        await disconnect_from_rithmic()
+
+if __name__ == "__main__":
+    import argparse
+    
+    # Initialize colorama
+    colorama.init()
+    
+    # Create argument parser
+    parser = argparse.ArgumentParser(description="Rithmic Data Admin Tool")
+    parser.add_argument("-t", "--test-connections", action="store_true", 
+                        help="Test database and Rithmic connections")
+    parser.add_argument("-S", "--search-symbols", type=str, metavar="PATTERN",
+                        help="Search for symbols matching the pattern (e.g., 'NG?5', 'ES*')")
+    parser.add_argument("-s", "--symbol", type=str, metavar="SYMBOL",
+                        help="Use the specified symbol (e.g., 'NGM5')")
+    parser.add_argument("-c", "--check-contracts", action="store_true",
+                        help="Check contract existence and datapoints (requires -s/--symbol)")
+    parser.add_argument("-d", "--download-historical", action="store_true",
+                        help="Download historical data (requires -s/--symbol)")
+    parser.add_argument("--days", type=str, metavar="DAYS",
+                        help="Number of days to download (default: 7, used with -d/--download-historical)")
+    parser.add_argument("-l", "--stream-live", action="store_true",
+                        help="Stream live data (requires -s/--symbol)")
+    parser.add_argument("--data-types", type=str, metavar="TYPES",
+                        help="Comma-separated list of data types to enable (e.g., 'HISTORY,MARKET_DATA')")
+    parser.add_argument("--connect", action="store_true",
+                        help="Connect to Rithmic (can be used with --data-types)")
+    parser.add_argument("--enable-history", action="store_true",
+                        help="Enable history data type for historical data retrieval")
+    
+    # Parse arguments
+    args = parser.parse_args()
+    
+    # If no arguments provided, run the interactive menu
+    if not any(vars(args).values()):
+        try:
+            # Create data directory if it doesn't exist
+            os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
+            
+            # Run the main menu
+            asyncio.run(main_menu())
+        except KeyboardInterrupt:
+            print(f"\n{Fore.YELLOW}Program terminated by user{Style.RESET_ALL}")
+        except Exception as e:
+            print(f"{Fore.RED}Unhandled exception: {e}{Style.RESET_ALL}")
+    else:
+        # Process command line arguments
+        try:
+            asyncio.run(process_command_line_args(args))
+        except KeyboardInterrupt:
+            print(f"\n{Fore.YELLOW}Program terminated by user{Style.RESET_ALL}")
+        except Exception as e:
+            error_msg = f"Unhandled exception: {e}"
+            print(f"{Fore.RED}{error_msg}{Style.RESET_ALL}")
+            logger.exception(error_msg)

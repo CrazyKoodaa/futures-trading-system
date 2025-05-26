@@ -6,8 +6,11 @@ import asyncio
 import logging
 from datetime import datetime, timedelta
 from config.chicago_gateway_config import get_chicago_gateway_config
-from async_rithmic import RithmicClient, TimeBarType, DataType, LastTradePresenceBits, BestBidOfferPresenceBits
+# Import the base components
+from async_rithmic import TimeBarType, DataType, LastTradePresenceBits, BestBidOfferPresenceBits
 from async_rithmic import ReconnectionSettings, RetrySettings
+# Import our extended RithmicClient
+from admin_rithmic import RithmicClient
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, 
@@ -46,9 +49,11 @@ async def collect_live_data(client, symbols=['ES', 'NQ']):
     try:
         # Get front month contracts for each symbol
         contracts = []
+        # Import the utility function
+        from admin_rithmic import get_front_month_contract
         for symbol in symbols:
             try:
-                contract = await client.get_front_month_contract(symbol, "CME")
+                contract = await get_front_month_contract(client, symbol, "CME")
                 contracts.append((contract, "CME"))
                 logger.info(f"Front month contract for {symbol}: {contract}")
             except Exception as e:
@@ -96,9 +101,11 @@ async def fetch_historical_data(client, symbols=['ES', 'NQ']):
     try:
         # Get front month contracts for each symbol
         contracts = []
+        # Import the utility function
+        from admin_rithmic import get_front_month_contract
         for symbol in symbols:
             try:
-                contract = await client.get_front_month_contract(symbol, "CME")
+                contract = await get_front_month_contract(client, symbol, "CME")
                 contracts.append((contract, "CME"))
                 logger.info(f"Front month contract for {symbol}: {contract}")
             except Exception as e:

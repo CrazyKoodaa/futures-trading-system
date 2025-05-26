@@ -9,7 +9,10 @@ import json
 import pandas as pd
 from datetime import datetime, timedelta
 from config.chicago_gateway_config import get_chicago_gateway_config
-from async_rithmic import RithmicClient, Gateway, TimeBarType
+# Import the base components
+from async_rithmic import Gateway, TimeBarType
+# Import our extended RithmicClient
+from admin_rithmic import RithmicClient
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, 
@@ -87,7 +90,9 @@ async def fetch_historical_data(client, symbols=['ES', 'NQ'], days=30):
         contracts = []
         for symbol in symbols:
             try:
-                contract = await client.get_front_month_contract(symbol, "CME")
+                # Use the utility function instead of the method
+                from admin_rithmic import get_front_month_contract
+                contract = await get_front_month_contract(client, symbol, "CME")
                 contracts.append((contract, "CME", symbol))
                 logger.info(f"Front month contract for {symbol}: {contract}")
             except Exception as e:
@@ -232,7 +237,7 @@ async def main():
             system_name=config['rithmic']['system_name'],
             app_name=config['rithmic']['app_name'],
             app_version=config['rithmic']['app_version'],
-            gateway=Gateway.TEST if config.get('use_test_gateway', False) else Gateway.LIVE
+            gateway=Gateway.TEST if config.get('use_test_gateway', False) else Gateway.CHICAGO
         )
         
         # Connect to Rithmic
