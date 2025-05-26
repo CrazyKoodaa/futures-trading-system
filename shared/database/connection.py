@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 class DatabaseConfig:
     """Database configuration management"""
     
-    def __init__(self, config: Dict[str, Any] = None):
+    def __init__(self, config: Optional[Dict[str, Any]] = None):
         """
         Initialize database configuration
         
@@ -81,7 +81,7 @@ class DatabaseConfig:
 class DatabaseManager:
     """Main database connection manager"""
     
-    def __init__(self, config: Dict[str, Any] = None):
+    def __init__(self, config: Optional[Dict[str, Any]] = None):
         """
         Initialize database manager
         
@@ -281,7 +281,7 @@ class DatabaseManager:
 # Global database manager instance
 _db_manager: Optional[DatabaseManager] = None
 
-def get_database_manager(config: Dict[str, Any] = None) -> DatabaseManager:
+def get_database_manager(config: Optional[Dict[str, Any]] = None) -> DatabaseManager:
     """Get global database manager instance"""
     global _db_manager
     if _db_manager is None:
@@ -339,7 +339,7 @@ class TimescaleDBHelper:
             logger.error(f"Error in bulk insert to {table_name}: {e}")
             raise
     
-    async def get_latest_data(self, symbol: str, exchange: str = None, 
+    async def get_latest_data(self, symbol: str, exchange: Optional[str] = None, 
                             table_name: str = 'market_data_seconds', limit: int = 100) -> pd.DataFrame:
         """Get latest market data as DataFrame"""
         query = f"""
@@ -368,7 +368,23 @@ class TimescaleDBHelper:
         else:
             return pd.DataFrame()
     
-    async def get_volume_by_exchange(self, symbol: str, date: str = None) -> pd.DataFrame:
+    async def insert_second_data(self, record: Dict[str, Any], table_name: str = 'market_data_seconds') -> None:
+        """
+        Insert a single record of second data into the database
+        
+        Args:
+            record: Dictionary containing the market data record
+            table_name: Target table name (default: market_data_seconds)
+        """
+        try:
+            # Use bulk_insert_market_data with a single record
+            await self.bulk_insert_market_data([record], table_name)
+            logger.debug(f"Inserted 1 record to {table_name}")
+        except Exception as e:
+            logger.error(f"Error inserting record to {table_name}: {e}")
+            raise
+    
+    async def get_volume_by_exchange(self, symbol: str, date: Optional[str] = None) -> pd.DataFrame:
         """Get volume statistics by exchange"""
         date_filter = f"AND DATE(timestamp) = :date" if date else ""
         
@@ -410,9 +426,10 @@ class ExchangeDataManager:
         volume_data = await self.timescale_helper.get_volume_by_exchange(symbol)
         
         rankings = {}
-        for i, row in volume_data.iterrows():
+        # Use enumerate to get a proper integer index
+        for idx, (_, row) in enumerate(volume_data.iterrows()):
             rankings[row['exchange']] = {
-                'rank': i + 1,
+                'rank': idx + 1,
                 'total_volume': int(row['total_volume']),
                 'bar_count': row['bar_count'],
                 'avg_spread': float(row['avg_spread']) if row['avg_spread'] else 0,
