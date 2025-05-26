@@ -1322,11 +1322,13 @@ async def stream_live_data():
     
     # Register tick data handler to simulate time bars
     async def time_bar_handler(data):
-        # Process market data to simulate time bars
+        # Process time bar data received from Rithmic
         if 'data_type' not in data:
             return
             
+        # Handle both tick data and time bar data
         if data['data_type'] == DataType.LAST_TRADE:
+            # Process tick data (for backward compatibility)
             contract = data.get('symbol', '')
             if not contract or contract not in contract_map:
                 return
@@ -1378,6 +1380,32 @@ async def stream_live_data():
                             
                         # Reset data for the new minute
                         last_bar_time[contract]['minute'] = current_minute
+        
+        # Handle time bar data directly from Rithmic
+        elif 'bar_type' in data:
+            contract = data.get('symbol', '')
+            if not contract or contract not in contract_map:
+                return
+                
+            # Check if we should process this bar type
+            bar_type = data.get('bar_type')
+            if (bar_type == TimeBarType.SECOND_BAR and stream_second_bars) or \
+               (bar_type == TimeBarType.MINUTE_BAR and stream_minute_bars):
+                
+                # Create a bar data structure compatible with our processing
+                bar_data = {
+                    'symbol': contract,
+                    'open': data.get('open', 0),
+                    'high': data.get('high', 0),
+                    'low': data.get('low', 0),
+                    'close': data.get('close', 0),
+                    'volume': data.get('volume', 0),
+                    'bar_end_datetime': data.get('bar_end_datetime', 
+                                               datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+                }
+                
+                # Process the time bar
+                await process_time_bar(bar_data, contract_map[contract])
     
     # Helper function to create a time bar from tick data
     def create_time_bar(contract, data, bar_type):
@@ -1450,20 +1478,17 @@ async def stream_live_data():
         for symbol, contracts in available_contracts.items():
             for contract in contracts:
                 # Use on_time_bar event handler instead of subscribe_to_time_bar_data
-                # which is not available in the current version of async_rithmic
+                # Use on_time_bar event handler instead of subscribe_to_time_bar_data
                 if stream_second_bars:
-                    # For second bars, use time bar data subscription
-                    await rithmic_client.subscribe_to_time_bar_data(
-                        contract, current_exchange, TimeBarType.SECOND_BAR, 1
-                    )
-                    print(f"Subscribed to second bars for {contract}")
+                    # For second bars, register the time_bar_handler with on_time_bar event
+                    if hasattr(rithmic_client, 'on_time_bar'):
+                        rithmic_client.on_time_bar += time_bar_handler
+                        print(f"Registered time_bar_handler for {contract} second bars")
                 
                 if stream_minute_bars:
-                    # For minute bars, use time bar data subscription
-                    await rithmic_client.subscribe_to_time_bar_data(
-                        contract, current_exchange, TimeBarType.MINUTE_BAR, 1
-                    )
-                    print(f"Subscribed to minute bars for {contract}")
+                    # For minute bars, we're already registered with on_time_bar event
+                    # We'll filter by bar type in the handler
+                    print(f"Using time_bar_handler for {contract} minute bars")
         
         print(f"\n{Fore.GREEN}Data streaming started. Press Ctrl+C to stop...{Style.RESET_ALL}")
         
@@ -1480,16 +1505,8 @@ async def stream_live_data():
         try:
             for symbol, contracts in available_contracts.items():
                 for contract in contracts:
-                    # Unsubscribe from time bar data
-                    if stream_second_bars:
-                        await rithmic_client.unsubscribe_from_time_bar_data(
-                            contract, current_exchange, TimeBarType.SECOND_BAR, 1
-                        )
-                    
-                    if stream_minute_bars:
-                        await rithmic_client.unsubscribe_from_time_bar_data(
-                            contract, current_exchange, TimeBarType.MINUTE_BAR, 1
-                        )
+                    # No need to unsubscribe from individual contracts
+                    # We'll remove the event handler later
             
             print(f"{Fore.GREEN}Successfully unsubscribed from all data streams{Style.RESET_ALL}")
         except Exception as e:
