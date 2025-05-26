@@ -252,51 +252,40 @@ class TimescaleDBHelper:
         self.session = session
 
     async def bulk_insert_market_data(self, data: list, table_name: str = 'market_data_seconds'):
-        if not data:
-            return
+    if not data:
+        return
+        
+    try:
+        # Simple approach: insert records one by one for reliability
+        for record in data:
+            # Convert pandas Timestamp to datetime if needed
+            processed_record = {}
+            for key, value in record.items():
+                if isinstance(value, pd.Timestamp):
+                    processed_record[key] = value.to_pydatetime()
+                elif pd.isna(value):
+                    processed_record[key] = None
+                else:
+                    processed_record[key] = value
             
-        try:
-            # Use raw SQL for bulk insert - more reliable with async
-            df = pd.DataFrame(data)
-            columns = list(df.columns)
+            # Build column list and placeholder list
+            columns = list(processed_record.keys())
+            placeholders = [f":{col}" for col in columns]
             
-            # Build the INSERT statement
-            placeholders = []
-            values = []
+            sql = f"""
+                INSERT INTO {table_name} ({', '.join(columns)}) 
+                VALUES ({', '.join(placeholders)})
+                ON CONFLICT DO NOTHING
+            """
             
-            for i, (_, row) in enumerate(df.iterrows()):
-                row_placeholders = []
-                for col in columns:
-                    placeholder = f"${len(values) + 1}"
-                    row_placeholders.append(placeholder)
-                    
-                    val = row[col]
-                    if pd.isna(val):
-                        values.append(None)
-                    elif isinstance(val, pd.Timestamp):
-                        values.append(val.to_pydatetime())
-                    else:
-                        values.append(val)
-                        
-                placeholders.append(f"({', '.join(row_placeholders)})")
+            await self.session.execute(text(sql), processed_record)
+        
+        logger.debug(f"Bulk inserted {len(data)} records to {table_name}")
             
-            if placeholders:
-                columns_str = ', '.join(columns)
-                values_str = ', '.join(placeholders)
-                
-                sql = f"""
-                    INSERT INTO {table_name} ({columns_str}) 
-                    VALUES {values_str}
-                    ON CONFLICT DO NOTHING
-                """
-                
-                await self.session.execute(text(sql), values)
-                logger.debug(f"Bulk inserted {len(data)} records to {table_name}")
-                
-        except Exception as e:
-            logger.error(f"Error in bulk insert to {table_name}: {e}")
-            raise
-
+    except Exception as e:
+        logger.error(f"Error in bulk insert to {table_name}: {e}")
+        raise
+    
     async def get_latest_data(self, symbol: str, exchange: Optional[str] = None,
                             table_name: str = 'market_data_seconds', limit: int = 100) -> pd.DataFrame:
         query = f"""
