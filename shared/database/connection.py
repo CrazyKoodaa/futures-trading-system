@@ -154,294 +154,72 @@ class DatabaseManager:
             return False
 
     async def initialize_database(self):
+        """Simple database initialization - just check if everything is ready"""
         try:
             async with self.get_async_session() as session:
-                # Create TimescaleDB extension
-                await session.execute(text("CREATE EXTENSION IF NOT EXISTS timescaledb CASCADE;"))
-                # Create additional extensions
-                await session.execute(text("CREATE EXTENSION IF NOT EXISTS pg_stat_statements;"))
-                await session.commit()
-                logger.info("Database extensions initialized successfully")
+                # Test that TimescaleDB extension exists
+                result = await session.execute(text("SELECT 1 FROM pg_extension WHERE extname = 'timescaledb';"))
+                if not result.scalar():
+                    logger.error("TimescaleDB extension not found!")
+                    raise Exception("TimescaleDB extension not installed")
+                    
+                logger.info("Database is ready and TimescaleDB is available")
         except Exception as e:
-            logger.error(f"Error initializing database: {e}")
+            logger.error(f"Error checking database: {e}")
             raise
 
-    async def create_tables(self):
-        """Create all required tables before creating hypertables"""
-        tables_sql = [
-            # Market data seconds table
-            """
-            CREATE TABLE IF NOT EXISTS market_data_seconds (
-                timestamp TIMESTAMPTZ NOT NULL,
-                symbol VARCHAR(10) NOT NULL,
-                contract VARCHAR(10) NOT NULL,
-                exchange VARCHAR(10) NOT NULL,
-                exchange_code VARCHAR(10),
-                open DECIMAL(12,4) NOT NULL,
-                high DECIMAL(12,4) NOT NULL,
-                low DECIMAL(12,4) NOT NULL,
-                close DECIMAL(12,4) NOT NULL,
-                volume INTEGER DEFAULT 0,
-                tick_count INTEGER DEFAULT 0,
-                vwap DECIMAL(12,4),
-                bid DECIMAL(12,4),
-                ask DECIMAL(12,4),
-                spread DECIMAL(12,4),
-                data_quality_score DECIMAL(3,2) DEFAULT 1.0,
-                is_regular_hours BOOLEAN DEFAULT TRUE,
-                created_at TIMESTAMPTZ DEFAULT NOW(),
-                PRIMARY KEY (timestamp, symbol, contract, exchange)
-            );
-            """,
-            # Raw tick data table
-            """
-            CREATE TABLE IF NOT EXISTS raw_tick_data (
-                timestamp TIMESTAMPTZ NOT NULL,
-                symbol VARCHAR(10) NOT NULL,
-                contract VARCHAR(10) NOT NULL,
-                exchange VARCHAR(10) NOT NULL,
-                price DECIMAL(12,4) NOT NULL,
-                size INTEGER DEFAULT 0,
-                tick_type VARCHAR(10) NOT NULL,
-                exchange_timestamp TIMESTAMPTZ,
-                sequence_number BIGINT,
-                created_at TIMESTAMPTZ DEFAULT NOW(),
-                PRIMARY KEY (timestamp, symbol, contract, exchange, sequence_number)
-            );
-            """,
-            # Market data minutes table
-            """
-            CREATE TABLE IF NOT EXISTS market_data_minutes (
-                timestamp TIMESTAMPTZ NOT NULL,
-                symbol VARCHAR(10) NOT NULL,
-                contract VARCHAR(10) NOT NULL,
-                exchange VARCHAR(10) NOT NULL,
-                open DECIMAL(12,4) NOT NULL,
-                high DECIMAL(12,4) NOT NULL,
-                low DECIMAL(12,4) NOT NULL,
-                close DECIMAL(12,4) NOT NULL,
-                volume INTEGER DEFAULT 0,
-                tick_count INTEGER DEFAULT 0,
-                vwap DECIMAL(12,4),
-                avg_spread DECIMAL(12,4),
-                max_spread DECIMAL(12,4),
-                trade_count INTEGER DEFAULT 0,
-                PRIMARY KEY (timestamp, symbol, contract, exchange)
-            );
-            """,
-            # Features table
-            """
-            CREATE TABLE IF NOT EXISTS features (
-                timestamp TIMESTAMPTZ NOT NULL,
-                symbol VARCHAR(10) NOT NULL,
-                contract VARCHAR(10) NOT NULL,
-                exchange VARCHAR(10) NOT NULL,
-                timeframe VARCHAR(5) NOT NULL,
-                sma_5 DECIMAL(12,4),
-                sma_10 DECIMAL(12,4),
-                sma_20 DECIMAL(12,4),
-                sma_50 DECIMAL(12,4),
-                ema_12 DECIMAL(12,4),
-                ema_26 DECIMAL(12,4),
-                macd DECIMAL(12,6),
-                macd_signal DECIMAL(12,6),
-                macd_histogram DECIMAL(12,6),
-                rsi DECIMAL(5,2),
-                stoch_k DECIMAL(5,2),
-                stoch_d DECIMAL(5,2),
-                williams_r DECIMAL(5,2),
-                roc DECIMAL(8,4),
-                bb_upper DECIMAL(12,4),
-                bb_middle DECIMAL(12,4),
-                bb_lower DECIMAL(12,4),
-                bb_width DECIMAL(8,4),
-                atr DECIMAL(8,4),
-                volume_sma DECIMAL(12,2),
-                volume_ratio DECIMAL(6,3),
-                obv BIGINT,
-                relative_volume DECIMAL(6,3),
-                exchange_rank INTEGER,
-                PRIMARY KEY (timestamp, symbol, contract, exchange, timeframe)
-            );
-            """,
-            # Predictions table
-            """
-            CREATE TABLE IF NOT EXISTS predictions (
-                timestamp TIMESTAMPTZ NOT NULL,
-                symbol VARCHAR(10) NOT NULL,
-                contract VARCHAR(10) NOT NULL,
-                exchange VARCHAR(10) NOT NULL,
-                model_version VARCHAR(50) NOT NULL,
-                model_type VARCHAR(20) NOT NULL,
-                direction_prediction INTEGER,
-                confidence_score DECIMAL(5,2),
-                pip_movement_prediction DECIMAL(8,4),
-                long_probability DECIMAL(5,4),
-                short_probability DECIMAL(5,4),
-                prediction_horizon_minutes INTEGER,
-                exchange_adjustment_factor DECIMAL(6,4) DEFAULT 1.0,
-                features_used TEXT[],
-                created_at TIMESTAMPTZ DEFAULT NOW(),
-                PRIMARY KEY (timestamp, symbol, contract, exchange, model_version)
-            );
-            """,
-            # Trades table - Fixed to work with TimescaleDB partitioning
-            """
-            CREATE TABLE IF NOT EXISTS trades (
-                timestamp TIMESTAMPTZ NOT NULL,
-                trade_id BIGINT NOT NULL,
-                symbol VARCHAR(10) NOT NULL,
-                contract VARCHAR(10) NOT NULL,
-                exchange VARCHAR(10) NOT NULL,
-                side VARCHAR(10) NOT NULL,
-                quantity INTEGER NOT NULL,
-                entry_price DECIMAL(12,4) NOT NULL,
-                exit_timestamp TIMESTAMPTZ,
-                exit_price DECIMAL(12,4),
-                pnl DECIMAL(12,2),
-                pnl_percent DECIMAL(8,4),
-                commission DECIMAL(8,2) DEFAULT 0,
-                confidence_at_entry DECIMAL(5,2),
-                model_version VARCHAR(50),
-                route_exchange VARCHAR(10),
-                execution_venue VARCHAR(20),
-                trade_type VARCHAR(20) DEFAULT 'ALGO',
-                notes TEXT,
-                created_at TIMESTAMPTZ DEFAULT NOW(),
-                updated_at TIMESTAMPTZ DEFAULT NOW(),
-                PRIMARY KEY (timestamp, trade_id, symbol, exchange)
-            );
-            """,
-            # Create sequence for trade_id
-            """
-            CREATE SEQUENCE IF NOT EXISTS trades_trade_id_seq;
-            """
+    async def verify_tables(self):
+        """Verify that all required tables exist"""
+        required_tables = [
+            'market_data_seconds',
+            'raw_tick_data', 
+            'market_data_minutes',
+            'features',
+            'predictions',
+            'trades'
         ]
-
+        
         try:
-            for sql in tables_sql:
-                async with self.get_async_session() as session:
-                    await session.execute(text(sql))
-                    await session.commit()
-            logger.info("All tables created successfully")
-        except Exception as e:
-            logger.error(f"Error creating tables: {e}")
-            raise
-
-    async def create_hypertables(self):
-        """Create TimescaleDB hypertables for time-series data"""
-        hypertables = [
-            {
-                'table': 'market_data_seconds',
-                'time_column': 'timestamp',
-                'chunk_interval': "INTERVAL '1 minute'"
-            },
-            {
-                'table': 'raw_tick_data',
-                'time_column': 'timestamp',
-                'chunk_interval': "INTERVAL '10 seconds'"
-            },
-            {
-                'table': 'market_data_minutes',
-                'time_column': 'timestamp',
-                'chunk_interval': "INTERVAL '1 hour'"
-            },
-            {
-                'table': 'features',
-                'time_column': 'timestamp',
-                'chunk_interval': "INTERVAL '1 day'"
-            },
-            {
-                'table': 'predictions',
-                'time_column': 'timestamp',
-                'chunk_interval': "INTERVAL '1 day'"
-            },
-            {
-                'table': 'trades',
-                'time_column': 'timestamp',
-                'chunk_interval': "INTERVAL '1 day'"
-            }
-        ]
-
-        for hypertable in hypertables:
-            try:
-                async with self.get_async_session() as session:
-                    # Check if table exists and is not already a hypertable
-                    check_sql = text("""
+            async with self.get_async_session() as session:
+                for table in required_tables:
+                    result = await session.execute(text(f"""
                         SELECT EXISTS (
                             SELECT FROM information_schema.tables 
-                            WHERE table_name = :table_name
-                        ) AND NOT EXISTS (
-                            SELECT FROM timescaledb_information.hypertables 
-                            WHERE hypertable_name = :table_name
+                            WHERE table_name = '{table}'
                         );
-                    """)
+                    """))
                     
-                    result = await session.execute(check_sql, {'table_name': hypertable['table']})
-                    should_create = result.scalar()
-                    
-                    if should_create:
-                        query = text(f"""
-                            SELECT create_hypertable('{hypertable['table']}', '{hypertable['time_column']}',
-                            chunk_time_interval => {hypertable['chunk_interval']}, if_not_exists => TRUE);
-                        """)
-                        await session.execute(query)
-                        await session.commit()
-                        logger.info(f"Created hypertable: {hypertable['table']}")
-                    else:
-                        logger.info(f"Hypertable {hypertable['table']} already exists or table not found")
+                    if not result.scalar():
+                        logger.error(f"Required table '{table}' not found!")
+                        return False
                         
-            except Exception as e:
-                logger.warning(f"Could not create hypertable {hypertable['table']}: {e}")
-                # Continue with other hypertables
+                logger.info("All required tables exist")
+                return True
+                
+        except Exception as e:
+            logger.error(f"Error verifying tables: {e}")
+            return False
 
-    async def setup_retention_policies(self):
-        """Set up data retention policies"""
-        retention_policies = [
-            {'table': 'raw_tick_data', 'interval': "INTERVAL '7 days'"},
-            {'table': 'market_data_seconds', 'interval': "INTERVAL '1 year'"},
-            {'table': 'market_data_minutes', 'interval': "INTERVAL '2 years'"},
-            {'table': 'predictions', 'interval': "INTERVAL '6 months'"}
-        ]
-
-        for policy in retention_policies:
-            try:
-                async with self.get_async_session() as session:
-                    # Check if table is a hypertable before adding retention policy
-                    check_sql = text("""
-                        SELECT EXISTS (
-                            SELECT FROM timescaledb_information.hypertables 
-                            WHERE hypertable_name = :table_name
-                        );
-                    """)
+    async def verify_hypertables(self):
+        """Verify that hypertables are properly configured"""
+        try:
+            async with self.get_async_session() as session:
+                result = await session.execute(text("""
+                    SELECT hypertable_name, num_chunks
+                    FROM timescaledb_information.hypertables
+                    ORDER BY hypertable_name;
+                """))
+                
+                hypertables = result.fetchall()
+                logger.info(f"Found {len(hypertables)} hypertables:")
+                for ht in hypertables:
+                    logger.info(f"  - {ht[0]} ({ht[1]} chunks)")
                     
-                    result = await session.execute(check_sql, {'table_name': policy['table']})
-                    is_hypertable = result.scalar()
-                    
-                    if is_hypertable:
-                        # Check if retention policy already exists
-                        policy_check_sql = text("""
-                            SELECT EXISTS (
-                                SELECT FROM timescaledb_information.drop_chunks_policies 
-                                WHERE hypertable_name = :table_name
-                            );
-                        """)
-                        
-                        result = await session.execute(policy_check_sql, {'table_name': policy['table']})
-                        policy_exists = result.scalar()
-                        
-                        if not policy_exists:
-                            query = text(f"SELECT add_retention_policy('{policy['table']}', {policy['interval']});")
-                            await session.execute(query)
-                            await session.commit()
-                            logger.info(f"Added retention policy for {policy['table']}: {policy['interval']}")
-                        else:
-                            logger.info(f"Retention policy for {policy['table']} already exists")
-                    else:
-                        logger.warning(f"Skipping retention policy for {policy['table']} - not a hypertable")
-                        
-            except Exception as e:
-                logger.warning(f"Could not set retention policy for {policy['table']}: {e}")
+                return len(hypertables) > 0
+                
+        except Exception as e:
+            logger.error(f"Error verifying hypertables: {e}")
+            return False
 
     async def close_connections(self):
         if self._async_engine:
@@ -476,36 +254,43 @@ class TimescaleDBHelper:
     async def bulk_insert_market_data(self, data: list, table_name: str = 'market_data_seconds'):
         if not data:
             return
+            
         try:
-            # Use raw SQL for bulk insert instead of pandas
+            # Use raw SQL for bulk insert - more reliable with async
             df = pd.DataFrame(data)
             columns = list(df.columns)
-            values_list = []
             
-            for _, row in df.iterrows():
-                values = []
+            # Build the INSERT statement
+            placeholders = []
+            values = []
+            
+            for i, (_, row) in enumerate(df.iterrows()):
+                row_placeholders = []
                 for col in columns:
+                    placeholder = f"${len(values) + 1}"
+                    row_placeholders.append(placeholder)
+                    
                     val = row[col]
                     if pd.isna(val):
-                        values.append('NULL')
-                    elif isinstance(val, str):
-                        values.append(f"'{val}'")
+                        values.append(None)
+                    elif isinstance(val, pd.Timestamp):
+                        values.append(val.to_pydatetime())
                     else:
-                        values.append(str(val))
-                values_list.append(f"({', '.join(values)})")
+                        values.append(val)
+                        
+                placeholders.append(f"({', '.join(row_placeholders)})")
             
-            if values_list:
+            if placeholders:
                 columns_str = ', '.join(columns)
-                values_str = ', '.join(values_list)
+                values_str = ', '.join(placeholders)
                 
-                sql = text(f"""
+                sql = f"""
                     INSERT INTO {table_name} ({columns_str}) 
                     VALUES {values_str}
                     ON CONFLICT DO NOTHING
-                """)
+                """
                 
-                await self.session.execute(sql)
-                await self.session.commit()
+                await self.session.execute(text(sql), values)
                 logger.debug(f"Bulk inserted {len(data)} records to {table_name}")
                 
         except Exception as e:
@@ -609,7 +394,7 @@ class ExchangeDataManager:
         data = result.fetchall()
         return pd.DataFrame([dict(row._mapping) for row in data])
 
-# Example usage and testing functions
+# Main test function - simplified without retention policies
 async def test_database_setup():
     try:
         # Test connection
@@ -620,21 +405,23 @@ async def test_database_setup():
             return False
         logger.info("[SUCCESS] Database connection successful")
 
-        # Initialize database
+        # Initialize database (just check readiness)
         await db_manager.initialize_database()
-        logger.info("[SUCCESS] Database extensions initialized")
+        logger.info("[SUCCESS] Database is ready")
 
-        # Create tables first
-        await db_manager.create_tables()
-        logger.info("[SUCCESS] Tables created")
+        # Verify tables exist
+        tables_ok = await db_manager.verify_tables()
+        if not tables_ok:
+            logger.error("[ERROR] Required tables missing")
+            return False
+        logger.info("[SUCCESS] All tables verified")
 
-        # Create hypertables
-        await db_manager.create_hypertables()
-        logger.info("[SUCCESS] Hypertables created")
-
-        # Set up retention policies
-        await db_manager.setup_retention_policies()
-        logger.info("[SUCCESS] Retention policies configured")
+        # Verify hypertables
+        hypertables_ok = await db_manager.verify_hypertables()
+        if not hypertables_ok:
+            logger.warning("[WARNING] No hypertables found - may need fresh setup")
+        else:
+            logger.info("[SUCCESS] Hypertables verified")
 
         # Test data operations
         async with get_async_session() as session:
