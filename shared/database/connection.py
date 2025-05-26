@@ -4,8 +4,6 @@ from contextlib import asynccontextmanager, contextmanager
 from typing import AsyncGenerator, Generator, Optional, Dict, Any
 import os
 from urllib.parse import quote_plus
-from datetime import datetime, timezone
-
 from sqlalchemy import create_engine, MetaData, text
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
 from sqlalchemy.orm import sessionmaker, Session
@@ -15,7 +13,6 @@ import pandas as pd
 logger = logging.getLogger(__name__)
 
 class DatabaseConfig:
-    """Manages database connection configuration, loading from environment variables."""
     def __init__(self, config: Optional[Dict[str, Any]] = None):
         if config:
             self.config = config
@@ -23,15 +20,15 @@ class DatabaseConfig:
             self.config = self._load_from_environment()
 
     def _load_from_environment(self) -> Dict[str, Any]:
-        """Loads database configuration from environment variables."""
         init_mode = os.getenv('DB_INIT_MODE', 'False').lower() == 'true'
+        
         if init_mode:
             user = os.getenv('POSTGRES_ADMIN_USER', 'trading_admin')
             password = os.getenv('POSTGRES_ADMIN_PASSWORD', 'myAdmin4Tr4ding42!')
         else:
             user = os.getenv('POSTGRES_USER', 'trading_user')
             password = os.getenv('POSTGRES_PASSWORD', 'myData4Tr4ding42!')
-        
+
         return {
             'host': os.getenv('POSTGRES_HOST', 'localhost'),
             'port': int(os.getenv('POSTGRES_PORT', '5432')),
@@ -46,7 +43,6 @@ class DatabaseConfig:
         }
 
     def get_sync_url(self) -> str:
-        """Returns the synchronous database connection URL."""
         password = quote_plus(self.config['password'])
         return (
             f"postgresql://{self.config['username']}:{password}@"
@@ -54,7 +50,6 @@ class DatabaseConfig:
         )
 
     def get_async_url(self) -> str:
-        """Returns the asynchronous database connection URL."""
         password = quote_plus(self.config['password'])
         return (
             f"postgresql+asyncpg://{self.config['username']}:{password}@"
@@ -62,7 +57,6 @@ class DatabaseConfig:
         )
 
 class DatabaseManager:
-    """Manages synchronous and asynchronous database engines and sessions."""
     def __init__(self, config: Optional[Dict[str, Any]] = None):
         self.db_config = DatabaseConfig(config)
         self._sync_engine = None
@@ -71,7 +65,6 @@ class DatabaseManager:
         self._async_session_factory = None
 
     def get_sync_engine(self):
-        """Gets or creates the synchronous SQLAlchemy engine."""
         if self._sync_engine is None:
             self._sync_engine = create_engine(
                 self.db_config.get_sync_url(),
@@ -88,7 +81,6 @@ class DatabaseManager:
         return self._sync_engine
 
     def get_async_engine(self):
-        """Gets or creates the asynchronous SQLAlchemy engine."""
         if self._async_engine is None:
             self._async_engine = create_async_engine(
                 self.db_config.get_async_url(),
@@ -107,7 +99,6 @@ class DatabaseManager:
         return self._async_engine
 
     def get_sync_session_factory(self):
-        """Gets or creates the synchronous session factory."""
         if self._sync_session_factory is None:
             self._sync_session_factory = sessionmaker(
                 bind=self.get_sync_engine(),
@@ -116,7 +107,6 @@ class DatabaseManager:
         return self._sync_session_factory
 
     def get_async_session_factory(self):
-        """Gets or creates the asynchronous session factory."""
         if self._async_session_factory is None:
             self._async_session_factory = async_sessionmaker(
                 bind=self.get_async_engine(),
@@ -127,7 +117,6 @@ class DatabaseManager:
 
     @contextmanager
     def get_sync_session(self) -> Generator[Session, None, None]:
-        """Provides a synchronous database session with automatic commit/rollback."""
         session = self.get_sync_session_factory()()
         try:
             yield session
@@ -141,7 +130,6 @@ class DatabaseManager:
 
     @asynccontextmanager
     async def get_async_session(self) -> AsyncGenerator[AsyncSession, None]:
-        """Provides an asynchronous database session with automatic commit/rollback."""
         session = self.get_async_session_factory()()
         try:
             yield session
@@ -154,7 +142,6 @@ class DatabaseManager:
             await session.close()
 
     async def test_connection(self) -> bool:
-        """Tests the database connection."""
         try:
             async with self.get_async_session() as session:
                 result = await session.execute(text("SELECT 1"))
@@ -163,255 +150,28 @@ class DatabaseManager:
             logger.error(f"Database connection test failed: {e}")
             return False
 
-    async def initialize_database_schema(self):
-        """
-        Initializes the database by creating extensions, tables, hypertables,
-        and setting up retention policies.
-        """
+    async def initialize_database(self):
         try:
             async with self.get_async_session() as session:
-                logger.info("Creating TimescaleDB and other extensions...")
-                await session.execute(text("CREATE EXTENSION IF NOT EXISTS timescaledb CASCADE;"))
-                await session.execute(text("CREATE EXTENSION IF NOT EXISTS pg_stat_statements;"))
-                logger.info("Extensions created/verified.")
-
-                logger.info("Creating market_data_seconds table...")
-                await session.execute(text("""
-                    CREATE TABLE IF NOT EXISTS market_data_seconds (
-                        timestamp TIMESTAMPTZ NOT NULL,
-                        symbol VARCHAR(10) NOT NULL,
-                        contract VARCHAR(10) NOT NULL,
-                        exchange VARCHAR(10) NOT NULL,
-                        exchange_code VARCHAR(10),
-                        open DECIMAL(12,4) NOT NULL,
-                        high DECIMAL(12,4) NOT NULL,
-                        low DECIMAL(12,4) NOT NULL,
-                        close DECIMAL(12,4) NOT NULL,
-                        volume INTEGER DEFAULT 0,
-                        tick_count INTEGER DEFAULT 0,
-                        vwap DECIMAL(12,4),
-                        bid DECIMAL(12,4),
-                        ask DECIMAL(12,4),
-                        spread DECIMAL(12,4),
-                        data_quality_score DECIMAL(3,2) DEFAULT 1.0,
-                        is_regular_hours BOOLEAN DEFAULT TRUE,
-                        created_at TIMESTAMPTZ DEFAULT NOW(),
-                        PRIMARY KEY (timestamp, symbol, contract, exchange)
-                    );
-                """))
-                logger.info("market_data_seconds table created/verified.")
-
-                logger.info("Creating market_data_minutes table...")
-                await session.execute(text("""
-                    CREATE TABLE IF NOT EXISTS market_data_minutes (
-                        timestamp TIMESTAMPTZ NOT NULL,
-                        symbol VARCHAR(10) NOT NULL,
-                        contract VARCHAR(10) NOT NULL,
-                        exchange VARCHAR(10) NOT NULL,
-                        exchange_code VARCHAR(10),
-                        open DECIMAL(12,4) NOT NULL,
-                        high DECIMAL(12,4) NOT NULL,
-                        low DECIMAL(12,4) NOT NULL,
-                        close DECIMAL(12,4) NOT NULL,
-                        volume INTEGER DEFAULT 0,
-                        tick_count INTEGER DEFAULT 0,
-                        vwap DECIMAL(12,4),
-                        avg_spread DECIMAL(12,4),
-                        max_spread DECIMAL(12,4),
-                        trade_count INTEGER DEFAULT 0,
-                        created_at TIMESTAMPTZ DEFAULT NOW(),
-                        PRIMARY KEY (timestamp, symbol, contract, exchange)
-                    );
-                """))
-                logger.info("market_data_minutes table created/verified.")
-
-                logger.info("Creating raw_tick_data table...")
-                await session.execute(text("""
-                    CREATE TABLE IF NOT EXISTS raw_tick_data (
-                        timestamp TIMESTAMPTZ NOT NULL,
-                        symbol VARCHAR(10) NOT NULL,
-                        contract VARCHAR(10) NOT NULL,
-                        exchange VARCHAR(10) NOT NULL,
-                        price DECIMAL(12,4) NOT NULL,
-                        size INTEGER DEFAULT 0,
-                        tick_type VARCHAR(10) NOT NULL,
-                        exchange_timestamp TIMESTAMPTZ,
-                        sequence_number BIGINT,
-                        created_at TIMESTAMPTZ DEFAULT NOW(),
-                        PRIMARY KEY (timestamp, symbol, contract, exchange, sequence_number)
-                    );
-                """))
-                logger.info("raw_tick_data table created/verified.")
-                
-                logger.info("Creating features table...")
-                await session.execute(text("""
-                    CREATE TABLE IF NOT EXISTS features (
-                        timestamp TIMESTAMPTZ NOT NULL,
-                        symbol VARCHAR(10) NOT NULL,
-                        contract VARCHAR(10) NOT NULL,
-                        exchange VARCHAR(10) NOT NULL,
-                        timeframe VARCHAR(5) NOT NULL,
-                        sma_5 DECIMAL(12,4),
-                        sma_10 DECIMAL(12,4),
-                        sma_20 DECIMAL(12,4),
-                        sma_50 DECIMAL(12,4),
-                        ema_12 DECIMAL(12,4),
-                        ema_26 DECIMAL(12,4),
-                        macd DECIMAL(12,6),
-                        macd_signal DECIMAL(12,6),
-                        macd_histogram DECIMAL(12,6),
-                        rsi DECIMAL(5,2),
-                        stoch_k DECIMAL(5,2),
-                        stoch_d DECIMAL(5,2),
-                        williams_r DECIMAL(5,2),
-                        roc DECIMAL(8,4),
-                        bb_upper DECIMAL(12,4),
-                        bb_middle DECIMAL(12,4),
-                        bb_lower DECIMAL(12,4),
-                        bb_width DECIMAL(8,4),
-                        atr DECIMAL(8,4),
-                        volume_sma DECIMAL(12,2),
-                        volume_ratio DECIMAL(6,3),
-                        obv BIGINT,
-                        relative_volume DECIMAL(6,3),
-                        exchange_rank INTEGER,
-                        PRIMARY KEY (timestamp, symbol, contract, exchange, timeframe)
-                    );
-                """))
-                logger.info("features table created/verified.")
-
-                logger.info("Creating predictions table...")
-                await session.execute(text("""
-                    CREATE TABLE IF NOT EXISTS predictions (
-                        timestamp TIMESTAMPTZ NOT NULL,
-                        symbol VARCHAR(10) NOT NULL,
-                        contract VARCHAR(10) NOT NULL,
-                        exchange VARCHAR(10) NOT NULL,
-                        model_version VARCHAR(50) NOT NULL,
-                        model_type VARCHAR(20) NOT NULL,
-                        direction_prediction INTEGER,
-                        confidence_score DECIMAL(5,2),
-                        pip_movement_prediction DECIMAL(8,4),
-                        long_probability DECIMAL(5,4),
-                        short_probability DECIMAL(5,4),
-                        prediction_horizon_minutes INTEGER,
-                        exchange_adjustment_factor DECIMAL(6,4) DEFAULT 1.0,
-                        features_used TEXT[],
-                        created_at TIMESTAMPTZ DEFAULT NOW(),
-                        PRIMARY KEY (timestamp, symbol, contract, exchange, model_version)
-                    );
-                """))
-                logger.info("predictions table created/verified.")
-
-                logger.info("Creating trades table...")
-                await session.execute(text("CREATE SEQUENCE IF NOT EXISTS trades_trade_id_seq;"))
-                await session.execute(text("""
-                    CREATE TABLE IF NOT EXISTS trades (
-                        timestamp TIMESTAMPTZ NOT NULL,
-                        trade_id BIGINT NOT NULL DEFAULT nextval('trades_trade_id_seq'),
-                        symbol VARCHAR(10) NOT NULL,
-                        contract VARCHAR(10) NOT NULL,
-                        exchange VARCHAR(10) NOT NULL,
-                        side VARCHAR(10) NOT NULL,
-                        quantity INTEGER NOT NULL,
-                        entry_price DECIMAL(12,4) NOT NULL,
-                        exit_timestamp TIMESTAMPTZ,
-                        exit_price DECIMAL(12,4),
-                        pnl DECIMAL(12,2),
-                        pnl_percent DECIMAL(8,4),
-                        commission DECIMAL(8,2) DEFAULT 0,
-                        confidence_at_entry DECIMAL(5,2),
-                        model_version VARCHAR(50),
-                        route_exchange VARCHAR(10),
-                        execution_venue VARCHAR(20),
-                        trade_type VARCHAR(20) DEFAULT 'ALGO',
-                        notes TEXT,
-                        created_at TIMESTAMPTZ DEFAULT NOW(),
-                        updated_at TIMESTAMPTZ DEFAULT NOW(),
-                        PRIMARY KEY (timestamp, trade_id)
-                    );
-                """))
-                logger.info("trades table created/verified.")
-
-                logger.info("Converting tables to hypertables...")
-                hypertables_to_create = [
-                    {'table': 'market_data_seconds', 'time_column': 'timestamp', 'chunk_interval': "INTERVAL '1 minute'"},
-                    {'table': 'raw_tick_data', 'time_column': 'timestamp', 'chunk_interval': "INTERVAL '10 seconds'"},
-                    {'table': 'market_data_minutes', 'time_column': 'timestamp', 'chunk_interval': "INTERVAL '1 hour'"},
-                    {'table': 'features', 'time_column': 'timestamp', 'chunk_interval': "INTERVAL '1 day'"},
-                    {'table': 'predictions', 'time_column': 'timestamp', 'chunk_interval': "INTERVAL '1 day'"},
-                    {'table': 'trades', 'time_column': 'timestamp', 'chunk_interval': "INTERVAL '1 day'"}
-                ]
-                for ht in hypertables_to_create:
-                    try:
-                        await session.execute(text(f"""
-                            SELECT create_hypertable('{ht['table']}', '{ht['time_column']}',
-                            chunk_time_interval => {ht['chunk_interval']}, if_not_exists => TRUE);
-                        """))
-                        logger.info(f"Hypertable '{ht['table']}' created/verified.")
-                    except Exception as e:
-                        logger.warning(f"Could not create hypertable '{ht['table']}': {e}")
-                
-                logger.info("Creating indexes...")
-                indexes = [
-                    "CREATE INDEX IF NOT EXISTS idx_market_data_seconds_symbol_time ON market_data_seconds (symbol, timestamp DESC);",
-                    "CREATE INDEX IF NOT EXISTS idx_market_data_seconds_contract_time ON market_data_seconds (contract, timestamp DESC);",
-                    "CREATE INDEX IF NOT EXISTS idx_market_data_seconds_exchange_time ON market_data_seconds (exchange, timestamp DESC);",
-                    "CREATE INDEX IF NOT EXISTS idx_raw_tick_data_contract_time ON raw_tick_data (contract, timestamp DESC);",
-                    "CREATE INDEX IF NOT EXISTS idx_raw_tick_data_type ON raw_tick_data (tick_type, timestamp DESC);",
-                    "CREATE INDEX IF NOT EXISTS idx_features_symbol_timeframe_time ON features (symbol, timeframe, timestamp DESC);",
-                    "CREATE INDEX IF NOT EXISTS idx_predictions_symbol_model_time ON predictions (symbol, model_version, timestamp DESC);",
-                    "CREATE INDEX IF NOT EXISTS idx_trades_symbol_time ON trades (symbol, timestamp DESC);",
-                    "CREATE INDEX IF NOT EXISTS idx_trades_exchange ON trades (exchange, timestamp DESC);"
-                ]
-                for idx_sql in indexes:
-                    try:
-                        await session.execute(text(idx_sql))
-                    except Exception as e:
-                        logger.warning(f"Could not create index: {e}")
-                logger.info("Indexes created/verified.")
-
-                logger.info("Setting up retention policies...")
-                retention_policies = [
-                    {'table': 'raw_tick_data', 'interval': "INTERVAL '7 days'"},
-                    {'table': 'market_data_seconds', 'interval': "INTERVAL '1 year'"},
-                    {'table': 'market_data_minutes', 'interval': "INTERVAL '2 years'"},
-                    {'table': 'predictions', 'interval': "INTERVAL '6 months'"}
-                ]
-                for policy in retention_policies:
-                    try:
-                        # Check if retention policy already exists to avoid error
-                        policy_exists = await session.execute(text(f"""
-                            SELECT EXISTS (
-                                SELECT 1 FROM timescaledb_information.drop_chunks_policies
-                                WHERE hypertable_name = '{policy['table']}'
-                            );
-                        """))
-                        if not policy_exists.scalar():
-                            await session.execute(text(f"SELECT add_retention_policy('{policy['table']}', {policy['interval']});"))
-                            logger.info(f"Added retention policy for {policy['table']}: {policy['interval']}")
-                        else:
-                            logger.info(f"Retention policy for {policy['table']} already exists.")
-                    except Exception as e:
-                        logger.warning(f"Could not set retention policy for {policy['table']}: {e}")
-                logger.info("Retention policies configured.")
-
-                await session.commit() # Commit all schema changes
-
+                result = await session.execute(text("SELECT 1 FROM pg_extension WHERE extname = 'timescaledb';"))
+                if not result.scalar():
+                    logger.error("TimescaleDB extension not found!")
+                    raise Exception("TimescaleDB extension not installed")
+                logger.info("Database is ready and TimescaleDB is available")
         except Exception as e:
-            logger.error(f"Error initializing database schema: {e}")
+            logger.error(f"Error checking database: {e}")
             raise
 
-    async def verify_tables(self) -> bool:
-        """Verifies that all required tables exist in the database."""
+    async def verify_tables(self):
         required_tables = [
             'market_data_seconds',
-            'raw_tick_data',
+            'raw_tick_data', 
             'market_data_minutes',
             'features',
             'predictions',
             'trades'
         ]
+        
         try:
             async with self.get_async_session() as session:
                 for table in required_tables:
@@ -424,14 +184,13 @@ class DatabaseManager:
                     if not result.scalar():
                         logger.error(f"Required table '{table}' not found!")
                         return False
-                logger.info("All required tables exist.")
+                logger.info("All required tables exist")
                 return True
         except Exception as e:
             logger.error(f"Error verifying tables: {e}")
             return False
 
-    async def verify_hypertables(self) -> bool:
-        """Verifies that hypertables are correctly set up."""
+    async def verify_hypertables(self):
         try:
             async with self.get_async_session() as session:
                 result = await session.execute(text("""
@@ -449,7 +208,6 @@ class DatabaseManager:
             return False
 
     async def close_connections(self):
-        """Closes all database connections."""
         if self._async_engine:
             await self._async_engine.dispose()
         if self._sync_engine:
@@ -459,7 +217,6 @@ class DatabaseManager:
 _db_manager: Optional[DatabaseManager] = None
 
 def get_database_manager(config: Optional[Dict[str, Any]] = None) -> DatabaseManager:
-    """Provides a singleton instance of the DatabaseManager."""
     global _db_manager
     if _db_manager is None:
         _db_manager = DatabaseManager(config)
@@ -467,71 +224,88 @@ def get_database_manager(config: Optional[Dict[str, Any]] = None) -> DatabaseMan
 
 @contextmanager
 def get_sync_session() -> Generator[Session, None, None]:
-    """Context manager for synchronous database sessions."""
     with get_database_manager().get_sync_session() as session:
         yield session
 
 @asynccontextmanager
 async def get_async_session() -> AsyncGenerator[AsyncSession, None]:
-    """Context manager for asynchronous database sessions."""
     async with get_database_manager().get_async_session() as session:
         yield session
 
 class TimescaleDBHelper:
-    """Helper class for TimescaleDB-specific data operations."""
     def __init__(self, session):
         self.session = session
 
-    async def bulk_insert_market_data(self, data: list, table_name: str) -> None:
-        """
-        Bulk inserts market data, updating on conflict.
-        """
+    async def bulk_insert_market_data(self, data: list, table_name: str = 'market_data_seconds'):
+        """Insert market data with improved error handling and logging"""
         if not data:
+            logger.warning("No data provided for insertion")
             return
 
+        logger.info(f"Attempting to insert {len(data)} records into {table_name}")
+        
         try:
-            # Get column names from the first record to build the SQL dynamically
-            # Ensure all records have consistent keys or handle missing keys with None
-            columns = list(data[0].keys())
+            inserted_count = 0
+            failed_count = 0
             
-            # Construct the ON CONFLICT DO UPDATE SET clause dynamically
-            update_set_clauses = []
-            for col in columns:
-                # Skip primary key columns in the UPDATE SET clause
-                if col not in ['timestamp', 'symbol', 'contract', 'exchange', 'sequence_number', 'trade_id']:
-                    update_set_clauses.append(f"{col} = EXCLUDED.{col}")
-            
-            # Determine the primary key columns for ON CONFLICT clause based on table
-            if table_name == 'market_data_seconds' or table_name == 'market_data_minutes' or table_name == 'features' or table_name == 'predictions':
-                conflict_columns = "(timestamp, symbol, contract, exchange)"
-            elif table_name == 'raw_tick_data':
-                conflict_columns = "(timestamp, symbol, contract, exchange, sequence_number)"
-            elif table_name == 'trades':
-                conflict_columns = "(timestamp, trade_id)" # Assuming trade_id is part of PK for trades
-            else:
-                logger.warning(f"Unknown table_name '{table_name}' for ON CONFLICT clause. Using default (timestamp, symbol).")
-                conflict_columns = "(timestamp, symbol)"
+            for i, record in enumerate(data):
+                try:
+                    # Process the record to handle pandas timestamps and NaN values
+                    processed_record = {}
+                    for key, value in record.items():
+                        if isinstance(value, pd.Timestamp):
+                            processed_record[key] = value.to_pydatetime()
+                        elif pd.isna(value):
+                            processed_record[key] = None
+                        else:
+                            processed_record[key] = value
 
-            sql = f"""
-                INSERT INTO {table_name} ({', '.join(columns)})
-                VALUES ({', '.join([f':{col}' for col in columns])})
-                ON CONFLICT {conflict_columns} DO UPDATE SET
-                    {', '.join(update_set_clauses)}
-            """
+                    # Build the SQL statement dynamically
+                    columns = list(processed_record.keys())
+                    placeholders = [f":{col}" for col in columns]
+                    
+                    sql = text(f"""
+                        INSERT INTO {table_name} ({', '.join(columns)})
+                        VALUES ({', '.join(placeholders)})
+                        ON CONFLICT DO NOTHING
+                    """)
+                    
+                    result = await self.session.execute(sql, processed_record)
+                    
+                    # Check if the insert was successful (not a conflict)
+                    if result.rowcount > 0:
+                        inserted_count += 1
+                    
+                    # Log progress every 100 records for large datasets
+                    if (i + 1) % 100 == 0:
+                        logger.debug(f"Processed {i + 1}/{len(data)} records")
+                        
+                except Exception as e:
+                    failed_count += 1
+                    logger.error(f"Error inserting record {i}: {e}")
+                    logger.debug(f"Problematic record: {record}")
+                    
+                    # If too many failures, stop processing
+                    if failed_count > 10:
+                        logger.error("Too many insertion failures, stopping bulk insert")
+                        break
             
-            # Execute in a single transaction for efficiency
-            await self.session.execute(text(sql), data)
-            logger.info(f"Bulk inserted/updated {len(data)} records to {table_name}")
-            await self.session.commit() # Explicit commit for bulk operation
-
+            # Commit the transaction
+            await self.session.commit()
+            
+            logger.info(f"Bulk insert completed: {inserted_count} inserted, {failed_count} failed, {len(data) - inserted_count - failed_count} duplicates/conflicts")
+            
+            if failed_count > 0:
+                logger.warning(f"{failed_count} records failed to insert - check logs for details")
+                
         except Exception as e:
-            logger.error(f"Error in bulk insert/update to {table_name}: {e}")
-            await self.session.rollback() # Rollback on error
+            logger.error(f"Fatal error in bulk insert to {table_name}: {e}")
+            await self.session.rollback()
             raise
 
     async def get_latest_data(self, symbol: str, exchange: Optional[str] = None,
                             table_name: str = 'market_data_seconds', limit: int = 100) -> pd.DataFrame:
-        """Retrieves the latest market data for a given symbol and exchange."""
+        """Get latest market data as DataFrame"""
         query = f"""
             SELECT * FROM {table_name}
             WHERE symbol = :symbol
@@ -539,10 +313,11 @@ class TimescaleDBHelper:
             ORDER BY timestamp DESC
             LIMIT :limit
         """
+        
         params = {'symbol': symbol, 'limit': limit}
         if exchange:
             params['exchange'] = exchange
-        
+            
         result = await self.session.execute(text(query), params)
         data = result.fetchall()
         
@@ -552,17 +327,35 @@ class TimescaleDBHelper:
             return pd.DataFrame()
 
     async def insert_second_data(self, record: Dict[str, Any], table_name: str = 'market_data_seconds') -> None:
-        """Inserts a single second bar record."""
+        """Insert a single second data record with validation"""
         try:
+            # Validate required fields
+            required_fields = ['timestamp', 'symbol', 'contract', 'exchange', 'open', 'high', 'low', 'close']
+            missing_fields = [field for field in required_fields if field not in record or record[field] is None]
+            
+            if missing_fields:
+                raise ValueError(f"Missing required fields: {missing_fields}")
+            
+            # Validate OHLC data
+            ohlc = [record['open'], record['high'], record['low'], record['close']]
+            if not all(isinstance(x, (int, float)) and x > 0 for x in ohlc):
+                raise ValueError(f"Invalid OHLC data: {ohlc}")
+                
+            if not (record['high'] >= max(record['open'], record['close']) and 
+                   record['low'] <= min(record['open'], record['close'])):
+                raise ValueError(f"OHLC validation failed: H={record['high']}, L={record['low']}, O={record['open']}, C={record['close']}")
+            
             await self.bulk_insert_market_data([record], table_name)
-            logger.debug(f"Inserted 1 record to {table_name}")
+            logger.debug(f"Successfully inserted 1 record to {table_name}")
+            
         except Exception as e:
             logger.error(f"Error inserting record to {table_name}: {e}")
             raise
 
     async def get_volume_by_exchange(self, symbol: str, date: Optional[str] = None) -> pd.DataFrame:
-        """Retrieves volume statistics by exchange for a given symbol and date."""
+        """Get volume statistics by exchange"""
         date_filter = f"AND DATE(timestamp) = :date" if date else ""
+        
         query = f"""
             SELECT
                 exchange,
@@ -576,23 +369,24 @@ class TimescaleDBHelper:
             GROUP BY exchange
             ORDER BY total_volume DESC
         """
+        
         params = {'symbol': symbol}
         if date:
             params['date'] = date
-        
+            
         result = await self.session.execute(text(query), params)
         data = result.fetchall()
         return pd.DataFrame([dict(row._mapping) for row in data])
 
 class ExchangeDataManager:
-    """Manages exchange-specific data operations."""
     def __init__(self, session):
         self.session = session
         self.timescale_helper = TimescaleDBHelper(session)
 
     async def get_exchange_rankings(self, symbol: str) -> Dict[str, Dict]:
-        """Retrieves current exchange rankings by volume for a given symbol."""
+        """Get current exchange rankings by volume"""
         volume_data = await self.timescale_helper.get_volume_by_exchange(symbol)
+        
         rankings = {}
         for idx, (_, row) in enumerate(volume_data.iterrows()):
             rankings[row['exchange']] = {
@@ -602,11 +396,12 @@ class ExchangeDataManager:
                 'avg_spread': float(row['avg_spread']) if row['avg_spread'] else 0,
                 'market_share': float(row['total_volume']) / float(volume_data['total_volume'].sum()) * 100
             }
+        
         return rankings
 
     async def get_cross_exchange_arbitrage_opportunities(self, symbol: str,
                                                        threshold: float = 0.5) -> pd.DataFrame:
-        """Finds potential arbitrage opportunities between exchanges for a given symbol."""
+        """Find potential arbitrage opportunities between exchanges"""
         query = """
             SELECT
                 a.timestamp,
@@ -626,39 +421,53 @@ class ExchangeDataManager:
             ORDER BY a.timestamp DESC, price_diff_pct DESC
             LIMIT 100
         """
+        
         result = await self.session.execute(text(query), {'symbol': symbol, 'threshold': threshold})
         data = result.fetchall()
         return pd.DataFrame([dict(row._mapping) for row in data])
 
+# Testing and verification functions
 async def test_database_setup():
-    """Tests the database setup and basic operations."""
+    """Test database setup and operations with detailed logging"""
     try:
+        logger.info("Starting comprehensive database test")
+        
+        # Test connection
         db_manager = get_database_manager()
         connection_ok = await db_manager.test_connection()
+        
         if not connection_ok:
-            logger.error("[ERROR] Database connection failed")
+            logger.error("❌ Database connection failed")
             return False
-        logger.info("[SUCCESS] Database connection successful")
-
-        # Use the new combined schema initialization
-        await db_manager.initialize_database_schema()
-        logger.info("[SUCCESS] Database schema initialized/verified")
-
+        
+        logger.info("✅ Database connection successful")
+        
+        # Initialize database
+        await db_manager.initialize_database()
+        logger.info("✅ Database extensions verified")
+        
+        # Verify tables
         tables_ok = await db_manager.verify_tables()
         if not tables_ok:
-            logger.error("[ERROR] Required tables missing")
+            logger.error("❌ Required tables missing")
             return False
-        logger.info("[SUCCESS] All tables verified")
-
+        
+        logger.info("✅ All tables verified")
+        
+        # Verify hypertables
         hypertables_ok = await db_manager.verify_hypertables()
         if not hypertables_ok:
-            logger.warning("[WARNING] No hypertables found or verification failed - may need fresh setup or review.")
+            logger.warning("⚠️  No hypertables found - may need fresh setup")
         else:
-            logger.info("[SUCCESS] Hypertables verified")
-
+            logger.info("✅ Hypertables verified")
+        
+        # Test data operations with comprehensive validation
         async with get_async_session() as session:
+            helper = TimescaleDBHelper(session)
+            
+            # Create test data with validation
             test_data = [{
-                'timestamp': datetime.now(timezone.utc), # Ensure timezone-aware datetime
+                'timestamp': pd.Timestamp.now(),
                 'symbol': 'NQ',
                 'contract': 'NQZ24',
                 'exchange': 'CME',
@@ -676,22 +485,29 @@ async def test_database_setup():
                 'data_quality_score': 1.0,
                 'is_regular_hours': True
             }]
-            helper = TimescaleDBHelper(session)
-            await helper.bulk_insert_market_data(test_data, 'market_data_seconds')
-            logger.info("[SUCCESS] Test data insertion successful")
-
+            
+            logger.info("Testing bulk insert with validation...")
+            await helper.bulk_insert_market_data(test_data)
+            logger.info("✅ Test data insertion successful")
+            
+            # Test data retrieval
             latest_data = await helper.get_latest_data('NQ', 'CME', limit=1)
             if not latest_data.empty:
-                logger.info(f"[SUCCESS] Test data retrieval successful: {len(latest_data)} records")
+                logger.info(f"✅ Test data retrieval successful: {len(latest_data)} records")
+                logger.debug(f"Sample record: {latest_data.iloc[0].to_dict()}")
             else:
-                logger.warning("[WARNING] No data retrieved in test")
+                logger.warning("⚠️  No data retrieved in test")
+        
         return True
+        
     except Exception as e:
-        logger.error(f"[ERROR] Database setup test failed: {e}")
+        logger.error(f"❌ Database setup test failed: {e}")
+        logger.exception("Database test exception details")
         return False
 
+# Configuration for different environments
 def get_production_config() -> Dict[str, Any]:
-    """Returns production database configuration."""
+    """Get production database configuration"""
     return {
         'host': os.getenv('PROD_POSTGRES_HOST', 'production-timescaledb'),
         'port': int(os.getenv('PROD_POSTGRES_PORT', '5432')),
@@ -706,7 +522,7 @@ def get_production_config() -> Dict[str, Any]:
     }
 
 def get_development_config() -> Dict[str, Any]:
-    """Returns development database configuration."""
+    """Get development database configuration"""
     return {
         'host': os.getenv('DEV_POSTGRES_HOST', 'localhost'),
         'port': int(os.getenv('DEV_POSTGRES_PORT', '5432')),
@@ -720,13 +536,22 @@ def get_development_config() -> Dict[str, Any]:
         'echo': True
     }
 
+# Main execution for testing
 if __name__ == "__main__":
     import asyncio
+    
     async def main():
+        """Test database operations"""
+        # Set up logging for testing
+        logging.basicConfig(
+            level=logging.INFO,
+            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+        )
+        
         success = await test_database_setup()
         if success:
             print("🎉 Database setup completed successfully!")
         else:
             print("❌ Database setup failed!")
+    
     asyncio.run(main())
-
