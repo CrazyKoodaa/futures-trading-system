@@ -1,0 +1,53 @@
+# Rithmic Enhanced Admin Tool - Core Requirements
+# Python 3.11.9 Compatible
+# Minimal requirements for core functionality
+
+# ===== CORE UI AND DISPLAY =====
+rich==13.7.1                    # Terminal UI library
+
+# ===== DATABASE OPERATIONS =====
+SQLAlchemy==2.0.30             # SQL toolkit and ORM
+asyncpg==0.29.0                # PostgreSQL async driver
+psycopg2-binary==2.9.9         # PostgreSQL adapter (binary version)
+
+# ===== DATA PROCESSING =====
+pandas==2.2.2                  # Data manipulation and analysis
+numpy==1.26.4                  # Numerical computing
+
+# ===== ASYNC OPERATIONS =====
+aiofiles==23.2.1               # Async file operations
+
+# ===== KEYBOARD INPUT =====
+keyboard==0.13.5               # Global hotkeys and listeners
+pynput==1.7.6                  # Input control and monitoring
+
+# ===== DATE/TIME HANDLING =====
+pytz==2024.1                   # Timezone definitions
+
+# ===== CONFIGURATION =====
+python-dotenv==1.0.1           # Environment variable management
+
+# ===== LOGGING =====
+colorlog==6.8.2                # Colored logging output
+
+# ===== RITHMIC API =====
+# Note: async-rithmic may need to be installed from source or private repo
+# Uncomment the following line if available:
+# async-rithmic>=1.0.0
+
+# ===== COMPATIBILITY FIXES =====
+setuptools==69.5.1             # Package development tools
+wheel==0.43.0                  # Built-package format
+
+# Installation instructions:
+# 1. Activate your virtual environment:
+#    .\venv\Scripts\activate
+#
+# 2. Upgrade pip:
+#    python -m pip install --upgrade pip
+#
+# 3. Install requirements:
+#    pip install -r requirements.txt
+#
+# 4. If async-rithmic is not available, install it separately:
+#    pip install async-rithmic  # or from your source

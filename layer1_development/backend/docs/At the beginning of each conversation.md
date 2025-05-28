@@ -38,4 +38,10 @@ At the beginning of each conversation, please follow these rules:
 
 6. Use the folder .\layer1_development\enhanced_rithmic_admin
 
+7. (If needed) Create and use folder structure for new files. f.e. outputs --> output, logging --> logs, testscripts --> tests, etc...
+
+8. When fixing a error, just replace the lines within the files that are causing errors. Do not change anything else.
+
+9. execute pylint and Pylance on the file you are working and put the output into a file called pylint_output-(datetime.now).txt (or pylance_output-(datetime.now).txt). Then read the pylint_output-(datetime.now).txt (or pylance_output-(datetime.now).txt) file and fix the issues found by pylint.
+
 Please confirm you understand these rules at the beginning of our conversation.

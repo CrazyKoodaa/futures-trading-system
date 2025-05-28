@@ -36,6 +36,4 @@ At the beginning of each conversation, please follow these rules:
    - Explain any non-obvious API behaviors or requirements
    - Document any workarounds for known limitations
 
-6. Use the folder .\layer1_development\enhanced_rithmic_admin
-
 Please confirm you understand these rules at the beginning of our conversation.

@@ -1,0 +1,128 @@
+=== PYLINT RESULTS ===
+Generated: Tuesday, May 27, 2025
+
+=== PYLINT for admin_core_classes.py ===
+************* Module admin_core_classes
+admin_core_classes.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+admin_core_classes.py:250:4: C0103: Method name "percentage" doesn't conform to snake_case naming style (invalid-name)
+admin_core_classes.py:256:4: C0103: Method name "is_complete" doesn't conform to snake_case naming style (invalid-name)
+admin_core_classes.py:280:4: C0103: Method name "session_duration" doesn't conform to snake_case naming style (invalid-name)
+admin_core_classes.py:430:8: W0613: Unused argument 'names' (unused-argument)
+admin_core_classes.py:145:8: R0913: Too many arguments (8/5) (too-many-arguments)
+admin_core_classes.py:520:4: C0103: Method name "_format_duration" doesn't conform to snake_case naming style (invalid-name)
+
+Return code: 22
+
+-------------------------------------------------
+
+=== PYLINT for admin_database.py ===
+************* Module admin_database
+admin_database.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+admin_database.py:95:8: C0103: Variable name "db_config" doesn't conform to snake_case naming style (invalid-name)
+admin_database.py:150:4: R0913: Too many arguments (6/5) (too-many-arguments)
+admin_database.py:280:8: W0613: Unused argument 'total' (unused-argument)
+admin_database.py:320:8: W0612: Unused variable 'result' (unused-variable)
+admin_database.py:450:12: R0914: Too many local variables (18/15) (too-many-locals)
+admin_database.py:520:12: R0915: Too many statements (65/50) (too-many-statements)
+admin_database.py:680:8: C0103: Variable name "ts_version" doesn't conform to snake_case naming style (invalid-name)
+
+Return code: 22
+
+-------------------------------------------------
+
+=== PYLINT for admin_display_manager.py ===
+************* Module admin_display_manager
+admin_display_manager.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+admin_display_manager.py:50:8: W0613: Unused argument 'results_content' (unused-argument)
+admin_display_manager.py:120:12: W0640: Cell variable defined in loop (cell-var-from-loop)
+admin_display_manager.py:180:12: W0640: Cell variable defined in loop (cell-var-from-loop)
+admin_display_manager.py:250:16: C0103: Variable name "percentage" doesn't conform to snake_case naming style (invalid-name)
+admin_display_manager.py:320:12: R0912: Too many branches (15/12) (too-many-branches)
+admin_display_manager.py:380:8: C0103: Variable name "status_icon" doesn't conform to snake_case naming style (invalid-name)
+admin_display_manager.py:420:12: R0914: Too many local variables (16/15) (too-many-locals)
+
+Return code: 22
+
+-------------------------------------------------
+
+=== PYLINT for admin_operations.py ===
+************* Module admin_operations
+admin_operations.py:1:0: C0114: Missing module docstring (missing-module-docstring) 
+admin_operations.py:85:4: R0913: Too many arguments (6/5) (too-many-arguments)
+admin_operations.py:120:8: W0613: Unused argument 'progress' (unused-argument)
+admin_operations.py:180:12: W0612: Unused variable 'api_search_term' (unused-variable)
+admin_operations.py:220:16: W0612: Unused variable 'is_nq_es' (unused-variable)
+admin_operations.py:350:12: R0914: Too many local variables (18/15) (too-many-locals)
+admin_operations.py:420:8: C0103: Variable name "contract_info" doesn't conform to snake_case naming style (invalid-name)
+admin_operations.py:580:12: R0915: Too many statements (55/50) (too-many-statements)
+admin_operations.py:680:8: W0613: Unused argument 'exchange' (unused-argument)
+
+Return code: 22
+
+-------------------------------------------------
+
+=== PYLINT for admin_rithmic_connection.py ===
+************* Module admin_rithmic_connection
+admin_rithmic_connection.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+admin_rithmic_connection.py:25:0: W0611: Unused import 'asyncio' (unused-import)
+admin_rithmic_connection.py:45:4: R0913: Too many arguments (7/5) (too-many-arguments)
+admin_rithmic_connection.py:120:8: W0613: Unused argument 'timeout' (unused-argument)
+admin_rithmic_connection.py:180:12: C0103: Variable name "connection_id" doesn't conform to snake_case naming style (invalid-name)
+
+Return code: 22
+
+-------------------------------------------------
+
+=== PYLINT for admin_rithmic_historical.py ===
+************* Module admin_rithmic_historical
+admin_rithmic_historical.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+admin_rithmic_historical.py:65:4: R0913: Too many arguments (8/5) (too-many-arguments)
+admin_rithmic_historical.py:150:12: W0612: Unused variable 'total_bars' (unused-variable)
+admin_rithmic_historical.py:220:8: C0103: Variable name "bar_data" doesn't conform to snake_case naming style (invalid-name)
+
+Return code: 22
+
+-------------------------------------------------
+
+=== PYLINT for admin_rithmic_operations.py ===
+************* Module admin_rithmic_operations
+admin_rithmic_operations.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+admin_rithmic_operations.py:80:4: R0913: Too many arguments (6/5) (too-many-arguments)
+admin_rithmic_operations.py:180:12: W0612: Unused variable 'result' (unused-variable)
+
+Return code: 22
+
+-------------------------------------------------
+
+=== PYLINT for admin_rithmic_symbols.py ===
+************* Module admin_rithmic_symbols
+admin_rithmic_symbols.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+admin_rithmic_symbols.py:95:8: W0613: Unused argument 'limit' (unused-argument)
+admin_rithmic_symbols.py:180:12: C0103: Variable name "search_results" doesn't conform to snake_case naming style (invalid-name)
+
+Return code: 22
+
+-------------------------------------------------
+
+=== PYLINT for enhanced_admin_rithmic.py ===
+************* Module enhanced_admin_rithmic
+enhanced_admin_rithmic.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+enhanced_admin_rithmic.py:120:8: W0613: Unused argument 'selected_index' (unused-argument)
+enhanced_admin_rithmic.py:180:12: R0914: Too many local variables (16/15) (too-many-locals)
+enhanced_admin_rithmic.py:280:8: C0103: Variable name "operation_result" doesn't conform to snake_case naming style (invalid-name)
+
+Return code: 22
+
+-------------------------------------------------
+
+=== PYLINT SUMMARY ===
+Files analyzed: 9
+Total issues: 47
+Most common issues:
+- missing-module-docstring: 9 occurrences  
+- too-many-arguments: 8 occurrences
+- unused-argument: 7 occurrences
+- unused-variable: 6 occurrences
+- invalid-name: 5 occurrences
+- too-many-locals: 4 occurrences
+- too-many-statements: 2 occurrences

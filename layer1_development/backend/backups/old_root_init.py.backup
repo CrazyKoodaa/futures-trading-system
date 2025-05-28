@@ -1,0 +1,36 @@
+"""
+Enhanced Rithmic Admin Package
+
+This package provides a modular system for managing Rithmic API operations,
+including connection management, symbol search, historical data download,
+and database operations.
+
+Modules:
+- admin_core_classes.py: Core data structures and UI components
+- admin_database.py: Database operations and TimescaleDB integration
+- admin_display_manager.py: Rich TUI display management
+- admin_operations.py: Main business logic coordinator
+- admin_rithmic_connection.py: Rithmic API connection management
+- admin_rithmic_historical.py: Historical data operations
+- admin_rithmic_operations.py: Rithmic operations coordinator
+- admin_rithmic_symbols.py: Symbol search and management
+- enhanced_admin_rithmic.py: Main application entry point
+
+Author: Trading System Admin Tool
+Version: 1.0.0
+"""
+
+# Import main components for easier access
+from .admin_core_classes import SystemStatus, DownloadProgress, TUIComponents
+from .admin_operations import AdminOperations
+from .enhanced_admin_rithmic import RithmicAdminTUI, CommandLineInterface, main
+
+__all__ = [
+    'SystemStatus',
+    'DownloadProgress',
+    'TUIComponents',
+    'AdminOperations',
+    'RithmicAdminTUI',
+    'CommandLineInterface',
+    'main'
+]

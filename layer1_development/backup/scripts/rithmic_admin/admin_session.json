@@ -1,0 +1,107 @@
+{
+  "last_symbols": [],
+  "last_exchange": "CME",
+  "preferred_settings": {},
+  "session_history": [
+    {
+      "timestamp": "2025-05-26T20:44:29.014751",
+      "action": "menu_executed",
+      "details": {
+        "item_index": 0,
+        "menu_name": "Test Connections (DB + Rithmic)"
+      }
+    },
+    {
+      "timestamp": "2025-05-26T20:44:29.014751",
+      "action": "results_updated",
+      "details": {
+        "content_length": 90,
+        "timestamp": "2025-05-26T20:44:29.014751"
+      }
+    },
+    {
+      "timestamp": "2025-05-26T20:44:32.857770",
+      "action": "menu_executed",
+      "details": {
+        "item_index": 1,
+        "menu_name": "Search Symbols & Check Contracts"
+      }
+    },
+    {
+      "timestamp": "2025-05-26T20:44:32.858770",
+      "action": "results_updated",
+      "details": {
+        "content_length": 91,
+        "timestamp": "2025-05-26T20:44:32.858770"
+      }
+    },
+    {
+      "timestamp": "2025-05-26T20:44:33.822509",
+      "action": "menu_executed",
+      "details": {
+        "item_index": 0,
+        "menu_name": "Test Connections (DB + Rithmic)"
+      }
+    },
+    {
+      "timestamp": "2025-05-26T20:44:33.822509",
+      "action": "results_updated",
+      "details": {
+        "content_length": 90,
+        "timestamp": "2025-05-26T20:44:33.822509"
+      }
+    },
+    {
+      "timestamp": "2025-05-26T20:44:34.349875",
+      "action": "menu_executed",
+      "details": {
+        "item_index": 2,
+        "menu_name": "Download Historical Data"
+      }
+    },
+    {
+      "timestamp": "2025-05-26T20:44:34.350876",
+      "action": "results_updated",
+      "details": {
+        "content_length": 83,
+        "timestamp": "2025-05-26T20:44:34.350876"
+      }
+    },
+    {
+      "timestamp": "2025-05-26T20:44:34.350876",
+      "action": "results_updated",
+      "details": {
+        "content_length": 59,
+        "timestamp": "2025-05-26T20:44:34.350876"
+      }
+    },
+    {
+      "timestamp": "2025-05-26T20:44:35.970233",
+      "action": "menu_executed",
+      "details": {
+        "item_index": 5,
+        "menu_name": "Exit"
+      }
+    },
+    {
+      "timestamp": "2025-05-26T20:44:35.970233",
+      "action": "results_updated",
+      "details": {
+        "content_length": 63,
+        "timestamp": "2025-05-26T20:44:35.970233"
+      }
+    },
+    {
+      "timestamp": "2025-05-26T20:44:36.008233",
+      "action": "results_updated",
+      "details": {
+        "content_length": 69,
+        "timestamp": "2025-05-26T20:44:36.008233"
+      }
+    }
+  ],
+  "timestamps": {
+    "created": "2025-05-26T20:44:08.847075",
+    "last_updated": "2025-05-26T20:45:09.911082"
+  }
+}
