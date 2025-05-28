@@ -1,0 +1,626 @@
+MYPY ANALYSIS REPORT
+Generated: 2025-05-28 15:48:09.545909
+================================================================================
+
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\fix_imports\fix_imports.py
+================================================================================
+✅ No type errors found
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\analyze_pylint.py
+================================================================================
+✅ No type errors found
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\complete_python_test.py
+================================================================================
+✅ No type errors found
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\comprehensive_fix_2025-05-28T11-41-52.py
+================================================================================
+✅ No type errors found
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\final_comprehensive_fix_2025-05-28T11-41-52.py
+================================================================================
+✅ No type errors found
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\FINAL_COMPREHENSIVE_FIXER_2025-05-28T11-41-52.py
+================================================================================
+STDOUT:
+scripts\FINAL_COMPREHENSIVE_FIXER_2025-05-28T11-41-52.py:53:9: error: Need type annotation for "issues_found" (hint: "issues_found: list[<type>] = ...")  [var-annotated]
+scripts\FINAL_COMPREHENSIVE_FIXER_2025-05-28T11-41-52.py:54:9: error: Need type annotation for "fixes_applied" (hint: "fixes_applied: list[<type>] = ...")  [var-annotated]
+scripts\FINAL_COMPREHENSIVE_FIXER_2025-05-28T11-41-52.py:55:9: error: Need type annotation for "analysis_results" (hint: "analysis_results: dict[<type>, <type>] = ...")  [var-annotated]
+scripts\FINAL_COMPREHENSIVE_FIXER_2025-05-28T11-41-52.py:140:9: error: Need type annotation for "files" (hint: "files: list[<type>] = ...")  [var-annotated]
+scripts\FINAL_COMPREHENSIVE_FIXER_2025-05-28T11-41-52.py:203:9: error: Need type annotation for "fixes_applied" (hint: "fixes_applied: list[<type>] = ...")  [var-annotated]
+scripts\FINAL_COMPREHENSIVE_FIXER_2025-05-28T11-41-52.py:304:52: error: Argument 1 to "endswith" of "str" has incompatible type "str | None"; expected "str | tuple[str, ...]"  [arg-type]
+scripts\FINAL_COMPREHENSIVE_FIXER_2025-05-28T11-41-52.py:344:9: error: Need type annotation for "reports" (hint: "reports: dict[<type>, <type>] = ...")  [var-annotated]
+scripts\FINAL_COMPREHENSIVE_FIXER_2025-05-28T11-41-52.py:682:17: error: Need type annotation for "issue_categories" (hint: "issue_categories: dict[<type>, <type>] = ...")  [var-annotated]
+scripts\FINAL_COMPREHENSIVE_FIXER_2025-05-28T11-41-52.py:702:17: error: Need type annotation for "fix_categories" (hint: "fix_categories: dict[<type>, <type>] = ...")  [var-annotated]
+scripts\FINAL_COMPREHENSIVE_FIXER_2025-05-28T11-41-52.py:887:20: error: Incompatible return value type (got "tuple[bool, None]", expected "tuple[bool, Path]")  [return-value]
+
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\focused_analysis_2025-05-28T11-41-52.py
+================================================================================
+✅ No type errors found
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\manual_analysis_2025-05-28T11-41-52.py
+================================================================================
+✅ No type errors found
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\quick_pylint_check.py
+================================================================================
+✅ No type errors found
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_analysis_2025-05-28T11-41-52.py
+================================================================================
+✅ No type errors found
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_comprehensive_pylint.py
+================================================================================
+✅ No type errors found
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_final_pylint_analysis.py
+================================================================================
+✅ No type errors found
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_focused_analysis.py
+================================================================================
+✅ No type errors found
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_pylint.py
+================================================================================
+✅ No type errors found
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_pylint_check.py
+================================================================================
+✅ No type errors found
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_pylint_diagnostic.py
+================================================================================
+✅ No type errors found
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_pylint_simple.py
+================================================================================
+✅ No type errors found
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\setup_check.py
+================================================================================
+✅ No type errors found
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\__init__.py
+================================================================================
+STDOUT:
+src\enhanced_admin_rithmic.py:46:30: error: Incompatible types in assignment (expression has type "bool", variable has type "str")  [assignment]
+
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_core_classes.py
+================================================================================
+STDOUT:
+src\enhanced_admin_rithmic.py:46:30: error: Incompatible types in assignment (expression has type "bool", variable has type "str")  [assignment]
+src\admin_core_classes.py:497:34: error: Incompatible types in assignment (expression has type "Text", variable has type "Markdown")  [assignment]
+src\admin_core_classes.py:499:30: error: Incompatible types in assignment (expression has type "Text", variable has type "Markdown")  [assignment]
+src\admin_core_classes.py:803:26: error: Incompatible types in assignment (expression has type "list[dict[str, str]]", variable has type "list[str]")  [assignment]
+src\admin_core_classes.py:976:9: error: Need type annotation for "panel_names" (hint: "panel_names: list[<type>] = ...")  [var-annotated]
+
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_database.py
+================================================================================
+STDOUT:
+src\admin_database.py:60:13: error: Cannot determine type of "_initialized"  [has-type]
+src\admin_database.py:64:12: error: Cannot determine type of "_initialized"  [has-type]
+src\admin_database.py:286:31: error: Incompatible types in assignment (expression has type "DatabaseManager", variable has type "None")  [assignment]
+src\admin_database.py:289:35: error: "None" has no attribute "test_connection"  [attr-defined]
+src\admin_database.py:1157:25: error: Need type annotation for "stats"  [var-annotated]
+src\admin_database.py:1307:17: error: Unsupported target for indexed assignment ("object")  [index]
+src\admin_database.py:1310:17: error: Unsupported target for indexed assignment ("object")  [index]
+src\admin_database.py:1313:17: error: Unsupported target for indexed assignment ("object")  [index]
+src\admin_database.py:1320:21: error: Unsupported target for indexed assignment ("object")  [index]
+src\admin_database.py:1321:21: error: Unsupported target for indexed assignment ("object")  [index]
+src\admin_database.py:1350:25: error: Unsupported target for indexed assignment ("object")  [index]
+src\enhanced_admin_rithmic.py:46:30: error: Incompatible types in assignment (expression has type "bool", variable has type "str")  [assignment]
+
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_display_manager.py
+================================================================================
+STDOUT:
+src\enhanced_admin_rithmic.py:46:30: error: Incompatible types in assignment (expression has type "bool", variable has type "str")  [assignment]
+src\admin_display_manager.py:43:49: error: Variable "src.admin_display_manager.TUIComponents" is not valid as a type  [valid-type]
+src\admin_display_manager.py:43:49: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#variables-vs-type-aliases
+src\admin_display_manager.py:43:72: error: Variable "src.admin_display_manager.SystemStatus" is not valid as a type  [valid-type]
+src\admin_display_manager.py:124:17: error: SystemStatus? has no attribute "last_operation_result"  [attr-defined]
+src\admin_display_manager.py:127:31: error: SystemStatus? has no attribute "last_operation_result"  [attr-defined]
+src\admin_display_manager.py:174:32: error: SystemStatus? has no attribute "rithmic_connected"  [attr-defined]
+src\admin_display_manager.py:176:35: error: SystemStatus? has no attribute "rithmic_connected"  [attr-defined]
+src\admin_display_manager.py:182:35: error: SystemStatus? has no attribute "database_connected"  [attr-defined]
+src\admin_display_manager.py:184:31: error: SystemStatus? has no attribute "database_connected"  [attr-defined]
+src\admin_display_manager.py:248:12: error: SystemStatus? has no attribute "active_operations"  [attr-defined]
+src\admin_display_manager.py:250:37: error: SystemStatus? has no attribute "active_operations"  [attr-defined]
+src\admin_display_manager.py:256:12: error: SystemStatus? has no attribute "last_operation_result"  [attr-defined]
+src\admin_display_manager.py:257:22: error: SystemStatus? has no attribute "last_operation_result"  [attr-defined]
+src\admin_display_manager.py:274:32: error: SystemStatus? has no attribute "session_duration_time"  [attr-defined]
+src\admin_display_manager.py:280:12: error: SystemStatus? has no attribute "connection_details"  [attr-defined]
+src\admin_display_manager.py:282:31: error: SystemStatus? has no attribute "connection_details"  [attr-defined]
+src\admin_display_manager.py:288:12: error: SystemStatus? has no attribute "last_operation_result"  [attr-defined]
+src\admin_display_manager.py:289:29: error: SystemStatus? has no attribute "last_operation_result"  [attr-defined]
+src\admin_display_manager.py:292:33: error: SystemStatus? has no attribute "last_operation_result"  [attr-defined]
+src\admin_display_manager.py:298:62: error: Variable "src.admin_display_manager.DownloadProgress" is not valid as a type  [valid-type]
+src\admin_display_manager.py:298:62: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#variables-vs-type-aliases
+src\admin_display_manager.py:306:9: error: SystemStatus? has no attribute "download_progress"  [attr-defined]
+src\admin_display_manager.py:309:9: error: TUIComponents? has no attribute "update_progress_info"  [attr-defined]
+src\admin_display_manager.py:312:46: error: Cannot determine type of "live_display"  [has-type]
+src\admin_display_manager.py:315:17: error: Cannot determine type of "live_display"  [has-type]
+src\admin_display_manager.py:328:48: error: Cannot determine type of "current_layout"  [has-type]
+src\admin_display_manager.py:437:12: error: SystemStatus? has no attribute "rithmic_connected"  [attr-defined]
+src\admin_display_manager.py:444:16: error: SystemStatus? has no attribute "connection_details"  [attr-defined]
+src\admin_display_manager.py:445:35: error: SystemStatus? has no attribute "connection_details"  [attr-defined]
+src\admin_display_manager.py:456:12: error: SystemStatus? has no attribute "database_connected"  [attr-defined]
+src\admin_display_manager.py:476:17: error: SystemStatus? has no attribute "rithmic_connected"  [attr-defined]
+src\admin_display_manager.py:481:22: error: SystemStatus? has no attribute "symbol_search_results"  [attr-defined]
+src\admin_display_manager.py:486:22: error: SystemStatus? has no attribute "download_progress"  [attr-defined]
+src\admin_display_manager.py:491:17: error: SystemStatus? has no attribute "database_connected"  [attr-defined]
+src\admin_display_manager.py:564:53: error: Cannot determine type of "live_display"  [has-type]
+src\admin_display_manager.py:582:33: error: Incompatible types in assignment (expression has type "None", variable has type "Live")  [assignment]
+src\admin_display_manager.py:612:12: error: SystemStatus? has no attribute "rithmic_connected"  [attr-defined]
+src\admin_display_manager.py:621:12: error: SystemStatus? has no attribute "symbol_search_results"  [attr-defined]
+src\admin_display_manager.py:623:43: error: SystemStatus? has no attribute "symbol_search_results"  [attr-defined]
+src\admin_display_manager.py:632:12: error: SystemStatus? has no attribute "download_progress"  [attr-defined]
+src\admin_display_manager.py:634:39: error: SystemStatus? has no attribute "download_progress"  [attr-defined]
+src\admin_display_manager.py:637:37: error: SystemStatus? has no attribute "download_progress"  [attr-defined]
+src\admin_display_manager.py:665:12: error: SystemStatus? has no attribute "database_connected"  [attr-defined]
+src\admin_display_manager.py:682:16: error: SystemStatus? has no attribute "download_progress"  [attr-defined]
+src\admin_display_manager.py:688:33: error: SystemStatus? has no attribute "download_progress"  [attr-defined]
+src\admin_display_manager.py:769:9: error: SystemStatus? has no attribute "last_operation_result"  [attr-defined]
+src\admin_display_manager.py:782:9: error: SystemStatus? has no attribute "last_operation_result"  [attr-defined]
+
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_operations.py
+================================================================================
+STDOUT:
+src\admin_operations.py:153:9: error: Need type annotation for "download_progress" (hint: "download_progress: dict[<type>, <type>] = ...")  [var-annotated]
+src\admin_operations.py:167:12: error: Function "progress_callback" could always be true in boolean context  [truthy-function]
+src\admin_operations.py:292:33: error: "None" has no attribute "search_symbols"  [attr-defined]
+src\admin_operations.py:347:17: error: Argument 1 to "_simulate_interactive_selection" of "AdminOperations" has incompatible type "list[SearchResult]"; expected "list[dict[Any, Any]]"  [arg-type]
+src\admin_operations.py:353:44: error: "dict[Any, Any]" has no attribute "symbol"  [attr-defined]
+src\admin_operations.py:358:13: error: Incompatible types in assignment (expression has type "dict[Any, Any]", variable has type "SearchResult")  [assignment]
+src\admin_operations.py:362:37: error: "None" has no attribute "get_front_month_contract"  [attr-defined]
+src\admin_operations.py:386:13: error: Incompatible types in assignment (expression has type "dict[Any, Any]", variable has type "SearchResult")  [assignment]
+src\admin_operations.py:507:27: error: "float" has no attribute "records_downloaded"  [attr-defined]
+src\admin_operations.py:508:34: error: "float" has no attribute "records_downloaded"  [attr-defined]
+src\enhanced_admin_rithmic.py:46:30: error: Incompatible types in assignment (expression has type "bool", variable has type "str")  [assignment]
+
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_rithmic_connection.py
+================================================================================
+STDOUT:
+src\admin_rithmic_connection.py:124:30: error: Value of type "dict[str, Any] | None" is not indexable  [index]
+src\admin_rithmic_connection.py:125:34: error: Value of type "dict[str, Any] | None" is not indexable  [index]
+src\admin_rithmic_connection.py:127:37: error: Item "None" of "dict[str, Any] | None" has no attribute "get"  [union-attr]
+src\admin_rithmic_connection.py:130:34: error: Item "None" of "dict[str, Any] | None" has no attribute "get"  [union-attr]
+src\admin_rithmic_connection.py:131:37: error: Item "None" of "dict[str, Any] | None" has no attribute "get"  [union-attr]
+src\admin_rithmic_connection.py:190:21: error: Value of type "dict[str, Any] | None" is not indexable  [index]
+src\admin_rithmic_connection.py:340:40: error: Incompatible types in assignment (expression has type "float", target has type "list[Any] | int | str | None")  [assignment]
+src\admin_rithmic_connection.py:366:29: error: Item "None" of "dict[str, Any] | None" has no attribute "get"  [union-attr]
+src\admin_rithmic_connection.py:367:36: error: Item "None" of "dict[str, Any] | None" has no attribute "get"  [union-attr]
+src\admin_rithmic_connection.py:373:33: error: Item "None" of "dict[str, Any] | None" has no attribute "get"  [union-attr]
+src\admin_rithmic_connection.py:374:32: error: Item "None" of "dict[str, Any] | None" has no attribute "get"  [union-attr]
+src\admin_rithmic_connection.py:459:35: error: Incompatible default for argument "progress_callback" (default has type "None", argument has type "Callable[..., Any]")  [assignment]
+src\admin_rithmic_connection.py:459:35: note: PEP 484 prohibits implicit Optional. Accordingly, mypy has changed its default to no_implicit_optional=True
+src\admin_rithmic_connection.py:459:35: note: Use https://github.com/hauntsaninja/no_implicit_optional to automatically upgrade your codebase
+src\admin_rithmic_connection.py:474:10: error: Function "progress_callback" could always be true in boolean context  [truthy-function]
+src\admin_rithmic_connection.py:481:35: error: Incompatible default for argument "progress_callback" (default has type "None", argument has type "Callable[..., Any]")  [assignment]
+src\admin_rithmic_connection.py:481:35: note: PEP 484 prohibits implicit Optional. Accordingly, mypy has changed its default to no_implicit_optional=True
+src\admin_rithmic_connection.py:481:35: note: Use https://github.com/hauntsaninja/no_implicit_optional to automatically upgrade your codebase
+src\enhanced_admin_rithmic.py:46:30: error: Incompatible types in assignment (expression has type "bool", variable has type "str")  [assignment]
+
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_rithmic_historical.py
+================================================================================
+STDOUT:
+src\admin_rithmic_historical.py:10:1: error: Library stubs not installed for "pytz"  [import-untyped]
+src\admin_rithmic_historical.py:10:1: note: Hint: "python3 -m pip install types-pytz"
+src\admin_rithmic_historical.py:10:1: note: (or run "mypy --install-types" to install all missing stub packages)
+src\admin_rithmic_historical.py:10:1: note: See https://mypy.readthedocs.io/en/stable/running_mypy.html#missing-imports
+src\admin_rithmic_historical.py:18:5: error: Name "TimeBarType" already defined (possibly by an import)  [no-redef]
+src\admin_rithmic_historical.py:98:25: error: Incompatible types in assignment (expression has type "None", variable has type "list[str]")  [assignment]
+src\admin_rithmic_historical.py:117:88: error: Incompatible default for argument "progress_callback" (default has type "None", argument has type "Callable[..., Any]")  [assignment]
+src\admin_rithmic_historical.py:117:88: note: PEP 484 prohibits implicit Optional. Accordingly, mypy has changed its default to no_implicit_optional=True
+src\admin_rithmic_historical.py:117:88: note: Use https://github.com/hauntsaninja/no_implicit_optional to automatically upgrade your codebase
+src\admin_rithmic_historical.py:129:9: error: Need type annotation for "download_stats" (hint: "download_stats: dict[<type>, <type>] = ...")  [var-annotated]
+src\admin_rithmic_historical.py:488:12: error: Function "progress_callback" could always be true in boolean context  [truthy-function]
+src\admin_rithmic_historical.py:753:55: error: Incompatible default for argument "contract" (default has type "None", argument has type "str")  [assignment]
+src\admin_rithmic_historical.py:753:55: note: PEP 484 prohibits implicit Optional. Accordingly, mypy has changed its default to no_implicit_optional=True
+src\admin_rithmic_historical.py:753:55: note: Use https://github.com/hauntsaninja/no_implicit_optional to automatically upgrade your codebase
+src\admin_rithmic_historical.py:819:35: error: Incompatible default for argument "dt" (default has type "None", argument has type "datetime")  [assignment]
+src\admin_rithmic_historical.py:819:35: note: PEP 484 prohibits implicit Optional. Accordingly, mypy has changed its default to no_implicit_optional=True
+src\admin_rithmic_historical.py:819:35: note: Use https://github.com/hauntsaninja/no_implicit_optional to automatically upgrade your codebase
+src\enhanced_admin_rithmic.py:46:30: error: Incompatible types in assignment (expression has type "bool", variable has type "str")  [assignment]
+
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_rithmic_operations.py
+================================================================================
+STDOUT:
+src\admin_rithmic_operations.py:42:54: error: Incompatible default for argument "progress_callback" (default has type "None", argument has type "Callable[..., Any]")  [assignment]
+src\admin_rithmic_operations.py:42:54: note: PEP 484 prohibits implicit Optional. Accordingly, mypy has changed its default to no_implicit_optional=True
+src\admin_rithmic_operations.py:42:54: note: Use https://github.com/hauntsaninja/no_implicit_optional to automatically upgrade your codebase
+src\admin_rithmic_operations.py:470:17: error: "Collection[str]" has no attribute "update"  [attr-defined]
+src\admin_rithmic_operations.py:472:17: error: Unsupported target for indexed assignment ("Collection[str]")  [index]
+src\admin_rithmic_operations.py:485:12: error: Function "progress_callback" could always be true in boolean context  [truthy-function]
+src\admin_rithmic_operations.py:550:35: error: Incompatible default for argument "progress_callback" (default has type "None", argument has type "Callable[..., Any]")  [assignment]
+src\admin_rithmic_operations.py:550:35: note: PEP 484 prohibits implicit Optional. Accordingly, mypy has changed its default to no_implicit_optional=True
+src\admin_rithmic_operations.py:550:35: note: Use https://github.com/hauntsaninja/no_implicit_optional to automatically upgrade your codebase
+src\enhanced_admin_rithmic.py:46:30: error: Incompatible types in assignment (expression has type "bool", variable has type "str")  [assignment]
+
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_rithmic_symbols.py
+================================================================================
+STDOUT:
+src\admin_rithmic_symbols.py:649:9: error: Need type annotation for "grouped" (hint: "grouped: dict[<type>, <type>] = ...")  [var-annotated]
+src\admin_rithmic_symbols.py:705:22: error: "object" has no attribute "__iter__"; maybe "__dir__" or "__str__"? (not iterable)  [attr-defined]
+src\enhanced_admin_rithmic.py:46:30: error: Incompatible types in assignment (expression has type "bool", variable has type "str")  [assignment]
+
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\config\__init__.py
+================================================================================
+STDOUT:
+src\config\__init__.py:9:1: error: Library stubs not installed for "yaml"  [import-untyped]
+src\config\__init__.py:9:1: note: Hint: "python3 -m pip install types-PyYAML"
+src\config\__init__.py:9:1: note: (or run "mypy --install-types" to install all missing stub packages)
+src\config\__init__.py:9:1: note: See https://mypy.readthedocs.io/en/stable/running_mypy.html#missing-imports
+src\enhanced_admin_rithmic.py:46:30: error: Incompatible types in assignment (expression has type "bool", variable has type "str")  [assignment]
+
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\config\chicago_gateway_config.py
+================================================================================
+STDOUT:
+src\config\__init__.py:9:1: error: Library stubs not installed for "yaml"  [import-untyped]
+src\config\__init__.py:9:1: note: Hint: "python3 -m pip install types-PyYAML"
+src\config\__init__.py:9:1: note: (or run "mypy --install-types" to install all missing stub packages)
+src\config\__init__.py:9:1: note: See https://mypy.readthedocs.io/en/stable/running_mypy.html#missing-imports
+src\config\chicago_gateway_config.py:47:20: error: Unsupported right operand type for in ("object")  [operator]
+src\config\chicago_gateway_config.py:48:21: error: Unsupported target for indexed assignment ("object")  [index]
+src\config\chicago_gateway_config.py:58:17: error: Unsupported target for indexed assignment ("object")  [index]
+src\enhanced_admin_rithmic.py:46:30: error: Incompatible types in assignment (expression has type "bool", variable has type "str")  [assignment]
+
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\config\database_config.py
+================================================================================
+STDOUT:
+src\config\__init__.py:9:1: error: Library stubs not installed for "yaml"  [import-untyped]
+src\config\__init__.py:9:1: note: Hint: "python3 -m pip install types-PyYAML"
+src\config\__init__.py:9:1: note: (or run "mypy --install-types" to install all missing stub packages)
+src\config\__init__.py:9:1: note: See https://mypy.readthedocs.io/en/stable/running_mypy.html#missing-imports
+src\enhanced_admin_rithmic.py:46:30: error: Incompatible types in assignment (expression has type "bool", variable has type "str")  [assignment]
+
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\config\trading_config.py
+================================================================================
+STDOUT:
+src\config\__init__.py:9:1: error: Library stubs not installed for "yaml"  [import-untyped]
+src\config\__init__.py:9:1: note: Hint: "python3 -m pip install types-PyYAML"
+src\config\__init__.py:9:1: note: (or run "mypy --install-types" to install all missing stub packages)
+src\config\__init__.py:9:1: note: See https://mypy.readthedocs.io/en/stable/running_mypy.html#missing-imports
+src\config\trading_config.py:58:17: error: Unsupported target for indexed assignment ("Collection[str]")  [index]
+src\enhanced_admin_rithmic.py:46:30: error: Incompatible types in assignment (expression has type "bool", variable has type "str")  [assignment]
+
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\enhanced_admin_rithmic.py
+================================================================================
+STDOUT:
+src\enhanced_admin_rithmic.py:46:30: error: Incompatible types in assignment (expression has type "bool", variable has type "str")  [assignment]
+
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\__init__.py
+================================================================================
+✅ No type errors found
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\comprehensive_tui_diagnostic.py
+================================================================================
+✅ No type errors found
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\enhanced_admin_rithmic.py
+================================================================================
+STDOUT:
+src\enhanced_admin_rithmic.py:46:30: error: Incompatible types in assignment (expression has type "bool", variable has type "str")  [assignment]
+
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\final_verification.py
+================================================================================
+✅ No type errors found
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\final_verification_test.py
+================================================================================
+✅ No type errors found
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\simple_tui_test.py
+================================================================================
+✅ No type errors found
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\test_enhanced_connection_display.py
+================================================================================
+STDOUT:
+src\enhanced_admin_rithmic.py:46:30: error: Incompatible types in assignment (expression has type "bool", variable has type "str")  [assignment]
+
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\test_fixes.py
+================================================================================
+STDOUT:
+src\enhanced_admin_rithmic.py:46:30: error: Incompatible types in assignment (expression has type "bool", variable has type "str")  [assignment]
+src\admin_display_manager.py:43:49: error: Variable "src.admin_display_manager.TUIComponents" is not valid as a type  [valid-type]
+src\admin_display_manager.py:43:49: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#variables-vs-type-aliases
+src\admin_display_manager.py:43:72: error: Variable "src.admin_display_manager.SystemStatus" is not valid as a type  [valid-type]
+src\admin_display_manager.py:124:17: error: SystemStatus? has no attribute "last_operation_result"  [attr-defined]
+src\admin_display_manager.py:127:31: error: SystemStatus? has no attribute "last_operation_result"  [attr-defined]
+src\admin_display_manager.py:174:32: error: SystemStatus? has no attribute "rithmic_connected"  [attr-defined]
+src\admin_display_manager.py:176:35: error: SystemStatus? has no attribute "rithmic_connected"  [attr-defined]
+src\admin_display_manager.py:182:35: error: SystemStatus? has no attribute "database_connected"  [attr-defined]
+src\admin_display_manager.py:184:31: error: SystemStatus? has no attribute "database_connected"  [attr-defined]
+src\admin_display_manager.py:248:12: error: SystemStatus? has no attribute "active_operations"  [attr-defined]
+src\admin_display_manager.py:250:37: error: SystemStatus? has no attribute "active_operations"  [attr-defined]
+src\admin_display_manager.py:256:12: error: SystemStatus? has no attribute "last_operation_result"  [attr-defined]
+src\admin_display_manager.py:257:22: error: SystemStatus? has no attribute "last_operation_result"  [attr-defined]
+src\admin_display_manager.py:274:32: error: SystemStatus? has no attribute "session_duration_time"  [attr-defined]
+src\admin_display_manager.py:280:12: error: SystemStatus? has no attribute "connection_details"  [attr-defined]
+src\admin_display_manager.py:282:31: error: SystemStatus? has no attribute "connection_details"  [attr-defined]
+src\admin_display_manager.py:288:12: error: SystemStatus? has no attribute "last_operation_result"  [attr-defined]
+src\admin_display_manager.py:289:29: error: SystemStatus? has no attribute "last_operation_result"  [attr-defined]
+src\admin_display_manager.py:292:33: error: SystemStatus? has no attribute "last_operation_result"  [attr-defined]
+src\admin_display_manager.py:298:62: error: Variable "src.admin_display_manager.DownloadProgress" is not valid as a type  [valid-type]
+src\admin_display_manager.py:298:62: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#variables-vs-type-aliases
+src\admin_display_manager.py:306:9: error: SystemStatus? has no attribute "download_progress"  [attr-defined]
+src\admin_display_manager.py:309:9: error: TUIComponents? has no attribute "update_progress_info"  [attr-defined]
+src\admin_display_manager.py:312:46: error: Cannot determine type of "live_display"  [has-type]
+src\admin_display_manager.py:315:17: error: Cannot determine type of "live_display"  [has-type]
+src\admin_display_manager.py:328:48: error: Cannot determine type of "current_layout"  [has-type]
+src\admin_display_manager.py:437:12: error: SystemStatus? has no attribute "rithmic_connected"  [attr-defined]
+src\admin_display_manager.py:444:16: error: SystemStatus? has no attribute "connection_details"  [attr-defined]
+src\admin_display_manager.py:445:35: error: SystemStatus? has no attribute "connection_details"  [attr-defined]
+src\admin_display_manager.py:456:12: error: SystemStatus? has no attribute "database_connected"  [attr-defined]
+src\admin_display_manager.py:476:17: error: SystemStatus? has no attribute "rithmic_connected"  [attr-defined]
+src\admin_display_manager.py:481:22: error: SystemStatus? has no attribute "symbol_search_results"  [attr-defined]
+src\admin_display_manager.py:486:22: error: SystemStatus? has no attribute "download_progress"  [attr-defined]
+src\admin_display_manager.py:491:17: error: SystemStatus? has no attribute "database_connected"  [attr-defined]
+src\admin_display_manager.py:564:53: error: Cannot determine type of "live_display"  [has-type]
+src\admin_display_manager.py:582:33: error: Incompatible types in assignment (expression has type "None", variable has type "Live")  [assignment]
+src\admin_display_manager.py:612:12: error: SystemStatus? has no attribute "rithmic_connected"  [attr-defined]
+src\admin_display_manager.py:621:12: error: SystemStatus? has no attribute "symbol_search_results"  [attr-defined]
+src\admin_display_manager.py:623:43: error: SystemStatus? has no attribute "symbol_search_results"  [attr-defined]
+src\admin_display_manager.py:632:12: error: SystemStatus? has no attribute "download_progress"  [attr-defined]
+src\admin_display_manager.py:634:39: error: SystemStatus? has no attribute "download_progress"  [attr-defined]
+src\admin_display_manager.py:637:37: error: SystemStatus? has no attribute "download_progress"  [attr-defined]
+src\admin_display_manager.py:665:12: error: SystemStatus? has no attribute "database_connected"  [attr-defined]
+src\admin_display_manager.py:682:16: error: SystemStatus? has no attribute "download_progress"  [attr-defined]
+src\admin_display_manager.py:688:33: error: SystemStatus? has no attribute "download_progress"  [attr-defined]
+src\admin_display_manager.py:769:9: error: SystemStatus? has no attribute "last_operation_result"  [attr-defined]
+src\admin_display_manager.py:782:9: error: SystemStatus? has no attribute "last_operation_result"  [attr-defined]
+
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\test_import_helper.py
+================================================================================
+STDOUT:
+src\admin_rithmic_connection.py:124:30: error: Value of type "dict[str, Any] | None" is not indexable  [index]
+src\admin_rithmic_connection.py:125:34: error: Value of type "dict[str, Any] | None" is not indexable  [index]
+src\admin_rithmic_connection.py:127:37: error: Item "None" of "dict[str, Any] | None" has no attribute "get"  [union-attr]
+src\admin_rithmic_connection.py:130:34: error: Item "None" of "dict[str, Any] | None" has no attribute "get"  [union-attr]
+src\admin_rithmic_connection.py:131:37: error: Item "None" of "dict[str, Any] | None" has no attribute "get"  [union-attr]
+src\admin_rithmic_connection.py:190:21: error: Value of type "dict[str, Any] | None" is not indexable  [index]
+src\admin_rithmic_connection.py:340:40: error: Incompatible types in assignment (expression has type "float", target has type "list[Any] | int | str | None")  [assignment]
+src\admin_rithmic_connection.py:366:29: error: Item "None" of "dict[str, Any] | None" has no attribute "get"  [union-attr]
+src\admin_rithmic_connection.py:367:36: error: Item "None" of "dict[str, Any] | None" has no attribute "get"  [union-attr]
+src\admin_rithmic_connection.py:373:33: error: Item "None" of "dict[str, Any] | None" has no attribute "get"  [union-attr]
+src\admin_rithmic_connection.py:374:32: error: Item "None" of "dict[str, Any] | None" has no attribute "get"  [union-attr]
+src\admin_rithmic_connection.py:459:35: error: Incompatible default for argument "progress_callback" (default has type "None", argument has type "Callable[..., Any]")  [assignment]
+src\admin_rithmic_connection.py:459:35: note: PEP 484 prohibits implicit Optional. Accordingly, mypy has changed its default to no_implicit_optional=True
+src\admin_rithmic_connection.py:459:35: note: Use https://github.com/hauntsaninja/no_implicit_optional to automatically upgrade your codebase
+src\admin_rithmic_connection.py:474:10: error: Function "progress_callback" could always be true in boolean context  [truthy-function]
+src\admin_rithmic_connection.py:481:35: error: Incompatible default for argument "progress_callback" (default has type "None", argument has type "Callable[..., Any]")  [assignment]
+src\admin_rithmic_connection.py:481:35: note: PEP 484 prohibits implicit Optional. Accordingly, mypy has changed its default to no_implicit_optional=True
+src\admin_rithmic_connection.py:481:35: note: Use https://github.com/hauntsaninja/no_implicit_optional to automatically upgrade your codebase
+src\admin_database.py:60:13: error: Cannot determine type of "_initialized"  [has-type]
+src\admin_database.py:64:12: error: Cannot determine type of "_initialized"  [has-type]
+src\admin_database.py:286:31: error: Incompatible types in assignment (expression has type "DatabaseManager", variable has type "None")  [assignment]
+src\admin_database.py:289:35: error: "None" has no attribute "test_connection"  [attr-defined]
+src\admin_database.py:1157:25: error: Need type annotation for "stats"  [var-annotated]
+src\admin_database.py:1307:17: error: Unsupported target for indexed assignment ("object")  [index]
+src\admin_database.py:1310:17: error: Unsupported target for indexed assignment ("object")  [index]
+src\admin_database.py:1313:17: error: Unsupported target for indexed assignment ("object")  [index]
+src\admin_database.py:1320:21: error: Unsupported target for indexed assignment ("object")  [index]
+src\admin_database.py:1321:21: error: Unsupported target for indexed assignment ("object")  [index]
+src\admin_database.py:1350:25: error: Unsupported target for indexed assignment ("object")  [index]
+src\enhanced_admin_rithmic.py:46:30: error: Incompatible types in assignment (expression has type "bool", variable has type "str")  [assignment]
+src\admin_core_classes.py:497:34: error: Incompatible types in assignment (expression has type "Text", variable has type "Markdown")  [assignment]
+src\admin_core_classes.py:499:30: error: Incompatible types in assignment (expression has type "Text", variable has type "Markdown")  [assignment]
+src\admin_core_classes.py:803:26: error: Incompatible types in assignment (expression has type "list[dict[str, str]]", variable has type "list[str]")  [assignment]
+src\admin_core_classes.py:976:9: error: Need type annotation for "panel_names" (hint: "panel_names: list[<type>] = ...")  [var-annotated]
+src\admin_display_manager.py:43:49: error: Variable "src.admin_display_manager.TUIComponents" is not valid as a type  [valid-type]
+src\admin_display_manager.py:43:49: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#variables-vs-type-aliases
+src\admin_display_manager.py:43:72: error: Variable "src.admin_display_manager.SystemStatus" is not valid as a type  [valid-type]
+src\admin_display_manager.py:124:17: error: SystemStatus? has no attribute "last_operation_result"  [attr-defined]
+src\admin_display_manager.py:127:31: error: SystemStatus? has no attribute "last_operation_result"  [attr-defined]
+src\admin_display_manager.py:174:32: error: SystemStatus? has no attribute "rithmic_connected"  [attr-defined]
+src\admin_display_manager.py:176:35: error: SystemStatus? has no attribute "rithmic_connected"  [attr-defined]
+src\admin_display_manager.py:182:35: error: SystemStatus? has no attribute "database_connected"  [attr-defined]
+src\admin_display_manager.py:184:31: error: SystemStatus? has no attribute "database_connected"  [attr-defined]
+src\admin_display_manager.py:248:12: error: SystemStatus? has no attribute "active_operations"  [attr-defined]
+src\admin_display_manager.py:250:37: error: SystemStatus? has no attribute "active_operations"  [attr-defined]
+src\admin_display_manager.py:256:12: error: SystemStatus? has no attribute "last_operation_result"  [attr-defined]
+src\admin_display_manager.py:257:22: error: SystemStatus? has no attribute "last_operation_result"  [attr-defined]
+src\admin_display_manager.py:274:32: error: SystemStatus? has no attribute "session_duration_time"  [attr-defined]
+src\admin_display_manager.py:280:12: error: SystemStatus? has no attribute "connection_details"  [attr-defined]
+src\admin_display_manager.py:282:31: error: SystemStatus? has no attribute "connection_details"  [attr-defined]
+src\admin_display_manager.py:288:12: error: SystemStatus? has no attribute "last_operation_result"  [attr-defined]
+src\admin_display_manager.py:289:29: error: SystemStatus? has no attribute "last_operation_result"  [attr-defined]
+src\admin_display_manager.py:292:33: error: SystemStatus? has no attribute "last_operation_result"  [attr-defined]
+src\admin_display_manager.py:298:62: error: Variable "src.admin_display_manager.DownloadProgress" is not valid as a type  [valid-type]
+src\admin_display_manager.py:298:62: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#variables-vs-type-aliases
+src\admin_display_manager.py:306:9: error: SystemStatus? has no attribute "download_progress"  [attr-defined]
+src\admin_display_manager.py:309:9: error: TUIComponents? has no attribute "update_progress_info"  [attr-defined]
+src\admin_display_manager.py:312:46: error: Cannot determine type of "live_display"  [has-type]
+src\admin_display_manager.py:315:17: error: Cannot determine type of "live_display"  [has-type]
+src\admin_display_manager.py:328:48: error: Cannot determine type of "current_layout"  [has-type]
+src\admin_display_manager.py:437:12: error: SystemStatus? has no attribute "rithmic_connected"  [attr-defined]
+src\admin_display_manager.py:444:16: error: SystemStatus? has no attribute "connection_details"  [attr-defined]
+src\admin_display_manager.py:445:35: error: SystemStatus? has no attribute "connection_details"  [attr-defined]
+src\admin_display_manager.py:456:12: error: SystemStatus? has no attribute "database_connected"  [attr-defined]
+src\admin_display_manager.py:476:17: error: SystemStatus? has no attribute "rithmic_connected"  [attr-defined]
+src\admin_display_manager.py:481:22: error: SystemStatus? has no attribute "symbol_search_results"  [attr-defined]
+src\admin_display_manager.py:486:22: error: SystemStatus? has no attribute "download_progress"  [attr-defined]
+src\admin_display_manager.py:491:17: error: SystemStatus? has no attribute "database_connected"  [attr-defined]
+src\admin_display_manager.py:564:53: error: Cannot determine type of "live_display"  [has-type]
+src\admin_display_manager.py:582:33: error: Incompatible types in assignment (expression has type "None", variable has type "Live")  [assignment]
+src\admin_display_manager.py:612:12: error: SystemStatus? has no attribute "rithmic_connected"  [attr-defined]
+src\admin_display_manager.py:621:12: error: SystemStatus? has no attribute "symbol_search_results"  [attr-defined]
+src\admin_display_manager.py:623:43: error: SystemStatus? has no attribute "symbol_search_results"  [attr-defined]
+src\admin_display_manager.py:632:12: error: SystemStatus? has no attribute "download_progress"  [attr-defined]
+src\admin_display_manager.py:634:39: error: SystemStatus? has no attribute "download_progress"  [attr-defined]
+src\admin_display_manager.py:637:37: error: SystemStatus? has no attribute "download_progress"  [attr-defined]
+src\admin_display_manager.py:665:12: error: SystemStatus? has no attribute "database_connected"  [attr-defined]
+src\admin_display_manager.py:682:16: error: SystemStatus? has no attribute "download_progress"  [attr-defined]
+src\admin_display_manager.py:688:33: error: SystemStatus? has no attribute "download_progress"  [attr-defined]
+src\admin_display_manager.py:769:9: error: SystemStatus? has no attribute "last_operation_result"  [attr-defined]
+src\admin_display_manager.py:782:9: error: SystemStatus? has no attribute "last_operation_result"  [attr-defined]
+tests\test_import_helper.py:32:5: error: Module "src.admin_core_classes" has no attribute "DatabaseManager"  [attr-defined]
+tests\test_import_helper.py:33:5: error: Module "src.admin_database" has no attribute "DatabaseConnection"  [attr-defined]
+tests\test_import_helper.py:34:5: error: Module "src.admin_rithmic_connection" has no attribute "RithmicConnection"; maybe "RithmicConnectionManager"?  [attr-defined]
+
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\test_tui_display.py
+================================================================================
+STDOUT:
+src\enhanced_admin_rithmic.py:46:30: error: Incompatible types in assignment (expression has type "bool", variable has type "str")  [assignment]
+
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\test_tui_fixes.py
+================================================================================
+✅ No type errors found
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\verify_imports\verify_import_fixes.py
+================================================================================
+STDOUT:
+src\admin_rithmic_connection.py:124:30: error: Value of type "dict[str, Any] | None" is not indexable  [index]
+src\admin_rithmic_connection.py:125:34: error: Value of type "dict[str, Any] | None" is not indexable  [index]
+src\admin_rithmic_connection.py:127:37: error: Item "None" of "dict[str, Any] | None" has no attribute "get"  [union-attr]
+src\admin_rithmic_connection.py:130:34: error: Item "None" of "dict[str, Any] | None" has no attribute "get"  [union-attr]
+src\admin_rithmic_connection.py:131:37: error: Item "None" of "dict[str, Any] | None" has no attribute "get"  [union-attr]
+src\admin_rithmic_connection.py:190:21: error: Value of type "dict[str, Any] | None" is not indexable  [index]
+src\admin_rithmic_connection.py:340:40: error: Incompatible types in assignment (expression has type "float", target has type "list[Any] | int | str | None")  [assignment]
+src\admin_rithmic_connection.py:366:29: error: Item "None" of "dict[str, Any] | None" has no attribute "get"  [union-attr]
+src\admin_rithmic_connection.py:367:36: error: Item "None" of "dict[str, Any] | None" has no attribute "get"  [union-attr]
+src\admin_rithmic_connection.py:373:33: error: Item "None" of "dict[str, Any] | None" has no attribute "get"  [union-attr]
+src\admin_rithmic_connection.py:374:32: error: Item "None" of "dict[str, Any] | None" has no attribute "get"  [union-attr]
+src\admin_rithmic_connection.py:459:35: error: Incompatible default for argument "progress_callback" (default has type "None", argument has type "Callable[..., Any]")  [assignment]
+src\admin_rithmic_connection.py:459:35: note: PEP 484 prohibits implicit Optional. Accordingly, mypy has changed its default to no_implicit_optional=True
+src\admin_rithmic_connection.py:459:35: note: Use https://github.com/hauntsaninja/no_implicit_optional to automatically upgrade your codebase
+src\admin_rithmic_connection.py:474:10: error: Function "progress_callback" could always be true in boolean context  [truthy-function]
+src\admin_rithmic_connection.py:481:35: error: Incompatible default for argument "progress_callback" (default has type "None", argument has type "Callable[..., Any]")  [assignment]
+src\admin_rithmic_connection.py:481:35: note: PEP 484 prohibits implicit Optional. Accordingly, mypy has changed its default to no_implicit_optional=True
+src\admin_rithmic_connection.py:481:35: note: Use https://github.com/hauntsaninja/no_implicit_optional to automatically upgrade your codebase
+src\admin_database.py:60:13: error: Cannot determine type of "_initialized"  [has-type]
+src\admin_database.py:64:12: error: Cannot determine type of "_initialized"  [has-type]
+src\admin_database.py:286:31: error: Incompatible types in assignment (expression has type "DatabaseManager", variable has type "None")  [assignment]
+src\admin_database.py:289:35: error: "None" has no attribute "test_connection"  [attr-defined]
+src\admin_database.py:1157:25: error: Need type annotation for "stats"  [var-annotated]
+src\admin_database.py:1307:17: error: Unsupported target for indexed assignment ("object")  [index]
+src\admin_database.py:1310:17: error: Unsupported target for indexed assignment ("object")  [index]
+src\admin_database.py:1313:17: error: Unsupported target for indexed assignment ("object")  [index]
+src\admin_database.py:1320:21: error: Unsupported target for indexed assignment ("object")  [index]
+src\admin_database.py:1321:21: error: Unsupported target for indexed assignment ("object")  [index]
+src\admin_database.py:1350:25: error: Unsupported target for indexed assignment ("object")  [index]
+src\enhanced_admin_rithmic.py:46:30: error: Incompatible types in assignment (expression has type "bool", variable has type "str")  [assignment]
+src\admin_core_classes.py:497:34: error: Incompatible types in assignment (expression has type "Text", variable has type "Markdown")  [assignment]
+src\admin_core_classes.py:499:30: error: Incompatible types in assignment (expression has type "Text", variable has type "Markdown")  [assignment]
+src\admin_core_classes.py:803:26: error: Incompatible types in assignment (expression has type "list[dict[str, str]]", variable has type "list[str]")  [assignment]
+src\admin_core_classes.py:976:9: error: Need type annotation for "panel_names" (hint: "panel_names: list[<type>] = ...")  [var-annotated]
+src\admin_display_manager.py:43:49: error: Variable "src.admin_display_manager.TUIComponents" is not valid as a type  [valid-type]
+src\admin_display_manager.py:43:49: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#variables-vs-type-aliases
+src\admin_display_manager.py:43:72: error: Variable "src.admin_display_manager.SystemStatus" is not valid as a type  [valid-type]
+src\admin_display_manager.py:124:17: error: SystemStatus? has no attribute "last_operation_result"  [attr-defined]
+src\admin_display_manager.py:127:31: error: SystemStatus? has no attribute "last_operation_result"  [attr-defined]
+src\admin_display_manager.py:174:32: error: SystemStatus? has no attribute "rithmic_connected"  [attr-defined]
+src\admin_display_manager.py:176:35: error: SystemStatus? has no attribute "rithmic_connected"  [attr-defined]
+src\admin_display_manager.py:182:35: error: SystemStatus? has no attribute "database_connected"  [attr-defined]
+src\admin_display_manager.py:184:31: error: SystemStatus? has no attribute "database_connected"  [attr-defined]
+src\admin_display_manager.py:248:12: error: SystemStatus? has no attribute "active_operations"  [attr-defined]
+src\admin_display_manager.py:250:37: error: SystemStatus? has no attribute "active_operations"  [attr-defined]
+src\admin_display_manager.py:256:12: error: SystemStatus? has no attribute "last_operation_result"  [attr-defined]
+src\admin_display_manager.py:257:22: error: SystemStatus? has no attribute "last_operation_result"  [attr-defined]
+src\admin_display_manager.py:274:32: error: SystemStatus? has no attribute "session_duration_time"  [attr-defined]
+src\admin_display_manager.py:280:12: error: SystemStatus? has no attribute "connection_details"  [attr-defined]
+src\admin_display_manager.py:282:31: error: SystemStatus? has no attribute "connection_details"  [attr-defined]
+src\admin_display_manager.py:288:12: error: SystemStatus? has no attribute "last_operation_result"  [attr-defined]
+src\admin_display_manager.py:289:29: error: SystemStatus? has no attribute "last_operation_result"  [attr-defined]
+src\admin_display_manager.py:292:33: error: SystemStatus? has no attribute "last_operation_result"  [attr-defined]
+src\admin_display_manager.py:298:62: error: Variable "src.admin_display_manager.DownloadProgress" is not valid as a type  [valid-type]
+src\admin_display_manager.py:298:62: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#variables-vs-type-aliases
+src\admin_display_manager.py:306:9: error: SystemStatus? has no attribute "download_progress"  [attr-defined]
+src\admin_display_manager.py:309:9: error: TUIComponents? has no attribute "update_progress_info"  [attr-defined]
+src\admin_display_manager.py:312:46: error: Cannot determine type of "live_display"  [has-type]
+src\admin_display_manager.py:315:17: error: Cannot determine type of "live_display"  [has-type]
+src\admin_display_manager.py:328:48: error: Cannot determine type of "current_layout"  [has-type]
+src\admin_display_manager.py:437:12: error: SystemStatus? has no attribute "rithmic_connected"  [attr-defined]
+src\admin_display_manager.py:444:16: error: SystemStatus? has no attribute "connection_details"  [attr-defined]
+src\admin_display_manager.py:445:35: error: SystemStatus? has no attribute "connection_details"  [attr-defined]
+src\admin_display_manager.py:456:12: error: SystemStatus? has no attribute "database_connected"  [attr-defined]
+src\admin_display_manager.py:476:17: error: SystemStatus? has no attribute "rithmic_connected"  [attr-defined]
+src\admin_display_manager.py:481:22: error: SystemStatus? has no attribute "symbol_search_results"  [attr-defined]
+src\admin_display_manager.py:486:22: error: SystemStatus? has no attribute "download_progress"  [attr-defined]
+src\admin_display_manager.py:491:17: error: SystemStatus? has no attribute "database_connected"  [attr-defined]
+src\admin_display_manager.py:564:53: error: Cannot determine type of "live_display"  [has-type]
+src\admin_display_manager.py:582:33: error: Incompatible types in assignment (expression has type "None", variable has type "Live")  [assignment]
+src\admin_display_manager.py:612:12: error: SystemStatus? has no attribute "rithmic_connected"  [attr-defined]
+src\admin_display_manager.py:621:12: error: SystemStatus? has no attribute "symbol_search_results"  [attr-defined]
+src\admin_display_manager.py:623:43: error: SystemStatus? has no attribute "symbol_search_results"  [attr-defined]
+src\admin_display_manager.py:632:12: error: SystemStatus? has no attribute "download_progress"  [attr-defined]
+src\admin_display_manager.py:634:39: error: SystemStatus? has no attribute "download_progress"  [attr-defined]
+src\admin_display_manager.py:637:37: error: SystemStatus? has no attribute "download_progress"  [attr-defined]
+src\admin_display_manager.py:665:12: error: SystemStatus? has no attribute "database_connected"  [attr-defined]
+src\admin_display_manager.py:682:16: error: SystemStatus? has no attribute "download_progress"  [attr-defined]
+src\admin_display_manager.py:688:33: error: SystemStatus? has no attribute "download_progress"  [attr-defined]
+src\admin_display_manager.py:769:9: error: SystemStatus? has no attribute "last_operation_result"  [attr-defined]
+src\admin_display_manager.py:782:9: error: SystemStatus? has no attribute "last_operation_result"  [attr-defined]
+tests\test_import_helper.py:32:5: error: Module "src.admin_core_classes" has no attribute "DatabaseManager"  [attr-defined]
+tests\test_import_helper.py:33:5: error: Module "src.admin_database" has no attribute "DatabaseConnection"  [attr-defined]
+tests\test_import_helper.py:34:5: error: Module "src.admin_rithmic_connection" has no attribute "RithmicConnection"; maybe "RithmicConnectionManager"?  [attr-defined]
+

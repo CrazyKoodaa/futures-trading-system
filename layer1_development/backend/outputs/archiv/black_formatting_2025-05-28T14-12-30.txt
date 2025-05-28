@@ -1,0 +1,4336 @@
+BLACK FORMATTING REPORT
+Generated: 2025-05-28 14:12:30.299889
+================================================================================
+
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\fix_imports\fix_imports.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\analyze_pylint.py
+================================================================================
+🎨 Would be reformatted:
+--- c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\analyze_pylint.py	2025-05-27 16:59:32.388082+00:00
++++ c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\analyze_pylint.py	2025-05-28 12:12:30.661063+00:00
+@@ -1,90 +1,98 @@
+ """
+ Pylint Error Analysis Script
+ Run this to manually identify and fix common pylint issues
+ """
++
+ import ast
+ import os
+ import sys
+ from pathlib import Path
+ 
++
+ def analyze_file(file_path):
+     """Analyze a Python file for common issues"""
+     print(f"=== Analyzing {file_path.name} ===")
+-    
+-    with open(file_path, 'r', encoding='utf-8') as f:
++
++    with open(file_path, "r", encoding="utf-8") as f:
+         content = f.read()
+-    
++
+     # Check for syntax errors first
+     try:
+         tree = ast.parse(content)
+     except SyntaxError as e:
+         print(f"  SYNTAX ERROR: Line {e.lineno}: {e.msg}")
+         return []
+-    
++
+     issues = []
+-    lines = content.split('\n')
+-    
++    lines = content.split("\n")
++
+     # Check for common issues
+     for i, line in enumerate(lines, 1):
+         # Long lines
+         if len(line) > 120:
+             issues.append((i, "line-too-long", f"Line too long ({len(line)}/120)"))
+-        
++
+         # Missing docstrings for functions/classes
+-        if line.strip().startswith(('def ', 'class ')) and not line.strip().endswith(':'):
++        if line.strip().startswith(("def ", "class ")) and not line.strip().endswith(":"):
+             if i < len(lines) and not lines[i].strip().startswith('"""'):
+                 issues.append((i, "missing-docstring", "Missing docstring"))
+-        
++
+         # Unused imports (simple check)
+-        if line.strip().startswith('from ') or (line.strip().startswith('import ') and ' as ' not in line):
+-            import_name = line.split()[-1].split('.')[0]
+-            if import_name not in content[lines.index(line)*len(line):]:
++        if line.strip().startswith("from ") or (
++            line.strip().startswith("import ") and " as " not in line
++        ):
++            import_name = line.split()[-1].split(".")[0]
++            if import_name not in content[lines.index(line) * len(line) :]:
+                 issues.append((i, "unused-import", f"Potentially unused import: {import_name}"))
+-        
++
+         # Wildcard imports
+-        if 'import *' in line:
++        if "import *" in line:
+             issues.append((i, "wildcard-import", "Wildcard import should be avoided"))
+-        
++
+         # Too many arguments (simple heuristic)
+-        if line.strip().startswith('def ') and line.count(',') > 6:
++        if line.strip().startswith("def ") and line.count(",") > 6:
+             issues.append((i, "too-many-arguments", "Function has many arguments"))
+-    
++
+     # Print issues
+     for line_no, code, msg in issues:
+         print(f"  Line {line_no}: {code} - {msg}")
+-    
++
+     if not issues:
+         print("  No obvious issues found!")
+-    
++
+     return issues
++
+ 
+ def main():
+     """Main analysis function"""
+-    current_dir = Path('.')
+-    py_files = list(current_dir.glob('*.py'))
+-    py_files = [f for f in py_files if not f.name.startswith('run_') and not f.name.endswith('.backup')]
+-    
++    current_dir = Path(".")
++    py_files = list(current_dir.glob("*.py"))
++    py_files = [
++        f for f in py_files if not f.name.startswith("run_") and not f.name.endswith(".backup")
++    ]
++
+     print(f"Analyzing {len(py_files)} Python files...")
+     print()
+-    
++
+     all_issues = {}
+-    
++
+     for py_file in py_files:
+         issues = analyze_file(py_file)
+         if issues:
+             all_issues[py_file.name] = issues
+         print()
+-    
++
+     # Summary
+     print("=== SUMMARY ===")
+     if all_issues:
+         for filename, issues in all_issues.items():
+             print(f"{filename}: {len(issues)} issues")
+-        
++
+         total_issues = sum(len(issues) for issues in all_issues.values())
+         print(f"\nTotal issues found: {total_issues}")
+     else:
+         print("No issues found in any files!")
+ 
++
+ if __name__ == "__main__":
+     main()
+STDERR:
+would reformat c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\analyze_pylint.py
+
+Oh no! \U0001f4a5 \U0001f494 \U0001f4a5
+1 file would be reformatted.
+
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\comprehensive_analysis_2025-05-28T11-41-52.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\comprehensive_fix_2025-05-28T11-41-52.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\final_comprehensive_fix_2025-05-28T11-41-52.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\FINAL_COMPREHENSIVE_FIXER_2025-05-28T11-41-52.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\focused_analysis_2025-05-28T11-41-52.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\manual_analysis_2025-05-28T11-41-52.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\quick_pylint_check.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_analysis_2025-05-28T11-41-52.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_comprehensive_pylint.py
+================================================================================
+🎨 Would be reformatted:
+--- c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_comprehensive_pylint.py	2025-05-27 17:06:40.400031+00:00
++++ c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_comprehensive_pylint.py	2025-05-28 12:12:33.003645+00:00
+@@ -5,74 +5,87 @@
+ import os
+ import subprocess
+ import glob
+ from pathlib import Path
+ 
++
+ def run_pylint_on_directory():
+     """Run pylint on all Python files in the current directory"""
+-    
++
+     # Get current directory
+     current_dir = Path(__file__).parent
+-    
++
+     # Find all Python files (excluding __pycache__ and backups)
+     python_files = []
+-    for pattern in ['*.py']:
++    for pattern in ["*.py"]:
+         files = glob.glob(str(current_dir / pattern))
+         for file in files:
+-            if '__pycache__' not in file and 'backups' not in file and 'run_comprehensive_pylint.py' not in file:
++            if (
++                "__pycache__" not in file
++                and "backups" not in file
++                and "run_comprehensive_pylint.py" not in file
++            ):
+                 python_files.append(file)
+-    
++
+     print(f"Found {len(python_files)} Python files to analyze:")
+     for file in python_files:
+         print(f"  - {os.path.basename(file)}")
+-    
++
+     # Output file for results
+-    output_file = current_dir / 'comprehensive_pylint_results.txt'
+-    
++    output_file = current_dir / "comprehensive_pylint_results.txt"
++
+     # Clear the output file
+-    with open(output_file, 'w', encoding='utf-8') as f:
++    with open(output_file, "w", encoding="utf-8") as f:
+         f.write("=== COMPREHENSIVE PYLINT ANALYSIS ===\n")
+         f.write(f"Analysis of {len(python_files)} Python files\n")
+         f.write("=" * 50 + "\n\n")
+-    
++
+     # Run pylint on each file
+     for py_file in python_files:
+         print(f"Running pylint on {os.path.basename(py_file)}...")
+-        
++
+         try:
+             # Run pylint with comprehensive options
+-            result = subprocess.run([
+-                'python', '-m', 'pylint', 
+-                '--output-format=text',
+-                '--reports=yes',
+-                '--score=yes',
+-                py_file
+-            ], capture_output=True, text=True, check=False)
+-            
++            result = subprocess.run(
++                [
++                    "python",
++                    "-m",
++                    "pylint",
++                    "--output-format=text",
++                    "--reports=yes",
++                    "--score=yes",
++                    py_file,
++                ],
++                capture_output=True,
++                text=True,
++                check=False,
++            )
++
+             # Append results to file
+-            with open(output_file, 'a', encoding='utf-8') as f:
++            with open(output_file, "a", encoding="utf-8") as f:
+                 f.write(f"\n{'='*60}\n")
+                 f.write(f"FILE: {os.path.basename(py_file)}\n")
+                 f.write(f"{'='*60}\n")
+                 f.write("STDOUT:\n")
+                 f.write(result.stdout)
+                 f.write("\nSTDERR:\n")
+                 f.write(result.stderr)
+                 f.write(f"\nReturn code: {result.returncode}\n")
+-                f.write("="*60 + "\n")
+-            
++                f.write("=" * 60 + "\n")
++
+         except Exception as e:
+             print(f"Error running pylint on {py_file}: {e}")
+-            with open(output_file, 'a', encoding='utf-8') as f:
++            with open(output_file, "a", encoding="utf-8") as f:
+                 f.write(f"\nERROR analyzing {py_file}: {e}\n")
+-    
++
+     print(f"\nPylint analysis complete. Results saved to: {output_file}")
+     return output_file
++
+ 
+ if __name__ == "__main__":
+     # Activate virtual environment first
+     print("Make sure to activate virtual environment first:")
+     print("Run: .\\venv\\Scripts\\activate")
+     print("")
+-    
++
+     result_file = run_pylint_on_directory()
+     print(f"Results saved to: {result_file}")
+STDERR:
+would reformat c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_comprehensive_pylint.py
+
+Oh no! \U0001f4a5 \U0001f494 \U0001f4a5
+1 file would be reformatted.
+
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_final_pylint_analysis.py
+================================================================================
+🎨 Would be reformatted:
+--- c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_final_pylint_analysis.py	2025-05-27 17:19:43.315123+00:00
++++ c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_final_pylint_analysis.py	2025-05-28 12:12:33.193691+00:00
+@@ -8,120 +8,134 @@
+ import subprocess
+ import os
+ import re
+ from pathlib import Path
+ 
++
+ def run_pylint_comprehensive():
+     """Run comprehensive pylint analysis on all Python files"""
+-    
++
+     # Python files to analyze
+     python_files = [
+-        'admin_core_classes.py',
+-        'admin_database.py', 
+-        'admin_display_manager.py',
+-        'admin_operations.py',
+-        'admin_rithmic_connection.py',
+-        'admin_rithmic_historical.py',
+-        'admin_rithmic_operations.py',
+-        'admin_rithmic_symbols.py',
+-        'enhanced_admin_rithmic.py',
+-        '__init__.py'
++        "admin_core_classes.py",
++        "admin_database.py",
++        "admin_display_manager.py",
++        "admin_operations.py",
++        "admin_rithmic_connection.py",
++        "admin_rithmic_historical.py",
++        "admin_rithmic_operations.py",
++        "admin_rithmic_symbols.py",
++        "enhanced_admin_rithmic.py",
++        "__init__.py",
+     ]
+-    
++
+     # Output file
+-    output_file = 'comprehensive_pylint_results_final.txt'
+-    
++    output_file = "comprehensive_pylint_results_final.txt"
++
+     # Clear output file
+-    with open(output_file, 'w', encoding='utf-8') as f:
++    with open(output_file, "w", encoding="utf-8") as f:
+         f.write("=== COMPREHENSIVE PYLINT ANALYSIS - FINAL ===\n")
+         f.write(f"Analysis of {len(python_files)} Python files\n")
+         f.write("=" * 60 + "\n\n")
+-    
++
+     print(f"Analyzing {len(python_files)} Python files...")
+-    
++
+     # Statistics
+     total_issues = 0
+     file_scores = {}
+-    
++
+     for py_file in python_files:
+         if os.path.exists(py_file):
+             print(f"Running pylint on {py_file}...")
+-            
++
+             try:
+                 # Run pylint with comprehensive options
+-                result = subprocess.run([
+-                    'python', '-m', 'pylint', 
+-                    '--output-format=text',
+-                    '--reports=yes',
+-                    '--score=yes',
+-                    '--max-line-length=100',
+-                    py_file
+-                ], capture_output=True, text=True, check=False)
+-                
++                result = subprocess.run(
++                    [
++                        "python",
++                        "-m",
++                        "pylint",
++                        "--output-format=text",
++                        "--reports=yes",
++                        "--score=yes",
++                        "--max-line-length=100",
++                        py_file,
++                    ],
++                    capture_output=True,
++                    text=True,
++                    check=False,
++                )
++
+                 # Parse score
+                 score = extract_score(result.stdout)
+                 file_scores[py_file] = score
+-                
++
+                 # Count issues
+                 issues = count_issues(result.stdout)
+                 total_issues += issues
+-                
++
+                 # Append to results file
+-                with open(output_file, 'a', encoding='utf-8') as f:
++                with open(output_file, "a", encoding="utf-8") as f:
+                     f.write(f"\n{'='*60}\n")
+                     f.write(f"FILE: {py_file}\n")
+                     f.write(f"SCORE: {score}/10.00\n")
+                     f.write(f"ISSUES: {issues}\n")
+                     f.write(f"{'='*60}\n")
+                     f.write("OUTPUT:\n")
+                     f.write(result.stdout)
+                     if result.stderr:
+                         f.write(f"\nERRORS:\n{result.stderr}")
+                     f.write(f"\nReturn code: {result.returncode}\n")
+-                    f.write("="*60 + "\n")
+-                    
++                    f.write("=" * 60 + "\n")
++
+             except Exception as e:
+                 print(f"Error analyzing {py_file}: {e}")
+-                with open(output_file, 'a', encoding='utf-8') as f:
++                with open(output_file, "a", encoding="utf-8") as f:
+                     f.write(f"\nERROR analyzing {py_file}: {e}\n")
+         else:
+             print(f"File not found: {py_file}")
+-    
++
+     # Write summary
+-    with open(output_file, 'a', encoding='utf-8') as f:
++    with open(output_file, "a", encoding="utf-8") as f:
+         f.write(f"\n{'='*60}\n")
+         f.write("FINAL SUMMARY\n")
+         f.write(f"{'='*60}\n")
+         f.write(f"Total files analyzed: {len([f for f in python_files if os.path.exists(f)])}\n")
+         f.write(f"Total issues found: {total_issues}\n")
+         f.write(f"Average score: {sum(file_scores.values()) / len(file_scores):.2f}/10.00\n\n")
+-        
++
+         f.write("FILE SCORES:\n")
+         for file, score in sorted(file_scores.items(), key=lambda x: x[1], reverse=True):
+             f.write(f"  {file}: {score:.2f}/10.00\n")
+-    
++
+     print(f"\nFinal analysis complete!")
+     print(f"Results saved to: {output_file}")
+     print(f"Total issues found: {total_issues}")
+     print(f"Average score: {sum(file_scores.values()) / len(file_scores):.2f}/10.00")
+-    
++
+     return output_file
++
+ 
+ def extract_score(pylint_output):
+     """Extract pylint score from output"""
+     score_pattern = r"Your code has been rated at ([\d\.-]+)/10"
+     match = re.search(score_pattern, pylint_output)
+     if match:
+         return float(match.group(1))
+     return 0.0
+ 
++
+ def count_issues(pylint_output):
+     """Count number of issues in pylint output"""
+     # Count lines that look like pylint issues
+-    issue_lines = [line for line in pylint_output.split('\n') 
+-                   if ':' in line and any(code in line for code in ['C0', 'W0', 'R0', 'E0', 'F0'])]
++    issue_lines = [
++        line
++        for line in pylint_output.split("\n")
++        if ":" in line and any(code in line for code in ["C0", "W0", "R0", "E0", "F0"])
++    ]
+     return len(issue_lines)
++
+ 
+ if __name__ == "__main__":
+     print("Starting comprehensive pylint analysis...")
+     result_file = run_pylint_comprehensive()
+     print(f"Analysis complete. Check {result_file} for results.")
+STDERR:
+would reformat c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_final_pylint_analysis.py
+
+Oh no! \U0001f4a5 \U0001f494 \U0001f4a5
+1 file would be reformatted.
+
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_focused_analysis.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_pylint.py
+================================================================================
+🎨 Would be reformatted:
+--- c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_pylint.py	2025-05-27 16:59:01.684361+00:00
++++ c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_pylint.py	2025-05-28 12:12:33.548198+00:00
+@@ -5,72 +5,74 @@
+ import os
+ import subprocess
+ import sys
+ from pathlib import Path
+ 
++
+ def run_pylint():
+     """Run pylint on all Python files in current directory"""
+-    
++
+     # Get current directory
+     current_dir = Path.cwd()
+     print(f"Running pylint in: {current_dir}")
+-    
++
+     # Find all Python files
+     py_files = list(current_dir.glob("*.py"))
+     py_files = [f for f in py_files if f.name != __file__.split(os.sep)[-1]]  # Exclude this script
+-    
++
+     if not py_files:
+         print("No Python files found!")
+         return
+-    
++
+     print(f"Found {len(py_files)} Python files:")
+     for f in py_files:
+         print(f"  - {f.name}")
+     print()
+-    
++
+     # Open results file for writing
+     results_file = current_dir / "pylint_results.txt"
+-    
+-    with open(results_file, 'w', encoding='utf-8') as f:
++
++    with open(results_file, "w", encoding="utf-8") as f:
+         f.write("=== PYLINT RESULTS ===\n")
+         f.write(f"Generated: {os.popen('date /t & time /t').read().strip()}\n")
+         f.write(f"Directory: {current_dir}\n")
+         f.write("\n")
+-        
++
+         for py_file in py_files:
+             print(f"Checking {py_file.name}...")
+             f.write(f"=== PYLINT for {py_file.name} ===\n")
+-            
++
+             try:
+                 # Run pylint and capture output
+                 result = subprocess.run(
+                     [sys.executable, "-m", "pylint", str(py_file)],
+                     capture_output=True,
+                     text=True,
+-                    timeout=60
++                    timeout=60,
+                 )
+-                
++
+                 # Write stdout and stderr
+                 if result.stdout:
+                     f.write(result.stdout)
+                 if result.stderr:
+                     f.write("\nSTDERR:\n")
+                     f.write(result.stderr)
+-                    
++
+                 f.write(f"\nReturn code: {result.returncode}\n")
+-                
++
+             except subprocess.TimeoutExpired:
+                 f.write("ERROR: Pylint timed out after 60 seconds\n")
+             except Exception as e:
+                 f.write(f"ERROR running pylint: {e}\n")
+-            
+-            f.write("\n" + "-"*80 + "\n\n")
+-    
++
++            f.write("\n" + "-" * 80 + "\n\n")
++
+     print(f"\nPylint results saved to: {results_file}")
+-    
++
+     # Also append to the results file for easier access
+     print("\n=== SUMMARY ===")
+     print(f"Processed {len(py_files)} files")
+     print(f"Results saved to: {results_file}")
+ 
++
+ if __name__ == "__main__":
+     run_pylint()
+STDERR:
+would reformat c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_pylint.py
+
+Oh no! \U0001f4a5 \U0001f494 \U0001f4a5
+1 file would be reformatted.
+
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_pylint_check.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_pylint_diagnostic.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_pylint_simple.py
+================================================================================
+🎨 Would be reformatted:
+--- c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_pylint_simple.py	2025-05-27 17:07:14.289810+00:00
++++ c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_pylint_simple.py	2025-05-28 12:12:34.050442+00:00
+@@ -1,66 +1,68 @@
+ import subprocess
+ import os
+ from pathlib import Path
+ 
++
+ def run_pylint_analysis():
+     """Run pylint on all Python files and save results"""
+-    
++
+     # List of Python files to analyze
+     python_files = [
+-        'admin_core_classes.py',
+-        'admin_database.py', 
+-        'admin_display_manager.py',
+-        'admin_operations.py',
+-        'admin_rithmic_connection.py',
+-        'admin_rithmic_historical.py',
+-        'admin_rithmic_operations.py',
+-        'admin_rithmic_symbols.py',
+-        'enhanced_admin_rithmic.py',
+-        'analyze_pylint.py',
+-        'run_pylint.py',
+-        '__init__.py'
++        "admin_core_classes.py",
++        "admin_database.py",
++        "admin_display_manager.py",
++        "admin_operations.py",
++        "admin_rithmic_connection.py",
++        "admin_rithmic_historical.py",
++        "admin_rithmic_operations.py",
++        "admin_rithmic_symbols.py",
++        "enhanced_admin_rithmic.py",
++        "analyze_pylint.py",
++        "run_pylint.py",
++        "__init__.py",
+     ]
+-    
++
+     # Output file
+-    output_file = 'comprehensive_pylint_results.txt'
+-    
++    output_file = "comprehensive_pylint_results.txt"
++
+     # Clear output file
+-    with open(output_file, 'w', encoding='utf-8') as f:
++    with open(output_file, "w", encoding="utf-8") as f:
+         f.write("=== COMPREHENSIVE PYLINT ANALYSIS ===\n")
+         f.write(f"Analysis of {len(python_files)} Python files\n")
+         f.write("=" * 50 + "\n\n")
+-    
++
+     print(f"Analyzing {len(python_files)} Python files...")
+-    
++
+     for py_file in python_files:
+         if os.path.exists(py_file):
+             print(f"Running pylint on {py_file}...")
+-            
++
+             try:
+                 # Run pylint
+-                cmd = ['python', '-m', 'pylint', '--output-format=text', py_file]
++                cmd = ["python", "-m", "pylint", "--output-format=text", py_file]
+                 result = subprocess.run(cmd, capture_output=True, text=True, check=False)
+-                
++
+                 # Append to results file
+-                with open(output_file, 'a', encoding='utf-8') as f:
++                with open(output_file, "a", encoding="utf-8") as f:
+                     f.write(f"\n{'='*60}\n")
+                     f.write(f"FILE: {py_file}\n")
+                     f.write(f"{'='*60}\n")
+                     f.write(result.stdout)
+                     if result.stderr:
+                         f.write(f"\nERRORS:\n{result.stderr}")
+                     f.write(f"\nReturn code: {result.returncode}\n")
+-                    f.write("="*60 + "\n")
+-                    
++                    f.write("=" * 60 + "\n")
++
+             except Exception as e:
+                 print(f"Error analyzing {py_file}: {e}")
+-                with open(output_file, 'a', encoding='utf-8') as f:
++                with open(output_file, "a", encoding="utf-8") as f:
+                     f.write(f"\nERROR analyzing {py_file}: {e}\n")
+         else:
+             print(f"File not found: {py_file}")
+-    
++
+     print(f"Analysis complete. Results saved to {output_file}")
+     return output_file
+ 
++
+ if __name__ == "__main__":
+     run_pylint_analysis()
+STDERR:
+would reformat c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_pylint_simple.py
+
+Oh no! \U0001f4a5 \U0001f494 \U0001f4a5
+1 file would be reformatted.
+
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\setup_check.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\__init__.py
+================================================================================
+✅ Already formatted correctly
+STDERR:
+All done! \u2728 \U0001f370 \u2728
+1 file would be left unchanged.
+
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_core_classes.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_database.py
+================================================================================
+🎨 Would be reformatted:
+--- c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_database.py	2025-05-28 10:39:25.625850+00:00
++++ c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_database.py	2025-05-28 12:12:35.180385+00:00
+@@ -45,13 +45,15 @@
+ # Configure logging
+ logger = logging.getLogger(__name__)
+ 
+ # Database configuration is now imported from config.database_config
+ 
++
+ # Database manager singleton
+ class DatabaseManager:
+     """Database connection manager"""
++
+     _instance = None
+ 
+     def __new__(cls, config: Optional[Dict[str, Any]] = None):
+         if cls._instance is None:
+             cls._instance = super(DatabaseManager, cls).__new__(cls)
+@@ -59,24 +61,22 @@
+         return cls._instance
+ 
+     def __init__(self, config: Optional[Dict[str, Any]] = None):
+         if self._initialized:
+             return
+-            
++
+         self.db_config = DatabaseConfig(config)
+         self.async_engine = create_async_engine(
+             self.db_config.get_async_url(),
+-            echo=self.db_config.config['echo'],
+-            pool_size=self.db_config.config['pool_size'],
+-            max_overflow=self.db_config.config['max_overflow'],
+-            pool_timeout=self.db_config.config['pool_timeout'],
+-            pool_recycle=self.db_config.config['pool_recycle']
++            echo=self.db_config.config["echo"],
++            pool_size=self.db_config.config["pool_size"],
++            max_overflow=self.db_config.config["max_overflow"],
++            pool_timeout=self.db_config.config["pool_timeout"],
++            pool_recycle=self.db_config.config["pool_recycle"],
+         )
+         self.async_session_factory = async_sessionmaker(
+-            bind=self.async_engine,
+-            expire_on_commit=False,
+-            class_=AsyncSession
++            bind=self.async_engine, expire_on_commit=False, class_=AsyncSession
+         )
+         self._initialized = True
+ 
+     @asynccontextmanager
+     async def get_async_session(self) -> AsyncGenerator[AsyncSession, None]:
+@@ -84,14 +84,14 @@
+         session = self.async_session_factory()
+         try:
+             yield session
+         finally:
+             await session.close()
+-            
++
+     async def test_connection(self) -> bool:
+         """Test database connection
+-        
++
+         Returns:
+             bool: True if connection is successful, False otherwise
+         """
+         try:
+             async with self.get_async_session() as session:
+@@ -99,328 +99,358 @@
+             return True
+         except SQLAlchemyError as e:
+             logger.error(f"Database connection test failed: {e}")
+             return False
+ 
++
+ # Get database manager singleton
+ def get_database_manager(config: Optional[Dict[str, Any]] = None) -> DatabaseManager:
+     """Get the database manager singleton instance"""
+     return DatabaseManager(config)
++
+ 
+ # Async session context manager
+ @asynccontextmanager
+ async def get_async_session() -> AsyncGenerator[AsyncSession, None]:
+     """Get an async database session using the context manager pattern"""
+     async with get_database_manager().get_async_session() as session:
+         yield session
+ 
++
+ # TimescaleDB helper class
+ class TimescaleDBHelper:
+     """Helper class for TimescaleDB operations"""
++
+     def __init__(self, session):
+         self.session = session
+ 
+-    async def bulk_insert_market_data(self, data: list, table_name: str = 'market_data_seconds'):
++    async def bulk_insert_market_data(self, data: list, table_name: str = "market_data_seconds"):
+         """Insert market data with improved error handling and logging"""
+         if not data:
+             logger.warning("No data provided for insertion")
+             return
+ 
+         logger.info(f"Attempting to insert {len(data)} records into {table_name}")
+-        
++
+         try:
+             inserted_count = 0
+             failed_count = 0
+-            
++
+             # Execute the insert
+             await self.session.execute(
+-            text(f"INSERT INTO {table_name} (symbol, timestamp, open, high, low, close, volume) "
+-            "VALUES (:symbol, :timestamp, :open, :high, :low, :close, :volume) "
+-            "ON CONFLICT (symbol, timestamp) DO UPDATE SET "
+-            "open = EXCLUDED.open, high = EXCLUDED.high, low = EXCLUDED.low, "
+-            "close = EXCLUDED.close, volume = EXCLUDED.volume"),
+-            [dict(row) for row in data]
++                text(
++                    f"INSERT INTO {table_name} (symbol, timestamp, open, high, low, close, volume) "
++                    "VALUES (:symbol, :timestamp, :open, :high, :low, :close, :volume) "
++                    "ON CONFLICT (symbol, timestamp) DO UPDATE SET "
++                    "open = EXCLUDED.open, high = EXCLUDED.high, low = EXCLUDED.low, "
++                    "close = EXCLUDED.close, volume = EXCLUDED.volume"
++                ),
++                [dict(row) for row in data],
+             )
+             await self.session.commit()
+-            
++
+             inserted_count = len(data)
+             logger.info(f"Successfully inserted {inserted_count} records into {table_name}")
+             return inserted_count
+-            
++
+         except Exception as e:
+             await self.session.rollback()
+             logger.error(f"Error inserting data into {table_name}: {str(e)}")
+             raise
++
+ 
+ # Test database setup
+ async def test_database_setup() -> Dict[str, Any]:
+     """Test the database connection and setup"""
+     try:
+         async with get_async_session() as session:
+             # Test basic connection
+             result = await session.execute(text("SELECT 1 as test"))
+             row = result.fetchone()
+-            
++
+             if row and row[0] == 1:
+                 logger.info("Database connection successful")
+-                
++
+                 # Check if TimescaleDB extension is installed
+                 result = await session.execute(
+                     text("SELECT extname FROM pg_extension WHERE extname = 'timescaledb'")
+                 )
+                 has_timescale = result.fetchone() is not None
+-                
++
+                 return {
+                     "success": True,
+                     "message": "Database connection successful",
+-                    "has_timescaledb": has_timescale
++                    "has_timescaledb": has_timescale,
+                 }
+             else:
+                 logger.error("Database connection test failed")
+-                return {
+-                    "success": False,
+-                    "message": "Database connection test failed"
+-                }
++                return {"success": False, "message": "Database connection test failed"}
+     except Exception as e:
+         logger.error(f"Database connection error: {str(e)}")
+-        return {
+-            "success": False,
+-            "message": f"Database connection error: {str(e)}"
+-        }
++        return {"success": False, "message": f"Database connection error: {str(e)}"}
++
+ 
+ # Configure logging
+ logger = logging.getLogger(__name__)
++
+ 
+ class DatabaseOperations:
+     """
+     Handles all database operations for the admin tool
+     """
+-    
++
+     def __init__(self, progress_callback: Optional[Callable] = None):
+         """
+         Initialize database operations
+-        
++
+         Args:
+             progress_callback: Optional callback function for progress reporting
+         """
+         self.progress_callback = progress_callback
+         self.db_manager = None
+         self.connection_tested = False
+         self.is_initialized = False
+-        
++
+         # Table schemas for validation
+         self.table_schemas = {
+-            'market_data_seconds': {
+-                'required_columns': [
+-                    'timestamp', 'symbol', 'contract', 'exchange',
+-                    'open', 'high', 'low', 'close', 'volume'
++            "market_data_seconds": {
++                "required_columns": [
++                    "timestamp",
++                    "symbol",
++                    "contract",
++                    "exchange",
++                    "open",
++                    "high",
++                    "low",
++                    "close",
++                    "volume",
+                 ],
+-                'primary_key': ['timestamp', 'symbol', 'contract', 'exchange']
++                "primary_key": ["timestamp", "symbol", "contract", "exchange"],
+             },
+-            'market_data_minutes': {
+-                'required_columns': [
+-                    'timestamp', 'symbol', 'contract', 'exchange',
+-                    'open', 'high', 'low', 'close', 'volume'
++            "market_data_minutes": {
++                "required_columns": [
++                    "timestamp",
++                    "symbol",
++                    "contract",
++                    "exchange",
++                    "open",
++                    "high",
++                    "low",
++                    "close",
++                    "volume",
+                 ],
+-                'primary_key': ['timestamp', 'symbol', 'contract', 'exchange']
++                "primary_key": ["timestamp", "symbol", "contract", "exchange"],
+             },
+-            'raw_tick_data': {
+-                'required_columns': [
+-                    'timestamp', 'symbol', 'contract', 'exchange',
+-                    'price', 'size', 'tick_type'
++            "raw_tick_data": {
++                "required_columns": [
++                    "timestamp",
++                    "symbol",
++                    "contract",
++                    "exchange",
++                    "price",
++                    "size",
++                    "tick_type",
+                 ],
+-                'primary_key': ['timestamp', 'symbol', 'contract', 'exchange', 'sequence_number']
+-            }
++                "primary_key": ["timestamp", "symbol", "contract", "exchange", "sequence_number"],
++            },
+         }
+-        
++
+     def _report_progress(self, message: str, step: int = 0, total: int = 0):
+         """Report progress if callback is available
+-        
++
+         Args:
+             message: Progress message
+             step: Current step number
+             total: Total steps
+         """
+         if self.progress_callback:
+             self.progress_callback(message, step, total)
+         logger.info(message)
+-    
++
+     async def test_connection(self) -> Tuple[bool, str]:
+         """
+         Test database connection and basic functionality
+-        
++
+         Returns:
+             Tuple of (success: bool, message: str)
+         """
+         try:
+             self._report_progress("Testing database connection...")
+-            
++
+             # Get database manager
+             self.db_manager = get_database_manager()
+-            
++
+             # Test basic connection
+             connection_ok = await self.db_manager.test_connection()
+             if not connection_ok:
+                 return False, "Failed to connect to database. Check credentials and server status."
+-            
++
+             self._report_progress("Testing database features...")
+-            
++
+             # Test TimescaleDB extension
+             async with get_async_session() as session:
+                 try:
+-                    query_result = await session.execute(text(
+-                        "SELECT 1 FROM pg_extension WHERE extname = 'timescaledb'"
+-                    ))
++                    query_result = await session.execute(
++                        text("SELECT 1 FROM pg_extension WHERE extname = 'timescaledb'")
++                    )
+                     if not query_result.scalar():
+                         return False, "TimescaleDB extension not found. Please install TimescaleDB."
+                 except Exception as e:
+                     return False, f"Error checking TimescaleDB extension: {str(e)}"
+-                
++
+                 # Test permissions
+                 try:
+                     await session.execute(text("SELECT 1"))
+                     await session.execute(text("SELECT NOW()"))
+                 except Exception as e:
+                     return False, f"Insufficient database permissions: {str(e)}"
+-            
++
+             self.connection_tested = True
+             self._report_progress("Database connection test completed successfully")
+-            
++
+             return True, "Database connection successful. TimescaleDB extension available."
+-            
++
+         except Exception as e:
+             error_msg = f"Database connection test failed: {str(e)}"
+             logger.error(error_msg)
+             return False, error_msg
+-    
++
+     async def create_database_structure(self) -> Tuple[bool, str]:
+         """
+         Create the database structure including tables, indexes, and constraints
+-        
++
+         This is a wrapper around the initialization process that focuses specifically
+         on creating the database structure without test data or verification.
+-        
++
+         Returns:
+             Tuple of (success: bool, message: str)
+         """
+         if not self.connection_tested:
+             success, msg = await self.test_connection()
+             if not success:
+                 return False, f"Connection test failed: {msg}"
+-        
++
+         try:
+             total_steps = 4
+             current_step = 0
+-            
++
+             # Step 1: Initialize extensions
+             current_step += 1
+             self._report_progress("Creating database extensions...", current_step, total_steps)
+-            
++
+             async with get_async_session() as session:
+                 try:
+-                    await session.execute(text("CREATE EXTENSION IF NOT EXISTS timescaledb CASCADE;"))
+-                    await session.execute(text("CREATE EXTENSION IF NOT EXISTS pg_stat_statements;"))
++                    await session.execute(
++                        text("CREATE EXTENSION IF NOT EXISTS timescaledb CASCADE;")
++                    )
++                    await session.execute(
++                        text("CREATE EXTENSION IF NOT EXISTS pg_stat_statements;")
++                    )
+                 except Exception as e:
+                     logger.warning(f"Extension creation warning: {e}")
+-            
++
+             # Step 2: Create tables
+             current_step += 1
+             self._report_progress("Creating database tables...", current_step, total_steps)
+-            
++
+             success = await self._create_tables()
+             if not success:
+                 return False, "Failed to create database tables"
+-            
++
+             # Step 3: Create hypertables
+             current_step += 1
+             self._report_progress("Converting tables to hypertables...", current_step, total_steps)
+-            
++
+             success = await self._create_hypertables()
+             if not success:
+                 return False, "Failed to create hypertables"
+-            
++
+             # Step 4: Create indexes
+             current_step += 1
+             self._report_progress("Creating database indexes...", current_step, total_steps)
+-            
++
+             success = await self._create_indexes()
+             if not success:
+                 logger.warning("Some indexes could not be created")
+-            
+-            self._report_progress("Database structure created successfully", current_step, total_steps)
++
++            self._report_progress(
++                "Database structure created successfully", current_step, total_steps
++            )
+             return True, "Database structure created successfully"
+-                
++
+         except Exception as e:
+             error_msg = f"Database structure creation failed: {str(e)}"
+             logger.error(error_msg)
+             return False, error_msg
+-    
++
+     async def initialize_database(self) -> Tuple[bool, str]:
+         """
+         Initialize database with required tables, hypertables, and indexes
+-        
++
+         Returns:
+             Tuple of (success: bool, message: str)
+         """
+         if not self.connection_tested:
+             success, msg = await self.test_connection()
+             if not success:
+                 return False, f"Connection test failed: {msg}"
+-        
++
+         try:
+             total_steps = 8
+             current_step = 0
+-            
++
+             # Steps 1-4: Create database structure
+             structure_success, structure_msg = await self.create_database_structure()
+             if not structure_success:
+                 return False, structure_msg
+-            
++
+             current_step = 4  # Structure creation completed 4 steps
+-            
++
+             # Step 5: Set up permissions
+             current_step += 1
+             self._report_progress("Setting up permissions...", current_step, total_steps)
+-            
++
+             await self._setup_permissions()
+-            
++
+             # Step 6: Insert test data
+             current_step += 1
+             self._report_progress("Inserting test data...", current_step, total_steps)
+-            
++
+             await self._insert_test_data()
+-            
++
+             # Step 7: Verify setup
+             current_step += 1
+             self._report_progress("Verifying database setup...", current_step, total_steps)
+-            
++
+             verification_success, verification_msg = await self._verify_setup()
+             if not verification_success:
+                 return False, f"Database verification failed: {verification_msg}"
+-            
++
+             # Step 7.5: Clean up test data after successful verification
+             self._report_progress("Cleaning up test data...", current_step, total_steps)
+             await self._cleanup_test_data()
+-            
++
+             # Step 8: Complete
+             current_step += 1
+             self._report_progress("Database initialization completed!", current_step, total_steps)
+-            
++
+             self.is_initialized = True
+             return True, "Database initialized successfully with all required tables and indexes."
+-            
++
+         except Exception as e:
+             error_msg = f"Database initialization failed: {str(e)}"
+             logger.error(error_msg)
+             return False, error_msg
+-    
++
+     async def _create_tables(self) -> bool:
+         """Create all required tables"""
+         try:
+             async with get_async_session() as session:
+                 # Market data seconds table
+-                await session.execute(text("""
++                await session.execute(
++                    text(
++                        """
+                     CREATE TABLE IF NOT EXISTS market_data_seconds (
+                         timestamp TIMESTAMPTZ NOT NULL,
+                         symbol VARCHAR(10) NOT NULL,
+                         contract VARCHAR(10) NOT NULL,
+                         exchange VARCHAR(10) NOT NULL,
+@@ -438,14 +468,18 @@
+                         data_quality_score DECIMAL(3,2) DEFAULT 1.0,
+                         is_regular_hours BOOLEAN DEFAULT TRUE,
+                         created_at TIMESTAMPTZ DEFAULT NOW(),
+                         PRIMARY KEY (timestamp, symbol, contract, exchange)
+                     );
+-                """))
+-                
++                """
++                    )
++                )
++
+                 # Market data minutes table
+-                await session.execute(text("""
++                await session.execute(
++                    text(
++                        """
+                     CREATE TABLE IF NOT EXISTS market_data_minutes (
+                         timestamp TIMESTAMPTZ NOT NULL,
+                         symbol VARCHAR(10) NOT NULL,
+                         contract VARCHAR(10) NOT NULL,
+                         exchange VARCHAR(10) NOT NULL,
+@@ -459,14 +493,18 @@
+                         avg_spread DECIMAL(12,4),
+                         max_spread DECIMAL(12,4),
+                         trade_count INTEGER DEFAULT 0,
+                         PRIMARY KEY (timestamp, symbol, contract, exchange)
+                     );
+-                """))
+-                
++                """
++                    )
++                )
++
+                 # Raw tick data table
+-                await session.execute(text("""
++                await session.execute(
++                    text(
++                        """
+                     CREATE TABLE IF NOT EXISTS raw_tick_data (
+                         timestamp TIMESTAMPTZ NOT NULL,
+                         symbol VARCHAR(10) NOT NULL,
+                         contract VARCHAR(10) NOT NULL,
+                         exchange VARCHAR(10) NOT NULL,
+@@ -476,14 +514,18 @@
+                         exchange_timestamp TIMESTAMPTZ,
+                         sequence_number BIGINT DEFAULT 0,
+                         created_at TIMESTAMPTZ DEFAULT NOW(),
+                         PRIMARY KEY (timestamp, symbol, contract, exchange, sequence_number)
+                     );
+-                """))
+-                
++                """
++                    )
++                )
++
+                 # Features table
+-                await session.execute(text("""
++                await session.execute(
++                    text(
++                        """
+                     CREATE TABLE IF NOT EXISTS features (
+                         timestamp TIMESTAMPTZ NOT NULL,
+                         symbol VARCHAR(10) NOT NULL,
+                         contract VARCHAR(10) NOT NULL,
+                         exchange VARCHAR(10) NOT NULL,
+@@ -512,14 +554,18 @@
+                         obv BIGINT,
+                         relative_volume DECIMAL(6,3),
+                         exchange_rank INTEGER,
+                         PRIMARY KEY (timestamp, symbol, contract, exchange, timeframe)
+                     );
+-                """))
+-                
++                """
++                    )
++                )
++
+                 # Predictions table
+-                await session.execute(text("""
++                await session.execute(
++                    text(
++                        """
+                     CREATE TABLE IF NOT EXISTS predictions (
+                         timestamp TIMESTAMPTZ NOT NULL,
+                         symbol VARCHAR(10) NOT NULL,
+                         contract VARCHAR(10) NOT NULL,
+                         exchange VARCHAR(10) NOT NULL,
+@@ -534,18 +580,26 @@
+                         exchange_adjustment_factor DECIMAL(6,4) DEFAULT 1.0,
+                         features_used TEXT[],
+                         created_at TIMESTAMPTZ DEFAULT NOW(),
+                         PRIMARY KEY (timestamp, symbol, contract, exchange, model_version)
+                     );
+-                """))
+-                
++                """
++                    )
++                )
++
+                 # Trades table with sequence
+-                await session.execute(text("""
++                await session.execute(
++                    text(
++                        """
+                     CREATE SEQUENCE IF NOT EXISTS trades_trade_id_seq;
+-                """))
+-                
+-                await session.execute(text("""
++                """
++                    )
++                )
++
++                await session.execute(
++                    text(
++                        """
+                     CREATE TABLE IF NOT EXISTS trades (
+                         timestamp TIMESTAMPTZ NOT NULL,
+                         trade_id BIGINT NOT NULL DEFAULT nextval('trades_trade_id_seq'),
+                         symbol VARCHAR(10) NOT NULL,
+                         contract VARCHAR(10) NOT NULL,
+@@ -566,47 +620,53 @@
+                         notes TEXT,
+                         created_at TIMESTAMPTZ DEFAULT NOW(),
+                         updated_at TIMESTAMPTZ DEFAULT NOW(),
+                         PRIMARY KEY (timestamp, trade_id)
+                     );
+-                """))
+-                
++                """
++                    )
++                )
++
+             return True
+-            
++
+         except Exception as e:
+             logger.error(f"Error creating tables: {e}")
+             return False
+-    
++
+     async def _create_hypertables(self) -> bool:
+         """Convert tables to TimescaleDB hypertables"""
+         hypertables = [
+-            {'table': 'market_data_seconds', 'interval': "INTERVAL '1 minute'"},
+-            {'table': 'raw_tick_data', 'interval': "INTERVAL '10 seconds'"},
+-            {'table': 'market_data_minutes', 'interval': "INTERVAL '1 hour'"},
+-            {'table': 'features', 'interval': "INTERVAL '1 day'"},
+-            {'table': 'predictions', 'interval': "INTERVAL '1 day'"},
+-            {'table': 'trades', 'interval': "INTERVAL '1 day'"}
++            {"table": "market_data_seconds", "interval": "INTERVAL '1 minute'"},
++            {"table": "raw_tick_data", "interval": "INTERVAL '10 seconds'"},
++            {"table": "market_data_minutes", "interval": "INTERVAL '1 hour'"},
++            {"table": "features", "interval": "INTERVAL '1 day'"},
++            {"table": "predictions", "interval": "INTERVAL '1 day'"},
++            {"table": "trades", "interval": "INTERVAL '1 day'"},
+         ]
+-        
++
+         try:
+             async with get_async_session() as session:
+                 for ht in hypertables:
+                     try:
+-                        await session.execute(text(f"""
++                        await session.execute(
++                            text(
++                                f"""
+                             SELECT create_hypertable('{ht['table']}', 'timestamp',
+                             chunk_time_interval => {ht['interval']}, if_not_exists => TRUE);
+-                        """))
++                        """
++                            )
++                        )
+                         logger.info(f"Created hypertable: {ht['table']}")
+                     except Exception as e:
+                         logger.warning(f"Could not create hypertable {ht['table']}: {e}")
+-            
++
+             return True
+-            
++
+         except Exception as e:
+             logger.error(f"Error creating hypertables: {e}")
+             return False
+-    
++
+     async def _create_indexes(self) -> bool:
+         """Create performance indexes"""
+         indexes = [
+             "CREATE INDEX IF NOT EXISTS idx_market_data_seconds_symbol_time ON market_data_seconds (symbol, timestamp DESC);",
+             "CREATE INDEX IF NOT EXISTS idx_market_data_seconds_contract_time ON market_data_seconds (contract, timestamp DESC);",
+@@ -618,574 +678,659 @@
+             "CREATE INDEX IF NOT EXISTS idx_features_exchange_time ON features (exchange, timestamp DESC);",
+             "CREATE INDEX IF NOT EXISTS idx_predictions_symbol_model_time ON predictions (symbol, model_version, timestamp DESC);",
+             "CREATE INDEX IF NOT EXISTS idx_predictions_confidence ON predictions (confidence_score DESC) WHERE ABS(confidence_score) > 50;",
+             "CREATE INDEX IF NOT EXISTS idx_trades_symbol_time ON trades (symbol, timestamp DESC);",
+             "CREATE INDEX IF NOT EXISTS idx_trades_pnl ON trades (pnl DESC);",
+-            "CREATE INDEX IF NOT EXISTS idx_trades_exchange ON trades (exchange, timestamp DESC);"
++            "CREATE INDEX IF NOT EXISTS idx_trades_exchange ON trades (exchange, timestamp DESC);",
+         ]
+-        
++
+         try:
+             async with get_async_session() as session:
+                 for idx_sql in indexes:
+                     try:
+                         await session.execute(text(idx_sql))
+                     except Exception as e:
+                         logger.warning(f"Could not create index: {e}")
+-            
++
+             return True
+-            
++
+         except Exception as e:
+             logger.error(f"Error creating indexes: {e}")
+             return False
+-    
++
+     async def _setup_permissions(self):
+         """Setup database permissions for trading_user"""
+         try:
+             async with get_async_session() as session:
+-                await session.execute(text("""
++                await session.execute(
++                    text(
++                        """
+                     GRANT USAGE ON SCHEMA public TO trading_user;
+                     GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO trading_user;
+                     GRANT USAGE ON ALL SEQUENCES IN SCHEMA public TO trading_user;
+                     ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO trading_user;
+                     ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT USAGE ON SEQUENCES TO trading_user;
+-                """))
++                """
++                    )
++                )
+         except Exception as e:
+             logger.warning(f"Could not set up permissions: {e}")
+-    
++
+     async def _insert_test_data(self):
+         """Insert test data to verify functionality"""
+         try:
+-            test_data = [{
+-                'timestamp': datetime.now(),
+-                'symbol': 'NQ',
+-                'contract': 'NQZ24',
+-                'exchange': 'CME',
+-                'exchange_code': 'XCME',
+-                'open': 17245.50,
+-                'high': 17246.00,
+-                'low': 17245.25,
+-                'close': 17245.75,
+-                'volume': 150,
+-                'tick_count': 12,
+-                'vwap': 17245.68,
+-                'bid': 17245.50,
+-                'ask': 17245.75,
+-                'spread': 0.25,
+-                'data_quality_score': 1.0,
+-                'is_regular_hours': True
+-            }]
+-            
+-            await self.bulk_insert_market_data(test_data, 'market_data_seconds')
+-            
++            test_data = [
++                {
++                    "timestamp": datetime.now(),
++                    "symbol": "NQ",
++                    "contract": "NQZ24",
++                    "exchange": "CME",
++                    "exchange_code": "XCME",
++                    "open": 17245.50,
++                    "high": 17246.00,
++                    "low": 17245.25,
++                    "close": 17245.75,
++                    "volume": 150,
++                    "tick_count": 12,
++                    "vwap": 17245.68,
++                    "bid": 17245.50,
++                    "ask": 17245.75,
++                    "spread": 0.25,
++                    "data_quality_score": 1.0,
++                    "is_regular_hours": True,
++                }
++            ]
++
++            await self.bulk_insert_market_data(test_data, "market_data_seconds")
++
+         except Exception as e:
+             logger.warning(f"Could not insert test data: {e}")
+-    
++
+     async def _cleanup_test_data(self):
+         """Clean up test data after verification"""
+         try:
+             async with get_async_session() as session:
+                 # Delete test data (NQ test record)
+-                await session.execute(text("""
++                await session.execute(
++                    text(
++                        """
+                     DELETE FROM market_data_seconds 
+                     WHERE symbol = 'NQ' 
+                     AND contract = 'NQZ24' 
+                     AND exchange = 'CME'
+                     AND volume = 150
+                     AND tick_count = 12;
+-                """))
++                """
++                    )
++                )
+                 logger.info("Test data cleaned up successfully")
+         except Exception as e:
+             logger.warning(f"Could not clean up test data: {e}")
+-            
++
+     async def cleanup(self):
+         """
+         Cleanup database connections and resources
+-        
++
+         This method ensures all database connections are properly closed
+         and any temporary resources are released.
+         """
+         logger.info("Starting database operations cleanup")
+-        
++
+         try:
+             # Close any open connections in the connection pool
+-            if hasattr(self, 'db_manager') and self.db_manager:
++            if hasattr(self, "db_manager") and self.db_manager:
+                 try:
+                     # Close the connection pool if available
+-                    if hasattr(self.db_manager, 'async_engine') and self.db_manager.async_engine:
++                    if hasattr(self.db_manager, "async_engine") and self.db_manager.async_engine:
+                         await self.db_manager.async_engine.dispose()
+                         logger.info("Database connection pool closed")
+                 except Exception as e:
+                     logger.warning(f"Error closing database connection pool: {e}")
+-            
++
+             # Reset any internal state
+             self._report_progress("Database connections cleaned up")
+             logger.info("Database operations cleanup completed")
+             return True
+         except Exception as e:
+             logger.error(f"Error during database cleanup: {e}")
+             return False
+-    
++
+     async def _verify_setup(self) -> Tuple[bool, str]:
+         """Verify database setup"""
+         try:
+             async with get_async_session() as session:
+                 # Check tables
+-                result = await session.execute(text("""
++                result = await session.execute(
++                    text(
++                        """
+                     SELECT table_name
+                     FROM information_schema.tables
+                     WHERE table_schema = 'public'
+                     AND table_type = 'BASE TABLE'
+                     ORDER BY table_name;
+-                """))
++                """
++                    )
++                )
+                 tables = [row[0] for row in result.fetchall()]
+-                
++
+                 required_tables = [
+-                    'market_data_seconds', 'market_data_minutes', 'raw_tick_data',
+-                    'features', 'predictions', 'trades'
++                    "market_data_seconds",
++                    "market_data_minutes",
++                    "raw_tick_data",
++                    "features",
++                    "predictions",
++                    "trades",
+                 ]
+-                
++
+                 missing_tables = [t for t in required_tables if t not in tables]
+                 if missing_tables:
+                     return False, f"Missing tables: {', '.join(missing_tables)}"
+-                
++
+                 # Check hypertables
+-                result = await session.execute(text("""
++                result = await session.execute(
++                    text(
++                        """
+                     SELECT hypertable_name, num_chunks
+                     FROM timescaledb_information.hypertables
+                     ORDER BY hypertable_name;
+-                """))
++                """
++                    )
++                )
+                 hypertables = result.fetchall()
+-                
++
+                 if len(hypertables) == 0:
+                     return False, "No hypertables found"
+-                
++
+                 # Check test data
+                 result = await session.execute(text("SELECT COUNT(*) FROM market_data_seconds;"))
+                 test_count = result.scalar()
+-                
++
+                 if test_count == 0:
+                     return False, "No test data found"
+-                
++
+                 return True, f"Setup verified: {len(tables)} tables, {len(hypertables)} hypertables"
+-                
++
+         except Exception as e:
+             return False, f"Verification error: {str(e)}"
+-    
++
+     async def get_database_summary(self) -> str:
+         """
+         Get comprehensive database summary in markdown format
+-        
++
+         Returns:
+             Formatted markdown string with database information
+         """
+         try:
+             async with get_async_session() as session:
+                 summary_parts = await self._build_summary_sections(session)
+                 return "\n".join(summary_parts)
+-                
++
+         except Exception as e:
+             error_msg = f"Error generating database summary: {str(e)}"
+             logger.error(error_msg)
+             return f"# Database Summary\n\n**Error:** {error_msg}"
+-    
++
+     async def _build_summary_sections(self, session) -> List[str]:
+         """Build all sections of the database summary"""
+         summary_parts = []
+-        
++
+         # Header and connection info
+         summary_parts.extend(await self._build_header_section())
+-        
++
+         # Tables information
+         summary_parts.extend(await self._build_tables_section(session))
+-        
++
+         # Hypertables information
+         summary_parts.extend(await self._build_hypertables_section(session))
+-        
++
+         # Data statistics
+         summary_parts.extend(await self._build_data_statistics_section(session))
+-        
++
+         # Recent activity
+         summary_parts.extend(await self._build_recent_activity_section(session))
+-        
++
+         # System information
+         summary_parts.extend(await self._build_system_info_section(session))
+-        
++
+         return summary_parts
+-    
++
+     async def _build_header_section(self) -> List[str]:
+         """Build header and connection information section"""
+         environment_config = os.environ
+-        host = environment_config.get('POSTGRES_HOST', 'localhost')
+-        port = environment_config.get('POSTGRES_PORT', '5432')
+-        database = environment_config.get('POSTGRES_DB', 'trading_db')
+-        user = environment_config.get('POSTGRES_USER', 'trading_user')
+-        
++        host = environment_config.get("POSTGRES_HOST", "localhost")
++        port = environment_config.get("POSTGRES_PORT", "5432")
++        database = environment_config.get("POSTGRES_DB", "trading_db")
++        user = environment_config.get("POSTGRES_USER", "trading_user")
++
+         return [
+             "# Database Summary",
+             "",
+             "## Connection Information",
+             f"- **Host:** {host}:{port}",
+             f"- **Database:** {database}",
+             f"- **User:** {user}",
+-            ""
++            "",
+         ]
+-    
++
+     async def _build_tables_section(self, session) -> List[str]:
+         """Build tables information section"""
+-        result = await session.execute(text("""
++        result = await session.execute(
++            text(
++                """
+             SELECT table_name
+             FROM information_schema.tables
+             WHERE table_schema = 'public'
+             AND table_type = 'BASE TABLE'
+             ORDER BY table_name;
+-        """))
++        """
++            )
++        )
+         tables = [row[0] for row in result.fetchall()]
+-        
++
+         section = ["## Tables"]
+         for table in tables:
+             try:
+                 result = await session.execute(text(f"SELECT COUNT(*) FROM {table}"))
+                 count = result.scalar()
+                 section.append(f"- **{table}:** {count:,} records")
+             except Exception:
+                 section.append(f"- **{table}:** Error reading count")
+-        
++
+         section.append("")
+         return section
+-    
++
+     async def _build_hypertables_section(self, session) -> List[str]:
+         """Build hypertables information section"""
+         try:
+-            result = await session.execute(text("""
++            result = await session.execute(
++                text(
++                    """
+                 SELECT hypertable_name, num_chunks
+                 FROM timescaledb_information.hypertables
+                 ORDER BY hypertable_name;
+-            """))
++            """
++                )
++            )
+             hypertables = result.fetchall()
+-            
++
+             if hypertables:
+                 section = ["## TimescaleDB Hypertables"]
+                 for ht in hypertables:
+                     section.append(f"- **{ht[0]}:** {ht[1]} chunks")
+                 section.append("")
+                 return section
+         except Exception:
+             pass
+-        
++
+         return []
+-    
++
+     async def _build_data_statistics_section(self, session) -> List[str]:
+         """Build data statistics section"""
+         section = []
+-        main_tables = ['market_data_seconds', 'market_data_minutes']
+-        
++        main_tables = ["market_data_seconds", "market_data_minutes"]
++
+         # Get available tables first
+-        result = await session.execute(text("""
++        result = await session.execute(
++            text(
++                """
+             SELECT table_name FROM information_schema.tables
+             WHERE table_schema = 'public' AND table_type = 'BASE TABLE'
+-        """))
++        """
++            )
++        )
+         available_tables = [row[0] for row in result.fetchall()]
+-        
++
+         for table in main_tables:
+             if table in available_tables:
+                 try:
+-                    result = await session.execute(text(f"""
++                    result = await session.execute(
++                        text(
++                            f"""
+                         SELECT symbol, exchange, COUNT(*) as count,
+                                MIN(timestamp) as first_data, MAX(timestamp) as last_data
+                         FROM {table}
+                         GROUP BY symbol, exchange
+                         ORDER BY symbol, exchange
+                         LIMIT 10;
+-                    """))
++                    """
++                        )
++                    )
+                     data_stats = result.fetchall()
+-                    
++
+                     if data_stats:
+                         section.append(f"## {table.replace('_', ' ').title()} Statistics")
+                         for stat in data_stats:
+                             section.append(
+                                 f"- **{stat[0]} ({stat[1]}):** {stat[2]:,} records "
+                                 f"({stat[3].strftime('%Y-%m-%d')} to {stat[4].strftime('%Y-%m-%d')})"
+                             )
+                         section.append("")
+                 except Exception:
+                     pass
+-        
++
+         return section
+-    
++
+     async def _build_recent_activity_section(self, session) -> List[str]:
+         """Build recent activity section"""
+         try:
+-            result = await session.execute(text("""
++            result = await session.execute(
++                text(
++                    """
+                 SELECT timestamp, symbol, contract, exchange, close, volume
+                 FROM market_data_seconds
+                 ORDER BY timestamp DESC
+                 LIMIT 5;
+-            """))
++            """
++                )
++            )
+             recent_data = result.fetchall()
+-            
++
+             if recent_data:
+                 section = ["## Recent Data Sample"]
+                 for data in recent_data:
+-                    timestamp_str = data[0].strftime('%Y-%m-%d %H:%M:%S')
++                    timestamp_str = data[0].strftime("%Y-%m-%d %H:%M:%S")
+                     section.append(
+                         f"- **{timestamp_str}** | {data[1]} {data[2]} | "
+                         f"Price: {data[4]} | Volume: {data[5]}"
+                     )
+                 section.append("")
+                 return section
+         except Exception:
+             pass
+-        
++
+         return []
+-    
++
+     async def _build_system_info_section(self, session) -> List[str]:
+         """Build system information section"""
+         try:
+             result = await session.execute(text("SELECT version()"))
+             pg_version = result.scalar()
+-            
+-            result = await session.execute(text("""
++
++            result = await session.execute(
++                text(
++                    """
+                 SELECT extversion FROM pg_extension WHERE extname = 'timescaledb'
+-            """))
++            """
++                )
++            )
+             timescale_version = result.scalar()
+-            
++
+             section = ["## System Information"]
+-            section.append(f"- **PostgreSQL:** {str(pg_version).split(',')[0] if pg_version else 'Unknown'}")
++            section.append(
++                f"- **PostgreSQL:** {str(pg_version).split(',')[0] if pg_version else 'Unknown'}"
++            )
+             if timescale_version:
+                 section.append(f"- **TimescaleDB:** {timescale_version}")
+             section.append(f"- **Generated:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+-            
++
+             return section
+         except Exception:
+             pass
+-        
++
+         return []
+-    
+-    async def bulk_insert_market_data(self, data: List[Dict], table_name: str = 'market_data_seconds') -> bool:
++
++    async def bulk_insert_market_data(
++        self, data: List[Dict], table_name: str = "market_data_seconds"
++    ) -> bool:
+         """
+         Bulk insert market data with validation and conflict handling
+-        
++
+         Args:
+             data: List of data dictionaries
+             table_name: Target table name
+-            
++
+         Returns:
+             Success status
+         """
+         if not data:
+             return True
+-        
++
+         try:
+             # Validate data structure
+             if table_name in self.table_schemas:
+                 schema = self.table_schemas[table_name]
+                 for record in data:
+-                    missing_cols = [col for col in schema['required_columns'] if col not in record]
++                    missing_cols = [col for col in schema["required_columns"] if col not in record]
+                     if missing_cols:
+                         logger.error(f"Missing required columns for {table_name}: {missing_cols}")
+                         return False
+-            
++
+             async with get_async_session() as session:
+                 helper = TimescaleDBHelper(session)
+-                
++
+                 # Process data to handle pandas timestamps and NaN values
+                 processed_data = []
+                 for record in data:
+                     processed_record = {}
+                     for key, value in record.items():
+                         if isinstance(value, pd.Timestamp):
+                             processed_record[key] = value.to_pydatetime()
+-                        elif pd.isna(value) if hasattr(pd, 'isna') else value is None:
++                        elif pd.isna(value) if hasattr(pd, "isna") else value is None:
+                             processed_record[key] = None
+                         else:
+                             processed_record[key] = value
+                     processed_data.append(processed_record)
+-                
++
+                 # Use bulk insert with conflict handling
+                 await helper.bulk_insert_market_data(processed_data, table_name)
+-                
++
+                 self._report_progress(f"Inserted {len(processed_data)} records to {table_name}")
+                 return True
+-                
++
+         except Exception as e:
+             error_msg = f"Error inserting data to {table_name}: {str(e)}"
+             logger.error(error_msg)
+             return False
+-    
++
+     async def get_data_statistics(self, symbol: Optional[str] = None) -> Dict:
+         """
+         Get comprehensive data statistics
+-        
++
+         Args:
+             symbol: Optional symbol filter
+-            
++
+         Returns:
+             Dictionary with statistics
+         """
+         try:
+             async with get_async_session() as session:
+                 stats = {
+-                    'total_records': {},
+-                    'symbol_breakdown': {},
+-                    'date_ranges': {},
+-                    'data_quality': {}
++                    "total_records": {},
++                    "symbol_breakdown": {},
++                    "date_ranges": {},
++                    "data_quality": {},
+                 }
+-                
++
+                 # Table record counts
+-                tables = ['market_data_seconds', 'market_data_minutes', 'raw_tick_data', 
+-                         'features', 'predictions', 'trades']
+-                
++                tables = [
++                    "market_data_seconds",
++                    "market_data_minutes",
++                    "raw_tick_data",
++                    "features",
++                    "predictions",
++                    "trades",
++                ]
++
+                 for table in tables:
+                     try:
+                         if symbol:
+-                            result = await session.execute(text(f"""
++                            result = await session.execute(
++                                text(
++                                    f"""
+                                 SELECT COUNT(*) FROM {table} WHERE symbol = :symbol
+-                            """), {'symbol': symbol})
++                            """
++                                ),
++                                {"symbol": symbol},
++                            )
+                         else:
+                             result = await session.execute(text(f"SELECT COUNT(*) FROM {table}"))
+-                        
+-                        stats['total_records'][table] = result.scalar()
++
++                        stats["total_records"][table] = result.scalar()
+                     except Exception:
+-                        stats['total_records'][table] = 0
+-                
++                        stats["total_records"][table] = 0
++
+                 # Symbol breakdown for main tables
+-                for table in ['market_data_seconds', 'market_data_minutes']:
++                for table in ["market_data_seconds", "market_data_minutes"]:
+                     try:
+                         if symbol:
+-                            result = await session.execute(text(f"""
++                            result = await session.execute(
++                                text(
++                                    f"""
+                                 SELECT exchange, COUNT(*) as count
+                                 FROM {table}
+                                 WHERE symbol = :symbol
+                                 GROUP BY exchange
+                                 ORDER BY count DESC
+-                            """), {'symbol': symbol})
++                            """
++                                ),
++                                {"symbol": symbol},
++                            )
+                         else:
+-                            result = await session.execute(text(f"""
++                            result = await session.execute(
++                                text(
++                                    f"""
+                                 SELECT symbol, exchange, COUNT(*) as count
+                                 FROM {table}
+                                 GROUP BY symbol, exchange
+                                 ORDER BY count DESC
+                                 LIMIT 20
+-                            """))
+-                        
+-                        stats['symbol_breakdown'][table] = [
+-                            {'symbol': row[0] if not symbol else symbol, 
+-                             'exchange': row[1] if symbol else row[1], 
+-                             'count': row[2] if symbol else row[2]}
++                            """
++                                )
++                            )
++
++                        stats["symbol_breakdown"][table] = [
++                            {
++                                "symbol": row[0] if not symbol else symbol,
++                                "exchange": row[1] if symbol else row[1],
++                                "count": row[2] if symbol else row[2],
++                            }
+                             for row in result.fetchall()
+                         ]
+                     except Exception:
+-                        stats['symbol_breakdown'][table] = []
++                        stats["symbol_breakdown"][table] = []
+                 # Date ranges
+-                for table in ['market_data_seconds', 'market_data_minutes']:
++                for table in ["market_data_seconds", "market_data_minutes"]:
+                     try:
+                         if symbol:
+-                            result = await session.execute(text(f"""
++                            result = await session.execute(
++                                text(
++                                    f"""
+                                 SELECT MIN(timestamp) as min_date, MAX(timestamp) as max_date
+                                 FROM {table}
+                                 WHERE symbol = :symbol
+-                            """), {'symbol': symbol})
++                            """
++                                ),
++                                {"symbol": symbol},
++                            )
+                         else:
+-                            result = await session.execute(text(f"""
++                            result = await session.execute(
++                                text(
++                                    f"""
+                                 SELECT MIN(timestamp) as min_date, MAX(timestamp) as max_date
+                                 FROM {table}
+-                            """))
+-                        
++                            """
++                                )
++                            )
++
+                         row = result.fetchone()
+                         if row:
+-                            stats['date_ranges'][table] = {
+-                                'min_date': row[0],
+-                                'max_date': row[1],
+-                                'days_span': (row[1] - row[0]).days if row[0] and row[1] else 0
++                            stats["date_ranges"][table] = {
++                                "min_date": row[0],
++                                "max_date": row[1],
++                                "days_span": (row[1] - row[0]).days if row[0] and row[1] else 0,
+                             }
+                         else:
+-                            stats['date_ranges'][table] = {
+-                                'min_date': None,
+-                                'max_date': None,
+-                                'days_span': 0
++                            stats["date_ranges"][table] = {
++                                "min_date": None,
++                                "max_date": None,
++                                "days_span": 0,
+                             }
+                     except Exception as e:
+                         logger.warning(f"Error getting date ranges for {table}: {e}")
+-                        stats['date_ranges'][table] = {
+-                            'min_date': None,
+-                            'max_date': None,
+-                            'days_span': 0,
+-                            'error': str(e)
++                        stats["date_ranges"][table] = {
++                            "min_date": None,
++                            "max_date": None,
++                            "days_span": 0,
++                            "error": str(e),
+                         }
+-                
++
+                 return stats
+         except Exception as e:
+             logger.error(f"Error getting data statistics: {e}")
+             return {
+-                'error': str(e),
+-                'total_records': {},
+-                'symbol_breakdown': {},
+-                'date_ranges': {},
+-                'data_quality': {}
++                "error": str(e),
++                "total_records": {},
++                "symbol_breakdown": {},
++                "date_ranges": {},
++                "data_quality": {},
+             }
+-                
++
+     async def get_connection_info(self) -> Dict:
+         """
+         Get detailed database connection information
+-        
++
+         Returns:
+             Dictionary with connection details
+         """
+         try:
+             async with get_async_session() as session:
+                 info = {
+-                    'connected': True,
+-                    'server_info': {},
+-                    'database_info': {},
+-                    'extensions': [],
+-                    'settings': {}
++                    "connected": True,
++                    "server_info": {},
++                    "database_info": {},
++                    "extensions": [],
++                    "settings": {},
+                 }
+-                
++
+                 # Server version and info
+                 result = await session.execute(text("SELECT version()"))
+-                info['server_info']['version'] = result.scalar()
+-                
++                info["server_info"]["version"] = result.scalar()
++
+                 result = await session.execute(text("SELECT current_database()"))
+-                info['database_info']['name'] = result.scalar()
+-                
++                info["database_info"]["name"] = result.scalar()
++
+                 result = await session.execute(text("SELECT current_user"))
+-                info['database_info']['user'] = result.scalar()
+-                
+-                result = await session.execute(text("SELECT inet_server_addr(), inet_server_port()"))
++                info["database_info"]["user"] = result.scalar()
++
++                result = await session.execute(
++                    text("SELECT inet_server_addr(), inet_server_port()")
++                )
+                 server_info = result.fetchone()
+                 if server_info:
+-                    info['server_info']['host'] = server_info[0]
+-                    info['server_info']['port'] = server_info[1]
+-                
++                    info["server_info"]["host"] = server_info[0]
++                    info["server_info"]["port"] = server_info[1]
++
+                 # Extensions
+-                result = await session.execute(text("""
++                result = await session.execute(
++                    text(
++                        """
+                     SELECT extname, extversion
+                     FROM pg_extension
+                     ORDER BY extname
+-                """))
+-                
+-                info['extensions'] = [
+-                    {'name': row[0], 'version': row[1]}
+-                    for row in result.fetchall()
++                """
++                    )
++                )
++
++                info["extensions"] = [
++                    {"name": row[0], "version": row[1]} for row in result.fetchall()
+                 ]
+-                
++
+                 # Important settings
+                 settings_to_check = [
+-                    'shared_buffers', 'effective_cache_size', 'work_mem',
+-                    'maintenance_work_mem', 'max_connections'
++                    "shared_buffers",
++                    "effective_cache_size",
++                    "work_mem",
++                    "maintenance_work_mem",
++                    "max_connections",
+                 ]
+-                
++
+                 for setting in settings_to_check:
+                     try:
+                         result = await session.execute(text(f"SHOW {setting}"))
+-                        info['settings'][setting] = result.scalar()
++                        info["settings"][setting] = result.scalar()
+                     except:
+                         pass
+-                
++
+                 return info
+-                
+-        except Exception as e:
+-            return {
+-                'connected': False,
+-                'error': str(e)
+-            }
+-
++
++        except Exception as e:
++            return {"connected": False, "error": str(e)}
+STDERR:
+would reformat c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_database.py
+
+Oh no! \U0001f4a5 \U0001f494 \U0001f4a5
+1 file would be reformatted.
+
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_display_manager.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_operations.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_rithmic_connection.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_rithmic_historical.py
+================================================================================
+🎨 Would be reformatted:
+--- c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_rithmic_historical.py	2025-05-28 09:59:32.298039+00:00
++++ c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_rithmic_historical.py	2025-05-28 12:12:36.516650+00:00
+@@ -17,436 +17,442 @@
+     # Fallback enum for development
+     class TimeBarType:
+         SECOND_BAR = "SECOND_BAR"
+         MINUTE_BAR = "MINUTE_BAR"
+ 
++
+ from admin_core_classes import DownloadProgress
+ from admin_rithmic_connection import RithmicConnectionManager
+ 
+ # Configure logging
+ logger = logging.getLogger(__name__)
+ 
+ # Chunk configurations for different data types
+ CHUNK_CONFIGS = {
+-    'second_bars': {
+-        'max_chunk_hours': 6,
+-        'max_data_points': 9999,
+-        'empty_chunk_limit': 4,
+-        'rate_limit_delay': 0.5,  # seconds between requests
+-        'retry_attempts': 3
++    "second_bars": {
++        "max_chunk_hours": 6,
++        "max_data_points": 9999,
++        "empty_chunk_limit": 4,
++        "rate_limit_delay": 0.5,  # seconds between requests
++        "retry_attempts": 3,
+     },
+-    'minute_bars': {
+-        'max_chunk_days': 2,
+-        'max_data_points': 9999,
+-        'empty_chunk_limit': 3,
+-        'rate_limit_delay': 0.3,
+-        'retry_attempts': 3
+-    }
++    "minute_bars": {
++        "max_chunk_days": 2,
++        "max_data_points": 9999,
++        "empty_chunk_limit": 3,
++        "rate_limit_delay": 0.3,
++        "retry_attempts": 3,
++    },
+ }
+ 
+ # Market hours configuration (US Central Time)
+ MARKET_HOURS = {
+-    'futures': {
+-        'start_time': time(17, 0),  # 5:00 PM CT (Sunday open)
+-        'end_time': time(16, 0),    # 4:00 PM CT (Friday close)
+-        'closed_hours': [(time(16, 0), time(17, 0))],  # Daily maintenance
+-        'closed_days': []  # Futures trade almost 24/7
++    "futures": {
++        "start_time": time(17, 0),  # 5:00 PM CT (Sunday open)
++        "end_time": time(16, 0),  # 4:00 PM CT (Friday close)
++        "closed_hours": [(time(16, 0), time(17, 0))],  # Daily maintenance
++        "closed_days": [],  # Futures trade almost 24/7
+     },
+-    'equity': {
+-        'start_time': time(8, 30),   # 8:30 AM CT
+-        'end_time': time(15, 0),     # 3:00 PM CT
+-        'closed_hours': [],
+-        'closed_days': [5, 6]  # Saturday, Sunday
+-    }
++    "equity": {
++        "start_time": time(8, 30),  # 8:30 AM CT
++        "end_time": time(15, 0),  # 3:00 PM CT
++        "closed_hours": [],
++        "closed_days": [5, 6],  # Saturday, Sunday
++    },
+ }
+ 
+ # Major US holidays (simplified)
+ MARKET_HOLIDAYS_2024_2025 = [
+-    datetime(2024, 1, 1),   # New Year's Day
++    datetime(2024, 1, 1),  # New Year's Day
+     datetime(2024, 1, 15),  # MLK Day
+     datetime(2024, 2, 19),  # Presidents Day
+     datetime(2024, 5, 27),  # Memorial Day
+     datetime(2024, 6, 19),  # Juneteenth
+-    datetime(2024, 7, 4),   # Independence Day
+-    datetime(2024, 9, 2),   # Labor Day
+-    datetime(2024, 11, 28), # Thanksgiving
+-    datetime(2024, 12, 25), # Christmas
+-    datetime(2025, 1, 1),   # New Year's Day
++    datetime(2024, 7, 4),  # Independence Day
++    datetime(2024, 9, 2),  # Labor Day
++    datetime(2024, 11, 28),  # Thanksgiving
++    datetime(2024, 12, 25),  # Christmas
++    datetime(2025, 1, 1),  # New Year's Day
+     datetime(2025, 1, 20),  # MLK Day
+     datetime(2025, 2, 17),  # Presidents Day
+     datetime(2025, 5, 26),  # Memorial Day
+     datetime(2025, 6, 19),  # Juneteenth
+-    datetime(2025, 7, 4),   # Independence Day
+-    datetime(2025, 9, 1),   # Labor Day
+-    datetime(2025, 11, 27), # Thanksgiving
+-    datetime(2025, 12, 25), # Christmas
++    datetime(2025, 7, 4),  # Independence Day
++    datetime(2025, 9, 1),  # Labor Day
++    datetime(2025, 11, 27),  # Thanksgiving
++    datetime(2025, 12, 25),  # Christmas
+ ]
+ 
+ 
+ @dataclass
+ class DownloadStats:
+     """Statistics for a download operation"""
++
+     total_bars: int = 0
+     successful_chunks: int = 0
+     failed_chunks: int = 0
+     empty_chunks: int = 0
+     start_time: Optional[datetime] = None
+     end_time: Optional[datetime] = None
+     duration_seconds: float = 0.0
+     api_calls: int = 0
+     errors: List[str] = None
+-    
++
+     def __post_init__(self):
+         if self.errors is None:
+             self.errors = []
+ 
+ 
+ class RithmicHistoricalError(Exception):
+     """Custom exception for historical data operations"""
++
+     pass
+ 
+ 
+ class RithmicHistoricalManager:
+     """
+     Manages historical data downloads from Rithmic API.
+     Handles chunking, progress tracking, error recovery, and data processing.
+     """
+-    
+-    def __init__(self, 
+-                 connection_manager,
+-                 database_ops,
+-                 progress_callback: Callable = None):
++
++    def __init__(self, connection_manager, database_ops, progress_callback: Callable = None):
+         """
+         Initialize the historical data manager.
+-        
++
+         Args:
+             connection_manager: RithmicConnectionManager instance
+             database_ops: Database operations instance
+             progress_callback: Optional callback for progress updates
+         """
+         self.connection_manager = connection_manager
+         self.database_ops = database_ops
+         self.progress_callback = progress_callback
+         self.download_stats = {}
+-        self.timezone = pytz.timezone('US/Central')
+-        
++        self.timezone = pytz.timezone("US/Central")
++
+         logger.info("RithmicHistoricalManager initialized")
+-    
+-    async def download_historical_data(self, 
+-                                     contracts: List[str],
+-                                     days: int = 7,
+-                                     download_seconds: bool = True,
+-                                     download_minutes: bool = True) -> str:
++
++    async def download_historical_data(
++        self,
++        contracts: List[str],
++        days: int = 7,
++        download_seconds: bool = True,
++        download_minutes: bool = True,
++    ) -> str:
+         """
+         Download historical data for multiple contracts.
+-        
++
+         Args:
+             contracts: List of contract symbols
+             days: Number of days of historical data
+             download_seconds: Whether to download second bars
+             download_minutes: Whether to download minute bars
+-            
++
+         Returns:
+             Status message summarizing the download operation
+         """
+-        logger.info(f"Starting historical data download for {len(contracts)} contracts, {days} days")
+-        
++        logger.info(
++            f"Starting historical data download for {len(contracts)} contracts, {days} days"
++        )
++
+         overall_start = datetime.now()
+         total_operations = len(contracts) * (int(download_seconds) + int(download_minutes))
+         completed_operations = 0
+-        
++
+         # Calculate date range
+         end_time = datetime.now().replace(second=0, microsecond=0)
+         start_time = end_time - timedelta(days=days)
+-        
++
+         results = []
+-        
++
+         for contract in contracts:
+             try:
+                 # Extract symbol and exchange from contract
+                 symbol, exchange = self._parse_contract(contract)
+-                
++
+                 # Initialize stats for this contract
+                 self.download_stats[contract] = DownloadStats(start_time=datetime.now())
+-                
++
+                 # Download second bars
+                 if download_seconds:
+                     logger.info(f"Downloading second bars for {contract}")
+                     second_data = await self.download_second_bars(
+                         contract, exchange, start_time, end_time
+                     )
+-                    
++
+                     if second_data:
+                         # Process and save to database
+                         processed_data = self.process_bar_data(
+                             second_data, symbol, contract, exchange
+                         )
+-                        
++
+                         success = await self.save_to_database(
+                             processed_data, f"{symbol}_second_bars"
+                         )
+-                        
++
+                         if success:
+                             self.download_stats[contract].total_bars += len(processed_data)
+                             logger.info(f"Saved {len(processed_data)} second bars for {contract}")
+                         else:
+                             logger.error(f"Failed to save second bars for {contract}")
+-                    
++
+                     completed_operations += 1
+                     await self.update_download_progress(
+-                        contract, completed_operations, total_operations,
+-                        "Historical Download", "Second Bars Complete"
++                        contract,
++                        completed_operations,
++                        total_operations,
++                        "Historical Download",
++                        "Second Bars Complete",
+                     )
+-                
++
+                 # Download minute bars
+                 if download_minutes:
+                     logger.info(f"Downloading minute bars for {contract}")
+                     minute_data = await self.download_minute_bars(
+                         contract, exchange, start_time, end_time
+                     )
+-                    
++
+                     if minute_data:
+                         # Process and save to database
+                         processed_data = self.process_bar_data(
+                             minute_data, symbol, contract, exchange
+                         )
+-                        
++
+                         success = await self.save_to_database(
+                             processed_data, f"{symbol}_minute_bars"
+                         )
+-                        
++
+                         if success:
+                             self.download_stats[contract].total_bars += len(processed_data)
+                             logger.info(f"Saved {len(processed_data)} minute bars for {contract}")
+                         else:
+                             logger.error(f"Failed to save minute bars for {contract}")
+-                    
++
+                     completed_operations += 1
+                     await self.update_download_progress(
+-                        contract, completed_operations, total_operations,
+-                        "Historical Download", "Minute Bars Complete"
++                        contract,
++                        completed_operations,
++                        total_operations,
++                        "Historical Download",
++                        "Minute Bars Complete",
+                     )
+-                
++
+                 # Finalize stats
+                 self.download_stats[contract].end_time = datetime.now()
+                 self.download_stats[contract].duration_seconds = (
+-                    self.download_stats[contract].end_time - 
+-                    self.download_stats[contract].start_time
++                    self.download_stats[contract].end_time
++                    - self.download_stats[contract].start_time
+                 ).total_seconds()
+-                
++
+                 results.append(f"{contract}: {self.download_stats[contract].total_bars} bars")
+-                
++
+             except Exception as e:
+                 error_msg = f"Error downloading data for {contract}: {str(e)}"
+                 logger.error(error_msg)
+                 results.append(f"{contract}: ERROR - {str(e)}")
+-                
++
+                 if contract in self.download_stats:
+                     self.download_stats[contract].errors.append(error_msg)
+-        
++
+         # Generate summary
+         total_duration = (datetime.now() - overall_start).total_seconds()
+         total_bars = sum(stats.total_bars for stats in self.download_stats.values())
+-        
++
+         summary = f"Historical download completed in {total_duration:.1f}s. "
+         summary += f"Total bars: {total_bars}. "
+         summary += f"Contracts processed: {len(results)}"
+-        
++
+         logger.info(summary)
+         return summary
+-    
+-    async def download_second_bars(self, 
+-                                 contract: str,
+-                                 exchange: str,
+-                                 start_time: datetime,
+-                                 end_time: datetime) -> List[Dict]:
++
++    async def download_second_bars(
++        self, contract: str, exchange: str, start_time: datetime, end_time: datetime
++    ) -> List[Dict]:
+         """
+         Download second bars for a specific contract.
+-        
++
+         Args:
+             contract: Contract symbol
+             exchange: Exchange name
+             start_time: Start datetime
+             end_time: End datetime
+-            
++
+         Returns:
+             List of bar data dictionaries
+         """
+         logger.info(f"Downloading second bars for {contract} from {start_time} to {end_time}")
+-        
++
+         all_bars = []
+-        chunks = self.calculate_chunks(start_time, end_time, 'second_bars')
+-        config = CHUNK_CONFIGS['second_bars']
+-        
++        chunks = self.calculate_chunks(start_time, end_time, "second_bars")
++        config = CHUNK_CONFIGS["second_bars"]
++
+         for i, (chunk_start, chunk_end) in enumerate(chunks):
+             # Update progress
+             await self.update_download_progress(
+-                contract, i + 1, len(chunks),
+-                "Downloading Second Bars", f"Chunk {i+1}/{len(chunks)}"
++                contract,
++                i + 1,
++                len(chunks),
++                "Downloading Second Bars",
++                f"Chunk {i+1}/{len(chunks)}",
+             )
+-            
++
+             # Skip non-market hours for efficiency
+             if not self.is_likely_market_hours(chunk_start):
+                 logger.debug(f"Skipping chunk {i+1} - outside market hours")
+                 continue
+-            
++
+             # Download chunk with retry logic
+             chunk_bars = await self._download_chunk_with_retry(
+-                contract, exchange, chunk_start, chunk_end,
+-                TimeBarType.SECOND_BAR, 1, config
++                contract, exchange, chunk_start, chunk_end, TimeBarType.SECOND_BAR, 1, config
+             )
+-            
++
+             if chunk_bars:
+                 all_bars.extend(chunk_bars)
+                 self.download_stats[contract].successful_chunks += 1
+                 logger.debug(f"Downloaded {len(chunk_bars)} second bars in chunk {i+1}")
+             else:
+                 self.download_stats[contract].empty_chunks += 1
+                 logger.debug(f"Empty chunk {i+1} for second bars")
+-            
++
+             # Rate limiting
+-            await asyncio.sleep(config['rate_limit_delay'])
+-        
++            await asyncio.sleep(config["rate_limit_delay"])
++
+         logger.info(f"Downloaded {len(all_bars)} total second bars for {contract}")
+         return all_bars
+-    
+-    async def download_minute_bars(self,
+-                                 contract: str,
+-                                 exchange: str,
+-                                 start_time: datetime,
+-                                 end_time: datetime) -> List[Dict]:
++
++    async def download_minute_bars(
++        self, contract: str, exchange: str, start_time: datetime, end_time: datetime
++    ) -> List[Dict]:
+         """
+         Download minute bars for a specific contract.
+-        
++
+         Args:
+             contract: Contract symbol
+             exchange: Exchange name
+             start_time: Start datetime
+             end_time: End datetime
+-            
++
+         Returns:
+             List of bar data dictionaries
+         """
+         logger.info(f"Downloading minute bars for {contract} from {start_time} to {end_time}")
+-        
++
+         all_bars = []
+-        chunks = self.calculate_chunks(start_time, end_time, 'minute_bars')
+-        config = CHUNK_CONFIGS['minute_bars']
+-        
++        chunks = self.calculate_chunks(start_time, end_time, "minute_bars")
++        config = CHUNK_CONFIGS["minute_bars"]
++
+         for i, (chunk_start, chunk_end) in enumerate(chunks):
+             # Update progress
+             await self.update_download_progress(
+-                contract, i + 1, len(chunks),
+-                "Downloading Minute Bars", f"Chunk {i+1}/{len(chunks)}"
++                contract,
++                i + 1,
++                len(chunks),
++                "Downloading Minute Bars",
++                f"Chunk {i+1}/{len(chunks)}",
+             )
+-            
++
+             # Skip non-market hours for efficiency
+             if not self.is_likely_market_hours(chunk_start):
+                 logger.debug(f"Skipping chunk {i+1} - outside market hours")
+                 continue
+-            
++
+             # Download chunk with retry logic
+             chunk_bars = await self._download_chunk_with_retry(
+-                contract, exchange, chunk_start, chunk_end,
+-                TimeBarType.MINUTE_BAR, 1, config
++                contract, exchange, chunk_start, chunk_end, TimeBarType.MINUTE_BAR, 1, config
+             )
+-            
++
+             if chunk_bars:
+                 all_bars.extend(chunk_bars)
+                 self.download_stats[contract].successful_chunks += 1
+                 logger.debug(f"Downloaded {len(chunk_bars)} minute bars in chunk {i+1}")
+             else:
+                 self.download_stats[contract].empty_chunks += 1
+                 logger.debug(f"Empty chunk {i+1} for minute bars")
+-            
++
+             # Rate limiting
+-            await asyncio.sleep(config['rate_limit_delay'])
+-        
++            await asyncio.sleep(config["rate_limit_delay"])
++
+         logger.info(f"Downloaded {len(all_bars)} total minute bars for {contract}")
+         return all_bars
+-    
+-    def calculate_chunks(self,
+-                        start_time: datetime,
+-                        end_time: datetime,
+-                        chunk_type: str) -> List[Tuple[datetime, datetime]]:
++
++    def calculate_chunks(
++        self, start_time: datetime, end_time: datetime, chunk_type: str
++    ) -> List[Tuple[datetime, datetime]]:
+         """
+         Calculate time chunks for data download.
+-        
++
+         Args:
+             start_time: Start datetime
+             end_time: End datetime
+             chunk_type: 'second_bars' or 'minute_bars'
+-            
++
+         Returns:
+             List of (chunk_start, chunk_end) tuples
+         """
+-        config = CHUNK_CONFIGS.get(chunk_type, CHUNK_CONFIGS['minute_bars'])
++        config = CHUNK_CONFIGS.get(chunk_type, CHUNK_CONFIGS["minute_bars"])
+         chunks = []
+-        
++
+         current_start = start_time
+-        
+-        if chunk_type == 'second_bars':
+-            chunk_delta = timedelta(hours=config['max_chunk_hours'])
++
++        if chunk_type == "second_bars":
++            chunk_delta = timedelta(hours=config["max_chunk_hours"])
+         else:  # minute_bars
+-            chunk_delta = timedelta(days=config['max_chunk_days'])
+-        
++            chunk_delta = timedelta(days=config["max_chunk_days"])
++
+         while current_start < end_time:
+             chunk_end = min(current_start + chunk_delta, end_time)
+             chunks.append((current_start, chunk_end))
+             current_start = chunk_end
+-        
++
+         logger.debug(f"Created {len(chunks)} chunks for {chunk_type}")
+         return chunks
+-    
++
+     def is_likely_market_hours(self, dt: datetime) -> bool:
+         """
+         Determine if a datetime is likely during market hours.
+-        
++
+         Args:
+             dt: Datetime to check
+-            
++
+         Returns:
+             True if likely market hours, False otherwise
+         """
+         # Convert to US Central time
+         if dt.tzinfo is None:
+             dt = self.timezone.localize(dt)
+         else:
+             dt = dt.astimezone(self.timezone)
+-        
++
+         # Check if it's a major holiday
+         date_only = dt.date()
+         for holiday in MARKET_HOLIDAYS_2024_2025:
+             if holiday.date() == date_only:
+                 return False
+-        
++
+         # For futures (assume most contracts are futures)
+         # Futures trade almost 24/7 except during maintenance
+         weekday = dt.weekday()
+         time_only = dt.time()
+-        
++
+         # Weekend check (Saturday afternoon to Sunday evening)
+         if weekday == 5 and time_only > time(16, 0):  # Saturday after 4 PM
+             return False
+         if weekday == 6 and time_only < time(17, 0):  # Sunday before 5 PM
+             return False
+-        
++
+         # Daily maintenance window (4 PM to 5 PM CT)
+         if time(16, 0) <= time_only <= time(17, 0):
+             return False
+-        
++
+         return True
+-    
+-    async def update_download_progress(self,
+-                                     symbol: str,
+-                                     current_chunk: int,
+-                                     total_chunks: int,
+-                                     operation: str,
+-                                     timeframe: str):
++
++    async def update_download_progress(
++        self, symbol: str, current_chunk: int, total_chunks: int, operation: str, timeframe: str
++    ):
+         """
+         Update download progress and trigger callback.
+-        
++
+         Args:
+             symbol: Symbol being processed
+             current_chunk: Current chunk number
+             total_chunks: Total number of chunks
+             operation: Current operation description
+@@ -457,362 +463,364 @@
+             current_operation=operation,
+             total_chunks=total_chunks,
+             completed_chunks=current_chunk,
+             current_timeframe=timeframe,
+             start_time=datetime.now(),
+-            completion_percentage=round((current_chunk / total_chunks) * 100, 1)
++            completion_percentage=round((current_chunk / total_chunks) * 100, 1),
+         )
+-        
++
+         if self.progress_callback:
+             try:
+                 self.progress_callback(symbol, progress)
+             except Exception as e:
+                 logger.warning(f"Progress callback error: {e}")
+-        
++
+         logger.debug(f"Progress: {symbol} - {operation} - {progress.completion_percentage}%")
+-    
+-    def process_bar_data(self,
+-                        raw_bars: List[Dict],
+-                        symbol: str,
+-                        contract: str,
+-                        exchange: str) -> List[Dict]:
++
++    def process_bar_data(
++        self, raw_bars: List[Dict], symbol: str, contract: str, exchange: str
++    ) -> List[Dict]:
+         """
+         Process raw bar data into standardized format.
+-        
++
+         Args:
+             raw_bars: Raw bar data from API
+             symbol: Base symbol
+             contract: Full contract identifier
+             exchange: Exchange name
+-            
++
+         Returns:
+             List of processed bar records
+         """
+         processed_data = []
+-        
++
+         for bar in raw_bars:
+             try:
+                 # Extract timestamp
+-                timestamp = bar.get('bar_end_datetime')
++                timestamp = bar.get("bar_end_datetime")
+                 if timestamp is None:
+-                    timestamp = bar.get('timestamp', datetime.now())
+-                
++                    timestamp = bar.get("timestamp", datetime.now())
++
+                 # Ensure timestamp is datetime object
+                 if isinstance(timestamp, str):
+-                    timestamp = datetime.fromisoformat(timestamp.replace('Z', '+00:00'))
+-                
++                    timestamp = datetime.fromisoformat(timestamp.replace("Z", "+00:00"))
++
+                 # Create standardized record
+                 record = {
+-                    'timestamp': timestamp,
+-                    'symbol': symbol,
+-                    'contract': contract,
+-                    'exchange': exchange,
+-                    'exchange_code': self._get_exchange_code(exchange),
+-                    'open': float(bar.get('open', 0)),
+-                    'high': float(bar.get('high', 0)),
+-                    'low': float(bar.get('low', 0)),
+-                    'close': float(bar.get('close', 0)),
+-                    'volume': int(bar.get('volume', 0)),
+-                    'tick_count': int(bar.get('tick_count', 1)),
+-                    'vwap': float(bar.get('vwap', bar.get('close', 0))),
+-                    'data_quality_score': self._calculate_quality_score(bar),
+-                    'is_regular_hours': self.is_likely_market_hours(timestamp)
++                    "timestamp": timestamp,
++                    "symbol": symbol,
++                    "contract": contract,
++                    "exchange": exchange,
++                    "exchange_code": self._get_exchange_code(exchange),
++                    "open": float(bar.get("open", 0)),
++                    "high": float(bar.get("high", 0)),
++                    "low": float(bar.get("low", 0)),
++                    "close": float(bar.get("close", 0)),
++                    "volume": int(bar.get("volume", 0)),
++                    "tick_count": int(bar.get("tick_count", 1)),
++                    "vwap": float(bar.get("vwap", bar.get("close", 0))),
++                    "data_quality_score": self._calculate_quality_score(bar),
++                    "is_regular_hours": self.is_likely_market_hours(timestamp),
+                 }
+-                
++
+                 # Validate record
+                 if self._validate_bar_record(record):
+                     processed_data.append(record)
+                 else:
+                     logger.warning(f"Invalid bar record skipped: {bar}")
+-                    
++
+             except Exception as e:
+                 logger.error(f"Error processing bar: {bar}, error: {e}")
+                 continue
+-        
++
+         logger.debug(f"Processed {len(processed_data)} bars from {len(raw_bars)} raw bars")
+         return processed_data
+-    
++
+     async def save_to_database(self, processed_data: List[Dict], table_name: str) -> bool:
+         """
+         Save processed data to database.
+-        
++
+         Args:
+             processed_data: List of processed bar records
+             table_name: Target table name
+-            
++
+         Returns:
+             True if successful, False otherwise
+         """
+         if not processed_data:
+             logger.warning("No data to save to database")
+             return True
+-        
++
+         try:
+             # Use database operations for bulk insertion
+-            success = await self.database_ops.bulk_insert_market_data(
+-                processed_data, table_name
+-            )
+-            
++            success = await self.database_ops.bulk_insert_market_data(processed_data, table_name)
++
+             if success:
+                 logger.info(f"Successfully saved {len(processed_data)} records to {table_name}")
+                 return True
+             else:
+                 logger.error(f"Failed to save data to {table_name}")
+                 return False
+-                
++
+         except Exception as e:
+             logger.error(f"Database save error: {e}")
+             return False
+-    
+-    async def _download_chunk_with_retry(self,
+-                                       contract: str,
+-                                       exchange: str,
+-                                       start_time: datetime,
+-                                       end_time: datetime,
+-                                       bar_type: str,
+-                                       interval: int,
+-                                       config: Dict) -> List[Dict]:
++
++    async def _download_chunk_with_retry(
++        self,
++        contract: str,
++        exchange: str,
++        start_time: datetime,
++        end_time: datetime,
++        bar_type: str,
++        interval: int,
++        config: Dict,
++    ) -> List[Dict]:
+         """
+         Download a chunk of data with retry logic.
+-        
++
+         Args:
+             contract: Contract symbol
+             exchange: Exchange name
+             start_time: Chunk start time
+             end_time: Chunk end time
+             bar_type: Type of bars to download
+             interval: Bar interval
+             config: Configuration for this data type
+-            
++
+         Returns:
+             List of bar data or empty list if failed
+         """
+-        for attempt in range(config['retry_attempts']):
++        for attempt in range(config["retry_attempts"]):
+             try:
+                 # Increment API call counter
+                 if contract in self.download_stats:
+                     self.download_stats[contract].api_calls += 1
+-                
++
+                 # Make API call
+                 chunk_bars = await self.connection_manager.client.get_historical_time_bars(
+                     contract, exchange, start_time, end_time, bar_type, interval
+                 )
+-                
++
+                 if chunk_bars:
+                     return chunk_bars
+                 else:
+                     logger.debug(f"Empty response for {contract} chunk {start_time} to {end_time}")
+                     return []
+-                    
++
+             except Exception as e:
+                 error_msg = f"API call failed (attempt {attempt + 1}): {str(e)}"
+                 logger.warning(error_msg)
+-                
++
+                 if contract in self.download_stats:
+                     self.download_stats[contract].errors.append(error_msg)
+-                
+-                if attempt < config['retry_attempts'] - 1:
++
++                if attempt < config["retry_attempts"] - 1:
+                     # Exponential backoff
+-                    delay = config['rate_limit_delay'] * (2 ** attempt)
++                    delay = config["rate_limit_delay"] * (2**attempt)
+                     await asyncio.sleep(delay)
+                 else:
+-                    logger.error(f"Failed to download chunk after {config['retry_attempts']} attempts")
++                    logger.error(
++                        f"Failed to download chunk after {config['retry_attempts']} attempts"
++                    )
+                     if contract in self.download_stats:
+                         self.download_stats[contract].failed_chunks += 1
+-        
++
+         return []
+-    
++
+     def _parse_contract(self, contract: str) -> Tuple[str, str]:
+         """
+         Parse contract string to extract symbol and exchange.
+-        
++
+         Args:
+             contract: Full contract identifier
+-            
++
+         Returns:
+             Tuple of (symbol, exchange)
+         """
+         # Handle different contract formats
+-        if '.' in contract:
+-            parts = contract.split('.')
++        if "." in contract:
++            parts = contract.split(".")
+             if len(parts) >= 2:
+                 return parts[0], parts[1]
+-        
++
+         # Default assumption for common futures
+-        if contract.startswith('ES'):
+-            return contract, 'CME'
+-        elif contract.startswith('NQ'):
+-            return contract, 'CME'
+-        elif contract.startswith('YM'):
+-            return contract, 'CBOT'
+-        elif contract.startswith('RTY'):
+-            return contract, 'CME'
++        if contract.startswith("ES"):
++            return contract, "CME"
++        elif contract.startswith("NQ"):
++            return contract, "CME"
++        elif contract.startswith("YM"):
++            return contract, "CBOT"
++        elif contract.startswith("RTY"):
++            return contract, "CME"
+         else:
+             # Generic fallback
+-            return contract, 'CME'
+-    
++            return contract, "CME"
++
+     def _get_exchange_code(self, exchange: str) -> str:
+         """
+         Get standardized exchange code.
+-        
++
+         Args:
+             exchange: Exchange name
+-            
++
+         Returns:
+             Standardized exchange code
+         """
+         exchange_map = {
+-            'CME': 'XCME',
+-            'CBOT': 'XCBT',
+-            'NYMEX': 'XNYM',
+-            'COMEX': 'XCEC',
+-            'ICE': 'IFUS'
++            "CME": "XCME",
++            "CBOT": "XCBT",
++            "NYMEX": "XNYM",
++            "COMEX": "XCEC",
++            "ICE": "IFUS",
+         }
+         return exchange_map.get(exchange.upper(), exchange.upper())
+-    
++
+     def _calculate_quality_score(self, bar: Dict) -> float:
+         """
+         Calculate data quality score for a bar.
+-        
++
+         Args:
+             bar: Raw bar data
+-            
++
+         Returns:
+             Quality score between 0.0 and 1.0
+         """
+         score = 1.0
+-        
++
+         # Check for missing or zero values
+-        required_fields = ['open', 'high', 'low', 'close']
++        required_fields = ["open", "high", "low", "close"]
+         for field in required_fields:
+             if bar.get(field, 0) == 0:
+                 score -= 0.2
+-        
++
+         # Check for valid OHLC relationships
+         try:
+             o, h, l, c = [float(bar.get(f, 0)) for f in required_fields]
+             if h < max(o, c) or l > min(o, c):
+                 score -= 0.3
+         except (ValueError, TypeError):
+             score -= 0.5
+-        
++
+         # Check volume
+-        if bar.get('volume', 0) == 0:
++        if bar.get("volume", 0) == 0:
+             score -= 0.1
+-        
++
+         return max(0.0, score)
+-    
++
+     def _validate_bar_record(self, record: Dict) -> bool:
+         """
+         Validate a processed bar record.
+-        
++
+         Args:
+             record: Processed bar record
+-            
++
+         Returns:
+             True if valid, False otherwise
+         """
+-        required_fields = ['timestamp', 'symbol', 'open', 'high', 'low', 'close']
+-        
++        required_fields = ["timestamp", "symbol", "open", "high", "low", "close"]
++
+         for field in required_fields:
+             if field not in record or record[field] is None:
+                 return False
+-        
++
+         # Check OHLC validity
+         try:
+-            o, h, l, c = record['open'], record['high'], record['low'], record['close']
++            o, h, l, c = record["open"], record["high"], record["low"], record["close"]
+             if h < max(o, c) or l > min(o, c):
+                 return False
+         except (ValueError, TypeError):
+             return False
+-        
++
+         return True
+-    
++
+     def get_download_statistics(self, contract: str = None) -> Dict:
+         """
+         Get download statistics.
+-        
++
+         Args:
+             contract: Specific contract or None for all
+-            
++
+         Returns:
+             Dictionary of statistics
+         """
+         if contract and contract in self.download_stats:
+             return self.download_stats[contract].__dict__
+         elif contract is None:
+             return {k: v.__dict__ for k, v in self.download_stats.items()}
+         else:
+             return {}
+-    
++
+     def reset_statistics(self):
+         """Reset all download statistics."""
+         self.download_stats.clear()
+         logger.info("Download statistics reset")
+ 
+ 
+ # Utility functions for external use
+ def format_download_summary(stats: Dict) -> str:
+     """
+     Format download statistics into a readable summary.
+-    
++
+     Args:
+         stats: Statistics dictionary
+-        
++
+     Returns:
+         Formatted summary string
+     """
+     if not stats:
+         return "No download statistics available"
+-    
++
+     summary_lines = []
+     total_bars = 0
+     total_duration = 0
+     total_api_calls = 0
+-    
++
+     for contract, contract_stats in stats.items():
+         if isinstance(contract_stats, dict):
+-            bars = contract_stats.get('total_bars', 0)
+-            duration = contract_stats.get('duration_seconds', 0)
+-            api_calls = contract_stats.get('api_calls', 0)
+-            errors = len(contract_stats.get('errors', []))
+-            
++            bars = contract_stats.get("total_bars", 0)
++            duration = contract_stats.get("duration_seconds", 0)
++            api_calls = contract_stats.get("api_calls", 0)
++            errors = len(contract_stats.get("errors", []))
++
+             total_bars += bars
+             total_duration += duration
+             total_api_calls += api_calls
+-            
++
+             summary_lines.append(
+                 f"{contract}: {bars:,} bars, {duration:.1f}s, "
+                 f"{api_calls} API calls, {errors} errors"
+             )
+-    
++
+     summary = "\n".join(summary_lines)
+-    summary += f"\n\nTotals: {total_bars:,} bars, {total_duration:.1f}s, {total_api_calls} API calls"
+-    
++    summary += (
++        f"\n\nTotals: {total_bars:,} bars, {total_duration:.1f}s, {total_api_calls} API calls"
++    )
++
+     return summary
+ 
+ 
+ def is_market_open(dt: datetime = None) -> bool:
+     """
+     Quick check if market is likely open.
+-    
++
+     Args:
+         dt: Datetime to check (default: now)
+-        
++
+     Returns:
+         True if market likely open
+     """
+     if dt is None:
+         dt = datetime.now()
+-    
++
+     # Simple heuristic - avoid weekends and major holidays
+     weekday = dt.weekday()
+     if weekday >= 5:  # Saturday or Sunday
+         return False
+-    
++
+     # Check major holidays
+     date_only = dt.date()
+     for holiday in MARKET_HOLIDAYS_2024_2025:
+         if holiday.date() == date_only:
+             return False
+-    
++
+     return True
+STDERR:
+would reformat c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_rithmic_historical.py
+
+Oh no! \U0001f4a5 \U0001f494 \U0001f4a5
+1 file would be reformatted.
+
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_rithmic_operations.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_rithmic_symbols.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\config\__init__.py
+================================================================================
+🎨 Would be reformatted:
+--- c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\config\__init__.py	2025-05-28 10:42:25.524366+00:00
++++ c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\config\__init__.py	2025-05-28 12:12:37.325262+00:00
+@@ -8,115 +8,118 @@
+ from typing import Dict, Any, Optional, Union, List
+ import yaml
+ 
+ # Default configuration paths
+ CONFIG_DIR = os.path.dirname(os.path.abspath(__file__))
+-DEFAULT_ENV = os.getenv('TRADING_ENV', 'development')
++DEFAULT_ENV = os.getenv("TRADING_ENV", "development")
+ DEFAULT_CONFIG_FILES = {
+-    'database': os.path.join(CONFIG_DIR, 'database.yaml'),
+-    'development': os.path.join(CONFIG_DIR, 'development.yaml'),
+-    'production': os.path.join(CONFIG_DIR, 'production.yaml'),
+-    'rithmic': os.path.join(CONFIG_DIR, 'rithmic_config.yaml')
++    "database": os.path.join(CONFIG_DIR, "database.yaml"),
++    "development": os.path.join(CONFIG_DIR, "development.yaml"),
++    "production": os.path.join(CONFIG_DIR, "production.yaml"),
++    "rithmic": os.path.join(CONFIG_DIR, "rithmic_config.yaml"),
+ }
++
+ 
+ def load_yaml_config(file_path: str) -> Dict[str, Any]:
+     """
+     Load configuration from a YAML file.
+-    
++
+     Args:
+         file_path: Path to the YAML file
+-        
++
+     Returns:
+         Dict containing the configuration
+     """
+     try:
+-        with open(file_path, 'r', encoding='utf-8') as file:
++        with open(file_path, "r", encoding="utf-8") as file:
+             return yaml.safe_load(file) or {}
+     except (IOError, yaml.YAMLError) as e:
+         print(f"Error loading config file {file_path}: {e}")
+         return {}
+ 
++
+ def get_database_config() -> Dict[str, Any]:
+     """
+     Get database configuration from YAML file and environment variables.
+-    
++
+     Returns:
+         Dict containing database configuration
+     """
+     # Load base configuration from YAML
+-    db_config = load_yaml_config(DEFAULT_CONFIG_FILES['database'])
+-    
++    db_config = load_yaml_config(DEFAULT_CONFIG_FILES["database"])
++
+     # Load environment-specific database configuration
+     env_config = load_yaml_config(DEFAULT_CONFIG_FILES[DEFAULT_ENV])
+-    if 'database' in env_config:
++    if "database" in env_config:
+         # Override with environment-specific settings
+-        return {
+-            **db_config,
+-            **env_config['database']
+-        }
+-    
++        return {**db_config, **env_config["database"]}
++
+     return db_config
++
+ 
+ def get_config(config_type: Optional[str] = None) -> Dict[str, Any]:
+     """
+     Get configuration by type.
+-    
++
+     Args:
+         config_type: Type of configuration to load (database, rithmic, etc.). If None, returns the environment-specific configuration.
+-        
++
+     Returns:
+         Dict containing the configuration
+     """
+-    if config_type == 'database':
++    if config_type == "database":
+         return get_database_config()
+     if config_type in DEFAULT_CONFIG_FILES:
+         return load_yaml_config(DEFAULT_CONFIG_FILES[config_type])
+     # Load environment-specific configuration
+     return load_yaml_config(DEFAULT_CONFIG_FILES[DEFAULT_ENV])
+ 
++
+ def get_trading_environment() -> str:
+     """
+     Get the current trading environment.
+-    
++
+     Returns:
+         String representing the current environment ('development', 'production', etc.)
+     """
+     return DEFAULT_ENV
+ 
++
+ def get_config_path(config_type: str) -> str:
+     """
+     Get the path to a specific configuration file.
+-    
++
+     Args:
+         config_type: Type of configuration file ('database', 'development', etc.)
+-        
++
+     Returns:
+         String path to the configuration file
+     """
+     if config_type in DEFAULT_CONFIG_FILES:
+         return DEFAULT_CONFIG_FILES[config_type]
+     else:
+         raise ValueError(f"Unknown configuration type: {config_type}")
+ 
++
+ def get_all_config() -> Dict[str, Any]:
+     """
+     Get all configuration merged into a single dictionary.
+-    
++
+     Returns:
+         Dict containing all configuration
+     """
+     # Start with environment-specific configuration
+     config = load_yaml_config(DEFAULT_CONFIG_FILES[DEFAULT_ENV])
+-    
++
+     # Add database configuration
+     db_config = get_database_config()
+-    if 'database' not in config:
+-        config['database'] = {}
+-    config['database'].update(db_config)
+-    
++    if "database" not in config:
++        config["database"] = {}
++    config["database"].update(db_config)
++
+     # Add rithmic configuration
+-    rithmic_config = load_yaml_config(DEFAULT_CONFIG_FILES['rithmic'])
+-    if 'rithmic' not in config:
+-        config['rithmic'] = {}
+-    config['rithmic'].update(rithmic_config)
+-    
+-    return config
+\ No newline at end of file
++    rithmic_config = load_yaml_config(DEFAULT_CONFIG_FILES["rithmic"])
++    if "rithmic" not in config:
++        config["rithmic"] = {}
++    config["rithmic"].update(rithmic_config)
++
++    return config
+STDERR:
+would reformat c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\config\__init__.py
+
+Oh no! \U0001f4a5 \U0001f494 \U0001f4a5
+1 file would be reformatted.
+
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\config\chicago_gateway_config.py
+================================================================================
+🎨 Would be reformatted:
+--- c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\config\chicago_gateway_config.py	2025-05-28 10:07:11.948193+00:00
++++ c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\config\chicago_gateway_config.py	2025-05-28 12:12:37.489923+00:00
+@@ -5,85 +5,86 @@
+ 
+ import os
+ from typing import Dict, Any
+ from . import get_config, load_yaml_config
+ 
++
+ def get_chicago_gateway_config() -> Dict[str, Any]:
+     """
+     Get configuration for Rithmic connection
+-    
++
+     Returns:
+         dict: Configuration dictionary for Rithmic client
+     """
+     # Try to load from YAML config file
+     try:
+         # Load environment-specific config
+         env_config = get_config()
+-        rithmic_config = get_config('rithmic')
+-        
++        rithmic_config = get_config("rithmic")
++
+         # Start with default configuration
+         config = {
+-            'rithmic': {
+-                'user': os.getenv('RITHMIC_USER', "ETF-177266"),
+-                'password': os.getenv('RITHMIC_PASSWORD', "t2bRVPUaw"),
+-                'system_name': os.getenv('RITHMIC_SYSTEM_NAME', "Rithmic Paper Trading"),
+-                'app_name': "Futures Trading System",
+-                'app_version': "1.0.0",
+-                'gateway': 'Chicago',
++            "rithmic": {
++                "user": os.getenv("RITHMIC_USER", "ETF-177266"),
++                "password": os.getenv("RITHMIC_PASSWORD", "t2bRVPUaw"),
++                "system_name": os.getenv("RITHMIC_SYSTEM_NAME", "Rithmic Paper Trading"),
++                "app_name": "Futures Trading System",
++                "app_version": "1.0.0",
++                "gateway": "Chicago",
+             },
+-            'use_test_gateway': False,
+-            'symbols': ['NQ', 'ES'],
+-            'collection': {
+-                'tick_types': ['trade', 'bid', 'ask'],
+-                'include_volume': True,
+-                'include_quotes': True,
+-                'time_bar_intervals': [1, 5, 15, 60]
+-            }
++            "use_test_gateway": False,
++            "symbols": ["NQ", "ES"],
++            "collection": {
++                "tick_types": ["trade", "bid", "ask"],
++                "include_volume": True,
++                "include_quotes": True,
++                "time_bar_intervals": [1, 5, 15, 60],
++            },
+         }
+-        
++
+         # Override with values from config files if available
+-        if 'rithmic' in env_config:
+-            for key, value in env_config['rithmic'].items():
+-                if key in config['rithmic']:
+-                    config['rithmic'][key] = value
+-                    
++        if "rithmic" in env_config:
++            for key, value in env_config["rithmic"].items():
++                if key in config["rithmic"]:
++                    config["rithmic"][key] = value
++
+         # Override with values from rithmic_config.yaml if available
+         if rithmic_config:
+             # Update instruments/symbols if available
+-            if 'instruments' in rithmic_config:
+-                config['symbols'] = list(rithmic_config['instruments'].keys())
+-                
++            if "instruments" in rithmic_config:
++                config["symbols"] = list(rithmic_config["instruments"].keys())
++
+             # Update data types if available
+-            if 'data_types' in rithmic_config:
+-                config['collection']['tick_types'] = rithmic_config['data_types']
+-                
++            if "data_types" in rithmic_config:
++                config["collection"]["tick_types"] = rithmic_config["data_types"]
++
+             # Update connection settings if available
+-            if 'connection' in rithmic_config:
+-                conn_config = rithmic_config['connection']
+-                if 'timeout' in conn_config:
+-                    config['connection_timeout'] = conn_config['timeout']
+-                if 'heartbeat_interval' in conn_config:
+-                    config['heartbeat_interval'] = conn_config['heartbeat_interval']
+-        
++            if "connection" in rithmic_config:
++                conn_config = rithmic_config["connection"]
++                if "timeout" in conn_config:
++                    config["connection_timeout"] = conn_config["timeout"]
++                if "heartbeat_interval" in conn_config:
++                    config["heartbeat_interval"] = conn_config["heartbeat_interval"]
++
+         return config
+-        
++
+     except Exception as e:
+         # Fallback to default configuration if loading fails
+         print(f"Error loading Rithmic configuration: {e}")
+         return {
+-            'rithmic': {
+-                'user': "ETF-177266",
+-                'password': "t2bRVPUaw",
+-                'system_name': "Rithmic Paper Trading",
+-                'app_name': "Futures Trading System",
+-                'app_version': "1.0.0",
+-                'gateway': 'Chicago',
++            "rithmic": {
++                "user": "ETF-177266",
++                "password": "t2bRVPUaw",
++                "system_name": "Rithmic Paper Trading",
++                "app_name": "Futures Trading System",
++                "app_version": "1.0.0",
++                "gateway": "Chicago",
+             },
+-            'use_test_gateway': False,
+-            'symbols': ['NQ', 'ES'],
+-            'collection': {
+-                'tick_types': ['trade', 'bid', 'ask'],
+-                'include_volume': True,
+-                'include_quotes': True,
+-                'time_bar_intervals': [1, 5, 15, 60]
+-            }
+-        }
+\ No newline at end of file
++            "use_test_gateway": False,
++            "symbols": ["NQ", "ES"],
++            "collection": {
++                "tick_types": ["trade", "bid", "ask"],
++                "include_volume": True,
++                "include_quotes": True,
++                "time_bar_intervals": [1, 5, 15, 60],
++            },
++        }
+STDERR:
+would reformat c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\config\chicago_gateway_config.py
+
+Oh no! \U0001f4a5 \U0001f494 \U0001f4a5
+1 file would be reformatted.
+
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\config\database_config.py
+================================================================================
+🎨 Would be reformatted:
+--- c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\config\database_config.py	2025-05-28 10:39:25.847937+00:00
++++ c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\config\database_config.py	2025-05-28 12:12:37.655916+00:00
+@@ -7,82 +7,84 @@
+ import os
+ from typing import Dict, Any, Optional
+ 
+ from . import get_database_config
+ 
++
+ class DatabaseConfig:
+     """Database configuration handler"""
++
+     def __init__(self, config: Optional[Dict[str, Any]] = None):
+         if config:
+             self.config = config
+         else:
+             self.config = self._load_config()
+ 
+     def _load_config(self) -> Dict[str, Any]:
+         """Load database configuration from config module and environment variables"""
+         # Get configuration from YAML files
+         yaml_config = get_database_config()
+-        
++
+         # Default configuration with environment variable fallbacks
+         default_config = {
+-            'host': os.getenv('POSTGRES_HOST', 'localhost'),
+-            'port': int(os.getenv('POSTGRES_PORT', '5432')),
+-            'database': os.getenv('POSTGRES_DB', 'trading_db'),
+-            'username': os.getenv('POSTGRES_USER', 'trading_user'),
+-            'password': os.getenv('POSTGRES_PASSWORD', 'myData4Tr4ding42!'),
+-            'pool_size': int(os.getenv('DB_POOL_SIZE', '10')),
+-            'max_overflow': int(os.getenv('DB_MAX_OVERFLOW', '20')),
+-            'pool_timeout': int(os.getenv('DB_POOL_TIMEOUT', '30')),
+-            'pool_recycle': int(os.getenv('DB_POOL_RECYCLE', '3600')),
+-            'echo': os.getenv('DB_ECHO', 'False').lower() == 'true'
++            "host": os.getenv("POSTGRES_HOST", "localhost"),
++            "port": int(os.getenv("POSTGRES_PORT", "5432")),
++            "database": os.getenv("POSTGRES_DB", "trading_db"),
++            "username": os.getenv("POSTGRES_USER", "trading_user"),
++            "password": os.getenv("POSTGRES_PASSWORD", "myData4Tr4ding42!"),
++            "pool_size": int(os.getenv("DB_POOL_SIZE", "10")),
++            "max_overflow": int(os.getenv("DB_MAX_OVERFLOW", "20")),
++            "pool_timeout": int(os.getenv("DB_POOL_TIMEOUT", "30")),
++            "pool_recycle": int(os.getenv("DB_POOL_RECYCLE", "3600")),
++            "echo": os.getenv("DB_ECHO", "False").lower() == "true",
+         }
+-        
++
+         # Convert YAML config keys to match our expected format
+-        if 'database' in yaml_config:
++        if "database" in yaml_config:
+             # Extract database section if it exists
+-            db_section = yaml_config['database']
++            db_section = yaml_config["database"]
+         else:
+             db_section = yaml_config
+-            
++
+         # Map YAML keys to our config keys
+         key_mapping = {
+-            'host': 'host',
+-            'port': 'port',
+-            'name': 'database',
+-            'user': 'username',
+-            'password': 'password'
++            "host": "host",
++            "port": "port",
++            "name": "database",
++            "user": "username",
++            "password": "password",
+         }
+-        
++
+         # Update config with values from YAML
+         for yaml_key, config_key in key_mapping.items():
+             if yaml_key in db_section:
+                 default_config[config_key] = db_section[yaml_key]
+-                
++
+         # Add TimescaleDB specific configuration if available
+-        if 'timescaledb' in yaml_config:
+-            default_config['timescaledb'] = yaml_config['timescaledb']
+-            
++        if "timescaledb" in yaml_config:
++            default_config["timescaledb"] = yaml_config["timescaledb"]
++
+         return default_config
+ 
+     def get_sync_url(self) -> str:
+         """Get synchronous database URL for SQLAlchemy"""
+         from urllib.parse import quote_plus
+-        
+-        password = quote_plus(self.config['password'])
++
++        password = quote_plus(self.config["password"])
+         return f"postgresql://{self.config['username']}:{password}@{self.config['host']}:{self.config['port']}/{self.config['database']}"
+ 
+     def get_async_url(self) -> str:
+         """Get asynchronous database URL for SQLAlchemy"""
+         from urllib.parse import quote_plus
+-        
+-        password = quote_plus(self.config['password'])
++
++        password = quote_plus(self.config["password"])
+         return f"postgresql+asyncpg://{self.config['username']}:{password}@{self.config['host']}:{self.config['port']}/{self.config['database']}"
+ 
+     def get_connection_params(self) -> Dict[str, Any]:
+         """Get connection parameters for asyncpg"""
+         return {
+-            'host': self.config['host'],
+-            'port': self.config['port'],
+-            'user': self.config['username'],
+-            'password': self.config['password'],
+-            'database': self.config['database']
+-        }
+\ No newline at end of file
++            "host": self.config["host"],
++            "port": self.config["port"],
++            "user": self.config["username"],
++            "password": self.config["password"],
++            "database": self.config["database"],
++        }
+STDERR:
+would reformat c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\config\database_config.py
+
+Oh no! \U0001f4a5 \U0001f494 \U0001f4a5
+1 file would be reformatted.
+
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\config\trading_config.py
+================================================================================
+🎨 Would be reformatted:
+--- c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\config\trading_config.py	2025-05-28 10:39:25.769216+00:00
++++ c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\config\trading_config.py	2025-05-28 12:12:37.834180+00:00
+@@ -12,102 +12,108 @@
+ from . import get_config as get_base_config, get_trading_environment
+ 
+ # Load environment variables
+ load_dotenv()
+ 
++
+ def get_trading_config() -> Dict[str, Any]:
+     """
+     Get trading configuration based on the current environment.
+-    
++
+     Returns:
+         Dict containing trading configuration
+     """
+     # Get current environment
+     env = get_trading_environment()
+-    
++
+     # Get base configuration
+     base_config = get_base_config()
+-    
++
+     # Default trading configuration
+     default_config = {
+-        'symbols': ['NQ', 'ES'],
+-        'timeframes': ['1m', '5m', '15m'],
+-        'collection': {
+-            'max_history_years': 5 if env == 'development' else 10,
+-            'batch_size': 1000 if env == 'development' else 2000,
+-            'delay_between_requests': 0.1 if env == 'development' else 0.05,
+-            'max_retry_attempts': 5
+-        }
++        "symbols": ["NQ", "ES"],
++        "timeframes": ["1m", "5m", "15m"],
++        "collection": {
++            "max_history_years": 5 if env == "development" else 10,
++            "batch_size": 1000 if env == "development" else 2000,
++            "delay_between_requests": 0.1 if env == "development" else 0.05,
++            "max_retry_attempts": 5,
++        },
+     }
+-    
++
+     # Override with values from environment-specific config
+-    if 'trading' in base_config:
+-        trading_config = base_config['trading']
+-        
++    if "trading" in base_config:
++        trading_config = base_config["trading"]
++
+         # Update symbols if available
+-        if 'instruments' in trading_config:
+-            default_config['symbols'] = trading_config['instruments']
+-            
++        if "instruments" in trading_config:
++            default_config["symbols"] = trading_config["instruments"]
++
+         # Update timeframes if available
+-        if 'timeframes' in trading_config:
+-            default_config['timeframes'] = trading_config['timeframes']
+-            
++        if "timeframes" in trading_config:
++            default_config["timeframes"] = trading_config["timeframes"]
++
+         # Update collection settings if available
+-        if 'collection' in trading_config:
+-            for key, value in trading_config['collection'].items():
+-                default_config['collection'][key] = value
+-    
++        if "collection" in trading_config:
++            for key, value in trading_config["collection"].items():
++                default_config["collection"][key] = value
++
+     return default_config
++
+ 
+ def get_rithmic_credentials() -> Dict[str, str]:
+     """
+     Get Rithmic API credentials based on the current environment.
+-    
++
+     Returns:
+         Dict containing Rithmic credentials
+     """
+     # Get current environment
+     env = get_trading_environment()
+-    
++
+     # Get base configuration
+     base_config = get_base_config()
+-    
++
+     # Environment-specific prefixes
+-    prefix = 'RITHMIC_LIVE_' if env == 'production' else 'RITHMIC_'
+-    
++    prefix = "RITHMIC_LIVE_" if env == "production" else "RITHMIC_"
++
+     # Default credentials
+     credentials = {
+-        'user': os.getenv(f'{prefix}USER', 'your_username_here'),
+-        'password': os.getenv(f'{prefix}PASSWORD', 'your_password_here'),
+-        'system_name': os.getenv(f'{prefix}SYSTEM_NAME', 'YourSystemName'),
+-        'server_name': os.getenv(f'{prefix}SERVER_NAME', 
+-                               'Rithmic Live' if env == 'production' else 'Rithmic Paper Trading'),
+-        'app_name': 'Futures Trading System',
+-        'app_version': '1.0.0',
++        "user": os.getenv(f"{prefix}USER", "your_username_here"),
++        "password": os.getenv(f"{prefix}PASSWORD", "your_password_here"),
++        "system_name": os.getenv(f"{prefix}SYSTEM_NAME", "YourSystemName"),
++        "server_name": os.getenv(
++            f"{prefix}SERVER_NAME",
++            "Rithmic Live" if env == "production" else "Rithmic Paper Trading",
++        ),
++        "app_name": "Futures Trading System",
++        "app_version": "1.0.0",
+     }
+-    
++
+     # Override with values from configuration
+-    if 'rithmic' in base_config:
+-        rithmic_config = base_config['rithmic']
+-        for key in ['user', 'password', 'system_name', 'server_name', 'app_name', 'app_version']:
++    if "rithmic" in base_config:
++        rithmic_config = base_config["rithmic"]
++        for key in ["user", "password", "system_name", "server_name", "app_name", "app_version"]:
+             if key in rithmic_config:
+                 credentials[key] = rithmic_config[key]
+-    
++
+     return credentials
++
+ 
+ def get_symbols() -> List[str]:
+     """
+     Get list of trading symbols.
+-    
++
+     Returns:
+         List of symbol strings
+     """
+-    return get_trading_config()['symbols']
++    return get_trading_config()["symbols"]
++
+ 
+ def get_timeframes() -> List[str]:
+     """
+     Get list of timeframes.
+-    
++
+     Returns:
+         List of timeframe strings
+     """
+-    return get_trading_config()['timeframes']
+\ No newline at end of file
++    return get_trading_config()["timeframes"]
+STDERR:
+would reformat c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\config\trading_config.py
+
+Oh no! \U0001f4a5 \U0001f494 \U0001f4a5
+1 file would be reformatted.
+
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\enhanced_admin_rithmic.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\__init__.py
+================================================================================
+🎨 Would be reformatted:
+--- c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\__init__.py	2025-05-28 09:15:02.913508+00:00
++++ c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\__init__.py	2025-05-28 12:12:38.274929+00:00
+@@ -1,3 +1,3 @@
+ """
+ Test package for Enhanced Rithmic Admin Tool.
+-"""
+\ No newline at end of file
++"""
+STDERR:
+would reformat c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\__init__.py
+
+Oh no! \U0001f4a5 \U0001f494 \U0001f4a5
+1 file would be reformatted.
+
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\comprehensive_tui_diagnostic.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\enhanced_admin_rithmic.py
+================================================================================
+🎨 Would be reformatted:
+--- c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\enhanced_admin_rithmic.py	2025-05-28 09:15:02.983604+00:00
++++ c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\enhanced_admin_rithmic.py	2025-05-28 12:12:38.697253+00:00
+@@ -8,10 +8,10 @@
+ import os
+ 
+ # Add the src directory to the Python path
+ current_dir = os.path.dirname(os.path.abspath(__file__))
+ parent_dir = os.path.dirname(current_dir)
+-src_dir = os.path.join(parent_dir, 'src')
++src_dir = os.path.join(parent_dir, "src")
+ sys.path.insert(0, src_dir)
+ 
+ # Import the main module and re-export everything
+-from src.enhanced_admin_rithmic import *
+\ No newline at end of file
++from src.enhanced_admin_rithmic import *
+STDERR:
+would reformat c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\enhanced_admin_rithmic.py
+
+Oh no! \U0001f4a5 \U0001f494 \U0001f4a5
+1 file would be reformatted.
+
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\final_verification.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\final_verification_test.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\simple_tui_test.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\test_enhanced_connection_display.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\test_fixes.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\test_import_helper.py
+================================================================================
+🎨 Would be reformatted:
+--- c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\test_import_helper.py	2025-05-28 11:31:50.699287+00:00
++++ c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\test_import_helper.py	2025-05-28 12:12:39.754455+00:00
+@@ -7,20 +7,22 @@
+ 
+ import sys
+ import os
+ from pathlib import Path
+ 
++
+ # Ensure src directory is in Python path
+ def setup_test_imports():
+     """Setup Python path to allow imports from src/ directory"""
+     backend_dir = Path(__file__).parent.parent
+     src_dir = backend_dir / "src"
+-    
++
+     if str(src_dir) not in sys.path:
+         sys.path.insert(0, str(src_dir))
+-    
++
+     return str(src_dir)
++
+ 
+ # Auto-setup when this module is imported
+ setup_test_imports()
+ 
+ # Import commonly used classes for easy access
+@@ -28,20 +30,20 @@
+     from src.enhanced_admin_rithmic import RithmicAdminTUI
+     from src.admin_display_manager import DisplayManager
+     from src.admin_core_classes import SystemStatus, DatabaseManager
+     from src.admin_database import DatabaseConnection
+     from src.admin_rithmic_connection import RithmicConnection
+-    
++
+     # Make them available for import
+     __all__ = [
+-        'RithmicAdminTUI',
+-        'DisplayManager', 
+-        'SystemStatus',
+-        'DatabaseManager',
+-        'DatabaseConnection',
+-        'RithmicConnection',
+-        'setup_test_imports'
++        "RithmicAdminTUI",
++        "DisplayManager",
++        "SystemStatus",
++        "DatabaseManager",
++        "DatabaseConnection",
++        "RithmicConnection",
++        "setup_test_imports",
+     ]
+-    
++
+ except ImportError as e:
+     print(f"Warning: Could not import some modules from src/: {e}")
+-    __all__ = ['setup_test_imports']
++    __all__ = ["setup_test_imports"]
+STDERR:
+would reformat c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\test_import_helper.py
+
+Oh no! \U0001f4a5 \U0001f494 \U0001f4a5
+1 file would be reformatted.
+
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\test_tui_display.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\test_tui_fixes.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\verify_imports\verify_import_fixes.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+SUMMARY
+================================================================================
+Files checked: 44
+Files needing formatting: 14
+
+Files that need formatting:
+  - c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\analyze_pylint.py
+  - c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_comprehensive_pylint.py
+  - c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_final_pylint_analysis.py
+  - c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_pylint.py
+  - c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_pylint_simple.py
+  - c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_database.py
+  - c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_rithmic_historical.py
+  - c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\config\__init__.py
+  - c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\config\chicago_gateway_config.py
+  - c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\config\database_config.py
+  - c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\config\trading_config.py
+  - c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\__init__.py
+  - c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\enhanced_admin_rithmic.py
+  - c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\test_import_helper.py

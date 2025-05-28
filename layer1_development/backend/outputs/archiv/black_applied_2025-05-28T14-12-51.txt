@@ -1,0 +1,116 @@
+BLACK FORMATTING APPLICATION REPORT
+Generated: 2025-05-28 14:12:51.006361
+================================================================================
+
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\analyze_pylint.py
+RESULT: SUCCESS
+STDERR: reformatted c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\analyze_pylint.py
+
+All done! \u2728 \U0001f370 \u2728
+1 file reformatted.
+
+----------------------------------------
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_comprehensive_pylint.py
+RESULT: SUCCESS
+STDERR: reformatted c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_comprehensive_pylint.py
+
+All done! \u2728 \U0001f370 \u2728
+1 file reformatted.
+
+----------------------------------------
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_final_pylint_analysis.py
+RESULT: SUCCESS
+STDERR: reformatted c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_final_pylint_analysis.py
+
+All done! \u2728 \U0001f370 \u2728
+1 file reformatted.
+
+----------------------------------------
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_pylint.py
+RESULT: SUCCESS
+STDERR: reformatted c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_pylint.py
+
+All done! \u2728 \U0001f370 \u2728
+1 file reformatted.
+
+----------------------------------------
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_pylint_simple.py
+RESULT: SUCCESS
+STDERR: reformatted c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_pylint_simple.py
+
+All done! \u2728 \U0001f370 \u2728
+1 file reformatted.
+
+----------------------------------------
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_database.py
+RESULT: SUCCESS
+STDERR: reformatted c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_database.py
+
+All done! \u2728 \U0001f370 \u2728
+1 file reformatted.
+
+----------------------------------------
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_rithmic_historical.py
+RESULT: SUCCESS
+STDERR: reformatted c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_rithmic_historical.py
+
+All done! \u2728 \U0001f370 \u2728
+1 file reformatted.
+
+----------------------------------------
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\config\__init__.py
+RESULT: SUCCESS
+STDERR: reformatted c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\config\__init__.py
+
+All done! \u2728 \U0001f370 \u2728
+1 file reformatted.
+
+----------------------------------------
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\config\chicago_gateway_config.py
+RESULT: SUCCESS
+STDERR: reformatted c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\config\chicago_gateway_config.py
+
+All done! \u2728 \U0001f370 \u2728
+1 file reformatted.
+
+----------------------------------------
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\config\database_config.py
+RESULT: SUCCESS
+STDERR: reformatted c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\config\database_config.py
+
+All done! \u2728 \U0001f370 \u2728
+1 file reformatted.
+
+----------------------------------------
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\config\trading_config.py
+RESULT: SUCCESS
+STDERR: reformatted c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\config\trading_config.py
+
+All done! \u2728 \U0001f370 \u2728
+1 file reformatted.
+
+----------------------------------------
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\__init__.py
+RESULT: SUCCESS
+STDERR: reformatted c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\__init__.py
+
+All done! \u2728 \U0001f370 \u2728
+1 file reformatted.
+
+----------------------------------------
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\enhanced_admin_rithmic.py
+RESULT: SUCCESS
+STDERR: reformatted c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\enhanced_admin_rithmic.py
+
+All done! \u2728 \U0001f370 \u2728
+1 file reformatted.
+
+----------------------------------------
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\test_import_helper.py
+RESULT: SUCCESS
+STDERR: reformatted c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\test_import_helper.py
+
+All done! \u2728 \U0001f370 \u2728
+1 file reformatted.
+
+----------------------------------------

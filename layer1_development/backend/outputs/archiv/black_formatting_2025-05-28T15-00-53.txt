@@ -1,0 +1,1044 @@
+BLACK FORMATTING REPORT
+Generated: 2025-05-28 15:00:53.649068
+================================================================================
+
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\fix_imports\fix_imports.py
+================================================================================
+✅ Already formatted correctly
+STDERR:
+All done! \u2728 \U0001f370 \u2728
+1 file would be left unchanged.
+
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\analyze_pylint.py
+================================================================================
+🎨 Would be reformatted:
+--- C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\analyze_pylint.py	2025-05-28 12:27:44.186924+00:00
++++ C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\analyze_pylint.py	2025-05-28 13:00:54.020741+00:00
+@@ -31,25 +31,21 @@
+         # Long lines
+         if len(line) > 120:
+             issues.append((i, "line-too-long", f"Line too long ({len(line)}/120)"))
+ 
+         # Missing docstrings for functions/classes
+-        if line.strip().startswith(("def ", "class ")) and not line.strip().endswith(
+-            ":"
+-        ):
++        if line.strip().startswith(("def ", "class ")) and not line.strip().endswith(":"):
+             if i < len(lines) and not lines[i].strip().startswith('"""'):
+                 issues.append((i, "missing-docstring", "Missing docstring"))
+ 
+         # Unused imports (simple check)
+         if line.strip().startswith("from ") or (
+             line.strip().startswith("import ") and " as " not in line
+         ):
+             import_name = line.split()[-1].split(".")[0]
+             if import_name not in content[lines.index(line) * len(line) :]:
+-                issues.append(
+-                    (i, "unused-import", f"Potentially unused import: {import_name}")
+-                )
++                issues.append((i, "unused-import", f"Potentially unused import: {import_name}"))
+ 
+         # Wildcard imports
+         if "import *" in line:
+             issues.append((i, "wildcard-import", "Wildcard import should be avoided"))
+ 
+@@ -70,13 +66,11 @@
+ def main():
+     """Main analysis function"""
+     current_dir = Path(".")
+     py_files = list(current_dir.glob("*.py"))
+     py_files = [
+-        f
+-        for f in py_files
+-        if not f.name.startswith("run_") and not f.name.endswith(".backup")
++        f for f in py_files if not f.name.startswith("run_") and not f.name.endswith(".backup")
+     ]
+ 
+     print(f"Analyzing {len(py_files)} Python files...")
+     print()
+ 
+STDERR:
+would reformat C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\analyze_pylint.py
+
+Oh no! \U0001f4a5 \U0001f494 \U0001f4a5
+1 file would be reformatted.
+
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\complete_python_test.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\comprehensive_fix_2025-05-28T11-41-52.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\final_comprehensive_fix_2025-05-28T11-41-52.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\FINAL_COMPREHENSIVE_FIXER_2025-05-28T11-41-52.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\focused_analysis_2025-05-28T11-41-52.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\manual_analysis_2025-05-28T11-41-52.py
+================================================================================
+🎨 Would be reformatted:
+--- C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\manual_analysis_2025-05-28T11-41-52.py	2025-05-28 12:27:44.368644+00:00
++++ C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\manual_analysis_2025-05-28T11-41-52.py	2025-05-28 13:00:55.880042+00:00
+@@ -185,13 +185,11 @@
+                 f.write("**Status:** No issues found\n\n")
+ 
+         f.write("## ðŸŽ¯ Priority Fixes Needed\n\n")
+         f.write("### High Priority\n")
+         f.write("1. **Fix syntax errors** - These prevent files from running at all\n")
+-        f.write(
+-            "2. **Resolve import issues** - Update import paths for reorganized files\n"
+-        )
++        f.write("2. **Resolve import issues** - Update import paths for reorganized files\n")
+         f.write("3. **Missing files** - Create or restore missing files\n\n")
+ 
+         f.write("### Medium Priority\n")
+         f.write("1. **Code quality improvements** - Run pylint after fixing syntax\n")
+         f.write("2. **Type annotations** - Add proper type hints\n")
+@@ -246,13 +244,11 @@
+     report_file = generate_report(results)
+ 
+     print(f"\nðŸ“‹ Analysis complete! Report saved: {report_file}")
+ 
+     # Show quick summary
+-    issues_found = sum(
+-        1 for r in results.values() if not r["syntax_ok"] or r["import_issues"]
+-    )
++    issues_found = sum(1 for r in results.values() if not r["syntax_ok"] or r["import_issues"])
+     total_files = len(results)
+ 
+     print(f"ðŸ“Š Quick Summary: {issues_found}/{total_files} files have issues")
+ 
+     if issues_found == 0:
+STDERR:
+would reformat C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\manual_analysis_2025-05-28T11-41-52.py
+
+Oh no! \U0001f4a5 \U0001f494 \U0001f4a5
+1 file would be reformatted.
+
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\quick_pylint_check.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_analysis_2025-05-28T11-41-52.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_comprehensive_pylint.py
+================================================================================
+✅ Already formatted correctly
+STDERR:
+All done! \u2728 \U0001f370 \u2728
+1 file would be left unchanged.
+
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_final_pylint_analysis.py
+================================================================================
+🎨 Would be reformatted:
+--- C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_final_pylint_analysis.py	2025-05-28 12:27:44.216511+00:00
++++ C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_final_pylint_analysis.py	2025-05-28 13:00:56.687073+00:00
+@@ -97,22 +97,16 @@
+     # Write summary
+     with open(output_file, "a", encoding="utf-8") as f:
+         f.write(f"\n{'='*60}\n")
+         f.write("FINAL SUMMARY\n")
+         f.write(f"{'='*60}\n")
+-        f.write(
+-            f"Total files analyzed: {len([f for f in python_files if os.path.exists(f)])}\n"
+-        )
++        f.write(f"Total files analyzed: {len([f for f in python_files if os.path.exists(f)])}\n")
+         f.write(f"Total issues found: {total_issues}\n")
+-        f.write(
+-            f"Average score: {sum(file_scores.values()) / len(file_scores):.2f}/10.00\n\n"
+-        )
++        f.write(f"Average score: {sum(file_scores.values()) / len(file_scores):.2f}/10.00\n\n")
+ 
+         f.write("FILE SCORES:\n")
+-        for file, score in sorted(
+-            file_scores.items(), key=lambda x: x[1], reverse=True
+-        ):
++        for file, score in sorted(file_scores.items(), key=lambda x: x[1], reverse=True):
+             f.write(f"  {file}: {score:.2f}/10.00\n")
+ 
+     print(f"\nFinal analysis complete!")
+     print(f"Results saved to: {output_file}")
+     print(f"Total issues found: {total_issues}")
+STDERR:
+would reformat C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_final_pylint_analysis.py
+
+Oh no! \U0001f4a5 \U0001f494 \U0001f4a5
+1 file would be reformatted.
+
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_focused_analysis.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_pylint.py
+================================================================================
+🎨 Would be reformatted:
+--- C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_pylint.py	2025-05-28 12:27:44.327180+00:00
++++ C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_pylint.py	2025-05-28 13:00:57.060485+00:00
+@@ -15,13 +15,11 @@
+     current_dir = Path.cwd()
+     print(f"Running pylint in: {current_dir}")
+ 
+     # Find all Python files
+     py_files = list(current_dir.glob("*.py"))
+-    py_files = [
+-        f for f in py_files if f.name != __file__.split(os.sep)[-1]
+-    ]  # Exclude this script
++    py_files = [f for f in py_files if f.name != __file__.split(os.sep)[-1]]  # Exclude this script
+ 
+     if not py_files:
+         print("No Python files found!")
+         return
+ 
+STDERR:
+would reformat C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_pylint.py
+
+Oh no! \U0001f4a5 \U0001f494 \U0001f4a5
+1 file would be reformatted.
+
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_pylint_check.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_pylint_diagnostic.py
+================================================================================
+✅ Already formatted correctly
+STDERR:
+All done! \u2728 \U0001f370 \u2728
+1 file would be left unchanged.
+
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_pylint_simple.py
+================================================================================
+🎨 Would be reformatted:
+--- C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_pylint_simple.py	2025-05-28 12:27:44.248210+00:00
++++ C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_pylint_simple.py	2025-05-28 13:00:57.560282+00:00
+@@ -38,13 +38,11 @@
+             print(f"Running pylint on {py_file}...")
+ 
+             try:
+                 # Run pylint
+                 cmd = ["python", "-m", "pylint", "--output-format=text", py_file]
+-                result = subprocess.run(
+-                    cmd, capture_output=True, text=True, check=False
+-                )
++                result = subprocess.run(cmd, capture_output=True, text=True, check=False)
+ 
+                 # Append to results file
+                 with open(output_file, "a", encoding="utf-8") as f:
+                     f.write(f"\n{'='*60}\n")
+                     f.write(f"FILE: {py_file}\n")
+STDERR:
+would reformat C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_pylint_simple.py
+
+Oh no! \U0001f4a5 \U0001f494 \U0001f4a5
+1 file would be reformatted.
+
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\setup_check.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\__init__.py
+================================================================================
+✅ Already formatted correctly
+STDERR:
+All done! \u2728 \U0001f370 \u2728
+1 file would be left unchanged.
+
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_core_classes.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_database.py
+================================================================================
+🎨 Would be reformatted:
+--- C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_database.py	2025-05-28 12:27:44.602053+00:00
++++ C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_database.py	2025-05-28 13:00:58.720107+00:00
+@@ -121,13 +121,11 @@
+     """Helper class for TimescaleDB operations"""
+ 
+     def __init__(self, session):
+         self.session = session
+ 
+-    async def bulk_insert_market_data(
+-        self, data: list, table_name: str = "market_data_seconds"
+-    ):
++    async def bulk_insert_market_data(self, data: list, table_name: str = "market_data_seconds"):
+         """Insert market data with improved error handling and logging"""
+         if not data:
+             logger.warning("No data provided for insertion")
+             return
+ 
+@@ -149,13 +147,11 @@
+                 [dict(row) for row in data],
+             )
+             await self.session.commit()
+ 
+             inserted_count = len(data)
+-            logger.info(
+-                f"Successfully inserted {inserted_count} records into {table_name}"
+-            )
++            logger.info(f"Successfully inserted {inserted_count} records into {table_name}")
+             return inserted_count
+ 
+         except Exception as e:
+             await self.session.rollback()
+             logger.error(f"Error inserting data into {table_name}: {str(e)}")
+@@ -174,13 +170,11 @@
+             if row and row[0] == 1:
+                 logger.info("Database connection successful")
+ 
+                 # Check if TimescaleDB extension is installed
+                 result = await session.execute(
+-                    text(
+-                        "SELECT extname FROM pg_extension WHERE extname = 'timescaledb'"
+-                    )
++                    text("SELECT extname FROM pg_extension WHERE extname = 'timescaledb'")
+                 )
+                 has_timescale = result.fetchone() is not None
+ 
+                 return {
+                     "success": True,
+@@ -354,13 +348,11 @@
+             total_steps = 4
+             current_step = 0
+ 
+             # Step 1: Initialize extensions
+             current_step += 1
+-            self._report_progress(
+-                "Creating database extensions...", current_step, total_steps
+-            )
++            self._report_progress("Creating database extensions...", current_step, total_steps)
+ 
+             async with get_async_session() as session:
+                 try:
+                     await session.execute(
+                         text("CREATE EXTENSION IF NOT EXISTS timescaledb CASCADE;")
+@@ -371,33 +363,27 @@
+                 except Exception as e:
+                     logger.warning(f"Extension creation warning: {e}")
+ 
+             # Step 2: Create tables
+             current_step += 1
+-            self._report_progress(
+-                "Creating database tables...", current_step, total_steps
+-            )
++            self._report_progress("Creating database tables...", current_step, total_steps)
+ 
+             success = await self._create_tables()
+             if not success:
+                 return False, "Failed to create database tables"
+ 
+             # Step 3: Create hypertables
+             current_step += 1
+-            self._report_progress(
+-                "Converting tables to hypertables...", current_step, total_steps
+-            )
++            self._report_progress("Converting tables to hypertables...", current_step, total_steps)
+ 
+             success = await self._create_hypertables()
+             if not success:
+                 return False, "Failed to create hypertables"
+ 
+             # Step 4: Create indexes
+             current_step += 1
+-            self._report_progress(
+-                "Creating database indexes...", current_step, total_steps
+-            )
++            self._report_progress("Creating database indexes...", current_step, total_steps)
+ 
+             success = await self._create_indexes()
+             if not success:
+                 logger.warning("Some indexes could not be created")
+ 
+@@ -434,13 +420,11 @@
+ 
+             current_step = 4  # Structure creation completed 4 steps
+ 
+             # Step 5: Set up permissions
+             current_step += 1
+-            self._report_progress(
+-                "Setting up permissions...", current_step, total_steps
+-            )
++            self._report_progress("Setting up permissions...", current_step, total_steps)
+ 
+             await self._setup_permissions()
+ 
+             # Step 6: Insert test data
+             current_step += 1
+@@ -448,13 +432,11 @@
+ 
+             await self._insert_test_data()
+ 
+             # Step 7: Verify setup
+             current_step += 1
+-            self._report_progress(
+-                "Verifying database setup...", current_step, total_steps
+-            )
++            self._report_progress("Verifying database setup...", current_step, total_steps)
+ 
+             verification_success, verification_msg = await self._verify_setup()
+             if not verification_success:
+                 return False, f"Database verification failed: {verification_msg}"
+ 
+@@ -462,13 +444,11 @@
+             self._report_progress("Cleaning up test data...", current_step, total_steps)
+             await self._cleanup_test_data()
+ 
+             # Step 8: Complete
+             current_step += 1
+-            self._report_progress(
+-                "Database initialization completed!", current_step, total_steps
+-            )
++            self._report_progress("Database initialization completed!", current_step, total_steps)
+ 
+             self.is_initialized = True
+             return (
+                 True,
+                 "Database initialized successfully with all required tables and indexes.",
+@@ -693,13 +673,11 @@
+                         """
+                             )
+                         )
+                         logger.info(f"Created hypertable: {ht['table']}")
+                     except Exception as e:
+-                        logger.warning(
+-                            f"Could not create hypertable {ht['table']}: {e}"
+-                        )
++                        logger.warning(f"Could not create hypertable {ht['table']}: {e}")
+ 
+             return True
+ 
+         except Exception as e:
+             logger.error(f"Error creating hypertables: {e}")
+@@ -818,14 +796,11 @@
+         try:
+             # Close any open connections in the connection pool
+             if hasattr(self, "db_manager") and self.db_manager:
+                 try:
+                     # Close the connection pool if available
+-                    if (
+-                        hasattr(self.db_manager, "async_engine")
+-                        and self.db_manager.async_engine
+-                    ):
++                    if hasattr(self.db_manager, "async_engine") and self.db_manager.async_engine:
+                         await self.db_manager.async_engine.dispose()
+                         logger.info("Database connection pool closed")
+                 except Exception as e:
+                     logger.warning(f"Error closing database connection pool: {e}")
+ 
+@@ -882,13 +857,11 @@
+ 
+                 if len(hypertables) == 0:
+                     return False, "No hypertables found"
+ 
+                 # Check test data
+-                result = await session.execute(
+-                    text("SELECT COUNT(*) FROM market_data_seconds;")
+-                )
++                result = await session.execute(text("SELECT COUNT(*) FROM market_data_seconds;"))
+                 test_count = result.scalar()
+ 
+                 if test_count == 0:
+                     return False, "No test data found"
+ 
+@@ -1043,13 +1016,11 @@
+                         )
+                     )
+                     data_stats = result.fetchall()
+ 
+                     if data_stats:
+-                        section.append(
+-                            f"## {table.replace('_', ' ').title()} Statistics"
+-                        )
++                        section.append(f"## {table.replace('_', ' ').title()} Statistics")
+                         for stat in data_stats:
+                             section.append(
+                                 f"- **{stat[0]} ({stat[1]}):** {stat[2]:,} records "
+                                 f"({stat[3].strftime('%Y-%m-%d')} to {stat[4].strftime('%Y-%m-%d')})"
+                             )
+@@ -1108,13 +1079,11 @@
+             section.append(
+                 f"- **PostgreSQL:** {str(pg_version).split(',')[0] if pg_version else 'Unknown'}"
+             )
+             if timescale_version:
+                 section.append(f"- **TimescaleDB:** {timescale_version}")
+-            section.append(
+-                f"- **Generated:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+-            )
++            section.append(f"- **Generated:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+ 
+             return section
+         except Exception:
+             pass
+ 
+@@ -1139,17 +1108,13 @@
+         try:
+             # Validate data structure
+             if table_name in self.table_schemas:
+                 schema = self.table_schemas[table_name]
+                 for record in data:
+-                    missing_cols = [
+-                        col for col in schema["required_columns"] if col not in record
+-                    ]
++                    missing_cols = [col for col in schema["required_columns"] if col not in record]
+                     if missing_cols:
+-                        logger.error(
+-                            f"Missing required columns for {table_name}: {missing_cols}"
+-                        )
++                        logger.error(f"Missing required columns for {table_name}: {missing_cols}")
+                         return False
+ 
+             async with get_async_session() as session:
+                 helper = TimescaleDBHelper(session)
+ 
+@@ -1167,13 +1132,11 @@
+                     processed_data.append(processed_record)
+ 
+                 # Use bulk insert with conflict handling
+                 await helper.bulk_insert_market_data(processed_data, table_name)
+ 
+-                self._report_progress(
+-                    f"Inserted {len(processed_data)} records to {table_name}"
+-                )
++                self._report_progress(f"Inserted {len(processed_data)} records to {table_name}")
+                 return True
+ 
+         except Exception as e:
+             error_msg = f"Error inserting data to {table_name}: {str(e)}"
+             logger.error(error_msg)
+@@ -1218,13 +1181,11 @@
+                             """
+                                 ),
+                                 {"symbol": symbol},
+                             )
+                         else:
+-                            result = await session.execute(
+-                                text(f"SELECT COUNT(*) FROM {table}")
+-                            )
++                            result = await session.execute(text(f"SELECT COUNT(*) FROM {table}"))
+ 
+                         stats["total_records"][table] = result.scalar()
+                     except Exception:
+                         stats["total_records"][table] = 0
+ 
+@@ -1294,13 +1255,11 @@
+                         row = result.fetchone()
+                         if row:
+                             stats["date_ranges"][table] = {
+                                 "min_date": row[0],
+                                 "max_date": row[1],
+-                                "days_span": (
+-                                    (row[1] - row[0]).days if row[0] and row[1] else 0
+-                                ),
++                                "days_span": ((row[1] - row[0]).days if row[0] and row[1] else 0),
+                             }
+                         else:
+                             stats["date_ranges"][table] = {
+                                 "min_date": None,
+                                 "max_date": None,
+STDERR:
+would reformat C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_database.py
+
+Oh no! \U0001f4a5 \U0001f494 \U0001f4a5
+1 file would be reformatted.
+
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_display_manager.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_operations.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_rithmic_connection.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_rithmic_historical.py
+================================================================================
+🎨 Would be reformatted:
+--- C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_rithmic_historical.py	2025-05-28 12:27:44.602053+00:00
++++ C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_rithmic_historical.py	2025-05-28 13:01:00.071556+00:00
+@@ -112,13 +112,11 @@
+     """
+     Manages historical data downloads from Rithmic API.
+     Handles chunking, progress tracking, error recovery, and data processing.
+     """
+ 
+-    def __init__(
+-        self, connection_manager, database_ops, progress_callback: Callable = None
+-    ):
++    def __init__(self, connection_manager, database_ops, progress_callback: Callable = None):
+         """
+         Initialize the historical data manager.
+ 
+         Args:
+             connection_manager: RithmicConnectionManager instance
+@@ -155,13 +153,11 @@
+         logger.info(
+             f"Starting historical data download for {len(contracts)} contracts, {days} days"
+         )
+ 
+         overall_start = datetime.now()
+-        total_operations = len(contracts) * (
+-            int(download_seconds) + int(download_minutes)
+-        )
++        total_operations = len(contracts) * (int(download_seconds) + int(download_minutes))
+         completed_operations = 0
+ 
+         # Calculate date range
+         end_time = datetime.now().replace(second=0, microsecond=0)
+         start_time = end_time - timedelta(days=days)
+@@ -192,16 +188,12 @@
+                         success = await self.save_to_database(
+                             processed_data, f"{symbol}_second_bars"
+                         )
+ 
+                         if success:
+-                            self.download_stats[contract].total_bars += len(
+-                                processed_data
+-                            )
+-                            logger.info(
+-                                f"Saved {len(processed_data)} second bars for {contract}"
+-                            )
++                            self.download_stats[contract].total_bars += len(processed_data)
++                            logger.info(f"Saved {len(processed_data)} second bars for {contract}")
+                         else:
+                             logger.error(f"Failed to save second bars for {contract}")
+ 
+                     completed_operations += 1
+                     await self.update_download_progress(
+@@ -228,16 +220,12 @@
+                         success = await self.save_to_database(
+                             processed_data, f"{symbol}_minute_bars"
+                         )
+ 
+                         if success:
+-                            self.download_stats[contract].total_bars += len(
+-                                processed_data
+-                            )
+-                            logger.info(
+-                                f"Saved {len(processed_data)} minute bars for {contract}"
+-                            )
++                            self.download_stats[contract].total_bars += len(processed_data)
++                            logger.info(f"Saved {len(processed_data)} minute bars for {contract}")
+                         else:
+                             logger.error(f"Failed to save minute bars for {contract}")
+ 
+                     completed_operations += 1
+                     await self.update_download_progress(
+@@ -253,13 +241,11 @@
+                 self.download_stats[contract].duration_seconds = (
+                     self.download_stats[contract].end_time
+                     - self.download_stats[contract].start_time
+                 ).total_seconds()
+ 
+-                results.append(
+-                    f"{contract}: {self.download_stats[contract].total_bars} bars"
+-                )
++                results.append(f"{contract}: {self.download_stats[contract].total_bars} bars")
+ 
+             except Exception as e:
+                 error_msg = f"Error downloading data for {contract}: {str(e)}"
+                 logger.error(error_msg)
+                 results.append(f"{contract}: ERROR - {str(e)}")
+@@ -291,13 +277,11 @@
+             end_time: End datetime
+ 
+         Returns:
+             List of bar data dictionaries
+         """
+-        logger.info(
+-            f"Downloading second bars for {contract} from {start_time} to {end_time}"
+-        )
++        logger.info(f"Downloading second bars for {contract} from {start_time} to {end_time}")
+ 
+         all_bars = []
+         chunks = self.calculate_chunks(start_time, end_time, "second_bars")
+         config = CHUNK_CONFIGS["second_bars"]
+ 
+@@ -354,13 +338,11 @@
+             end_time: End datetime
+ 
+         Returns:
+             List of bar data dictionaries
+         """
+-        logger.info(
+-            f"Downloading minute bars for {contract} from {start_time} to {end_time}"
+-        )
++        logger.info(f"Downloading minute bars for {contract} from {start_time} to {end_time}")
+ 
+         all_bars = []
+         chunks = self.calculate_chunks(start_time, end_time, "minute_bars")
+         config = CHUNK_CONFIGS["minute_bars"]
+ 
+@@ -507,13 +489,11 @@
+             try:
+                 self.progress_callback(symbol, progress)
+             except Exception as e:
+                 logger.warning(f"Progress callback error: {e}")
+ 
+-        logger.debug(
+-            f"Progress: {symbol} - {operation} - {progress.completion_percentage}%"
+-        )
++        logger.debug(f"Progress: {symbol} - {operation} - {progress.completion_percentage}%")
+ 
+     def process_bar_data(
+         self, raw_bars: List[Dict], symbol: str, contract: str, exchange: str
+     ) -> List[Dict]:
+         """
+@@ -567,18 +547,14 @@
+ 
+             except Exception as e:
+                 logger.error(f"Error processing bar: {bar}, error: {e}")
+                 continue
+ 
+-        logger.debug(
+-            f"Processed {len(processed_data)} bars from {len(raw_bars)} raw bars"
+-        )
++        logger.debug(f"Processed {len(processed_data)} bars from {len(raw_bars)} raw bars")
+         return processed_data
+ 
+-    async def save_to_database(
+-        self, processed_data: List[Dict], table_name: str
+-    ) -> bool:
++    async def save_to_database(self, processed_data: List[Dict], table_name: str) -> bool:
+         """
+         Save processed data to database.
+ 
+         Args:
+             processed_data: List of processed bar records
+@@ -591,18 +567,14 @@
+             logger.warning("No data to save to database")
+             return True
+ 
+         try:
+             # Use database operations for bulk insertion
+-            success = await self.database_ops.bulk_insert_market_data(
+-                processed_data, table_name
+-            )
++            success = await self.database_ops.bulk_insert_market_data(processed_data, table_name)
+ 
+             if success:
+-                logger.info(
+-                    f"Successfully saved {len(processed_data)} records to {table_name}"
+-                )
++                logger.info(f"Successfully saved {len(processed_data)} records to {table_name}")
+                 return True
+             else:
+                 logger.error(f"Failed to save data to {table_name}")
+                 return False
+ 
+@@ -640,22 +612,18 @@
+                 # Increment API call counter
+                 if contract in self.download_stats:
+                     self.download_stats[contract].api_calls += 1
+ 
+                 # Make API call
+-                chunk_bars = (
+-                    await self.connection_manager.client.get_historical_time_bars(
+-                        contract, exchange, start_time, end_time, bar_type, interval
+-                    )
++                chunk_bars = await self.connection_manager.client.get_historical_time_bars(
++                    contract, exchange, start_time, end_time, bar_type, interval
+                 )
+ 
+                 if chunk_bars:
+                     return chunk_bars
+                 else:
+-                    logger.debug(
+-                        f"Empty response for {contract} chunk {start_time} to {end_time}"
+-                    )
++                    logger.debug(f"Empty response for {contract} chunk {start_time} to {end_time}")
+                     return []
+ 
+             except Exception as e:
+                 error_msg = f"API call failed (attempt {attempt + 1}): {str(e)}"
+                 logger.warning(error_msg)
+@@ -839,11 +807,13 @@
+                 f"{contract}: {bars:,} bars, {duration:.1f}s, "
+                 f"{api_calls} API calls, {errors} errors"
+             )
+ 
+     summary = "\n".join(summary_lines)
+-    summary += f"\n\nTotals: {total_bars:,} bars, {total_duration:.1f}s, {total_api_calls} API calls"
++    summary += (
++        f"\n\nTotals: {total_bars:,} bars, {total_duration:.1f}s, {total_api_calls} API calls"
++    )
+ 
+     return summary
+ 
+ 
+ def is_market_open(dt: datetime = None) -> bool:
+STDERR:
+would reformat C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_rithmic_historical.py
+
+Oh no! \U0001f4a5 \U0001f494 \U0001f4a5
+1 file would be reformatted.
+
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_rithmic_operations.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_rithmic_symbols.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\config\__init__.py
+================================================================================
+✅ Already formatted correctly
+STDERR:
+All done! \u2728 \U0001f370 \u2728
+1 file would be left unchanged.
+
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\config\chicago_gateway_config.py
+================================================================================
+🎨 Would be reformatted:
+--- C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\config\chicago_gateway_config.py	2025-05-28 12:27:44.347483+00:00
++++ C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\config\chicago_gateway_config.py	2025-05-28 13:01:01.093284+00:00
+@@ -24,13 +24,11 @@
+         # Start with default configuration
+         config = {
+             "rithmic": {
+                 "user": os.getenv("RITHMIC_USER", "ETF-177266"),
+                 "password": os.getenv("RITHMIC_PASSWORD", "t2bRVPUaw"),
+-                "system_name": os.getenv(
+-                    "RITHMIC_SYSTEM_NAME", "Rithmic Paper Trading"
+-                ),
++                "system_name": os.getenv("RITHMIC_SYSTEM_NAME", "Rithmic Paper Trading"),
+                 "app_name": "Futures Trading System",
+                 "app_version": "1.0.0",
+                 "gateway": "Chicago",
+             },
+             "use_test_gateway": False,
+STDERR:
+would reformat C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\config\chicago_gateway_config.py
+
+Oh no! \U0001f4a5 \U0001f494 \U0001f4a5
+1 file would be reformatted.
+
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\config\database_config.py
+================================================================================
+✅ Already formatted correctly
+STDERR:
+All done! \u2728 \U0001f370 \u2728
+1 file would be left unchanged.
+
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\config\trading_config.py
+================================================================================
+✅ Already formatted correctly
+STDERR:
+All done! \u2728 \U0001f370 \u2728
+1 file would be left unchanged.
+
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\enhanced_admin_rithmic.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\__init__.py
+================================================================================
+✅ Already formatted correctly
+STDERR:
+All done! \u2728 \U0001f370 \u2728
+1 file would be left unchanged.
+
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\comprehensive_tui_diagnostic.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\enhanced_admin_rithmic.py
+================================================================================
+✅ Already formatted correctly
+STDERR:
+All done! \u2728 \U0001f370 \u2728
+1 file would be left unchanged.
+
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\final_verification.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\final_verification_test.py
+================================================================================
+✅ Already formatted correctly
+STDERR:
+All done! \u2728 \U0001f370 \u2728
+1 file would be left unchanged.
+
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\simple_tui_test.py
+================================================================================
+✅ Already formatted correctly
+STDERR:
+All done! \u2728 \U0001f370 \u2728
+1 file would be left unchanged.
+
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\test_enhanced_connection_display.py
+================================================================================
+✅ Already formatted correctly
+STDERR:
+All done! \u2728 \U0001f370 \u2728
+1 file would be left unchanged.
+
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\test_fixes.py
+================================================================================
+✅ Already formatted correctly
+STDERR:
+All done! \u2728 \U0001f370 \u2728
+1 file would be left unchanged.
+
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\test_import_helper.py
+================================================================================
+✅ Already formatted correctly
+STDERR:
+All done! \u2728 \U0001f370 \u2728
+1 file would be left unchanged.
+
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\test_tui_display.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\test_tui_fixes.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\verify_imports\verify_import_fixes.py
+================================================================================
+✅ Already formatted correctly
+STDERR:
+All done! \u2728 \U0001f370 \u2728
+1 file would be left unchanged.
+
+
+================================================================================
+SUMMARY
+================================================================================
+Files checked: 44
+Files needing formatting: 8
+
+Files that need formatting:
+  - C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\analyze_pylint.py
+  - C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\manual_analysis_2025-05-28T11-41-52.py
+  - C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_final_pylint_analysis.py
+  - C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_pylint.py
+  - C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_pylint_simple.py
+  - C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_database.py
+  - C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_rithmic_historical.py
+  - C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\config\chicago_gateway_config.py

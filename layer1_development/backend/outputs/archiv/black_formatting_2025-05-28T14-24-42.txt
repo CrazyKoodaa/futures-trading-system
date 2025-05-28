@@ -1,0 +1,348 @@
+BLACK FORMATTING REPORT
+Generated: 2025-05-28 14:24:42.146557
+================================================================================
+
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\fix_imports\fix_imports.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\analyze_pylint.py
+================================================================================
+✅ Already formatted correctly
+STDERR:
+All done! \u2728 \U0001f370 \u2728
+1 file would be left unchanged.
+
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\comprehensive_analysis_2025-05-28T11-41-52.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\comprehensive_fix_2025-05-28T11-41-52.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\final_comprehensive_fix_2025-05-28T11-41-52.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\FINAL_COMPREHENSIVE_FIXER_2025-05-28T11-41-52.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\focused_analysis_2025-05-28T11-41-52.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\manual_analysis_2025-05-28T11-41-52.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\quick_pylint_check.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_analysis_2025-05-28T11-41-52.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_comprehensive_pylint.py
+================================================================================
+✅ Already formatted correctly
+STDERR:
+All done! \u2728 \U0001f370 \u2728
+1 file would be left unchanged.
+
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_final_pylint_analysis.py
+================================================================================
+✅ Already formatted correctly
+STDERR:
+All done! \u2728 \U0001f370 \u2728
+1 file would be left unchanged.
+
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_focused_analysis.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_pylint.py
+================================================================================
+✅ Already formatted correctly
+STDERR:
+All done! \u2728 \U0001f370 \u2728
+1 file would be left unchanged.
+
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_pylint_check.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_pylint_diagnostic.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\run_pylint_simple.py
+================================================================================
+✅ Already formatted correctly
+STDERR:
+All done! \u2728 \U0001f370 \u2728
+1 file would be left unchanged.
+
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\scripts\setup_check.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\__init__.py
+================================================================================
+✅ Already formatted correctly
+STDERR:
+All done! \u2728 \U0001f370 \u2728
+1 file would be left unchanged.
+
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_core_classes.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_database.py
+================================================================================
+✅ Already formatted correctly
+STDERR:
+All done! \u2728 \U0001f370 \u2728
+1 file would be left unchanged.
+
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_display_manager.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_operations.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_rithmic_connection.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_rithmic_historical.py
+================================================================================
+✅ Already formatted correctly
+STDERR:
+All done! \u2728 \U0001f370 \u2728
+1 file would be left unchanged.
+
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_rithmic_operations.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\admin_rithmic_symbols.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\config\__init__.py
+================================================================================
+✅ Already formatted correctly
+STDERR:
+All done! \u2728 \U0001f370 \u2728
+1 file would be left unchanged.
+
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\config\chicago_gateway_config.py
+================================================================================
+✅ Already formatted correctly
+STDERR:
+All done! \u2728 \U0001f370 \u2728
+1 file would be left unchanged.
+
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\config\database_config.py
+================================================================================
+✅ Already formatted correctly
+STDERR:
+All done! \u2728 \U0001f370 \u2728
+1 file would be left unchanged.
+
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\config\trading_config.py
+================================================================================
+✅ Already formatted correctly
+STDERR:
+All done! \u2728 \U0001f370 \u2728
+1 file would be left unchanged.
+
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\src\enhanced_admin_rithmic.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\__init__.py
+================================================================================
+✅ Already formatted correctly
+STDERR:
+All done! \u2728 \U0001f370 \u2728
+1 file would be left unchanged.
+
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\comprehensive_tui_diagnostic.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\enhanced_admin_rithmic.py
+================================================================================
+✅ Already formatted correctly
+STDERR:
+All done! \u2728 \U0001f370 \u2728
+1 file would be left unchanged.
+
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\final_verification.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\final_verification_test.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\simple_tui_test.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\test_enhanced_connection_display.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\test_fixes.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\test_import_helper.py
+================================================================================
+✅ Already formatted correctly
+STDERR:
+All done! \u2728 \U0001f370 \u2728
+1 file would be left unchanged.
+
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\test_tui_display.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\tests\test_tui_fixes.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+FILE: c:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\verify_imports\verify_import_fixes.py
+================================================================================
+🎨 Would be reformatted:
+
+ERROR: write() argument must be str, not None
+
+================================================================================
+SUMMARY
+================================================================================
+Files checked: 44
+Files needing formatting: 0

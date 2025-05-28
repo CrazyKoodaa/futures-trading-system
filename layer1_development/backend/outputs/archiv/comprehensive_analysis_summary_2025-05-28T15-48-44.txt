@@ -1,0 +1,31 @@
+COMPREHENSIVE CODE ANALYSIS SUMMARY
+================================================================================
+Generated: 2025-05-28 15:48:44.435134
+Backend Directory: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend
+
+ANALYSIS REPORTS GENERATED:
+----------------------------------------
+📊 Pylint Report: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\outputs\pylint_analysis_2025-05-28T15-47-15.txt
+🔍 MyPy Report: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\outputs\mypy_analysis_2025-05-28T15-48-09.txt
+🎨 Black Report: C:\Users\nobody\myProjects\git\futures-trading-system\layer1_development\backend\outputs\black_formatting_2025-05-28T15-48-35.txt
+
+RECOMMENDED NEXT STEPS:
+----------------------------------------
+1. Review pylint report for code quality issues
+2. Review mypy report for type annotation issues
+3. Apply black formatting if not already done
+4. Fix any import issues found in the reports
+5. Re-run analysis after fixes to verify improvements
+
+IMPORT FIX INFORMATION:
+----------------------------------------
+Import fixes have been moved to appropriate folders:
+- fix_imports/fix_imports.py
+- verify_imports/verify_import_fixes.py
+
+RUN TESTS:
+----------------------------------------
+After fixing issues, test the system:
+1. python verify_imports/verify_import_fixes.py
+2. python tests/test_fixes.py
+3. python src/enhanced_admin_rithmic.py

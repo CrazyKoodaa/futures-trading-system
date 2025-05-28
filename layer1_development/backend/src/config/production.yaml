@@ -3,12 +3,12 @@
   port: 5432
   name: trading_db
   user: trading_user
-  password: secure_password
+  password: secure_password1
 
 rithmic:
-  system_name: your_system_name
-  user: your_username
-  password: your_password
+  system_name: Rithmic Paper Trading
+  user: ETF-177266
+  password: t2bRVPUaw
   exchange: CME
 
 trading:

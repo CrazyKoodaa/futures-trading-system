@@ -36,12 +36,18 @@ At the beginning of each conversation, please follow these rules:
    - Explain any non-obvious API behaviors or requirements
    - Document any workarounds for known limitations
 
-6. Use the folder .\layer1_development\enhanced_rithmic_admin
+6. Use the folder futures-trading-system\layer1_development\backend
 
 7. (If needed) Create and use folder structure for new files. f.e. outputs --> output, logging --> logs, testscripts --> tests, etc...
 
 8. When fixing a error, just replace the lines within the files that are causing errors. Do not change anything else.
 
-9. execute pylint and Pylance on the file you are working and put the output into a file called pylint_output-(datetime.now).txt (or pylance_output-(datetime.now).txt). Then read the pylint_output-(datetime.now).txt (or pylance_output-(datetime.now).txt) file and fix the issues found by pylint.
+9. execute pylint, mypy, black (if it doesn't exist in the venv install it) on the file you are working and put the output into a file called command_output-(datetime.now).txt. Then read the output files and fix the issues found by the commands.
+
+10. when new files are created, then use the approbiate folders. f.e. fix_imports.py should be placed in the folder fix_imports.
+    - If there is no folder yet create one.
+    - If there is already a folder but the file name does not match the folder name, rename the file to match the folder name.
+    - If there is already a folder and the file name matches the folder name, place the file in the correct folder.
+    - If there is already a folder and the file name does not match the folder name, create a new folder with the same name as the file and move the file into the new folder.
 
 Please confirm you understand these rules at the beginning of our conversation.

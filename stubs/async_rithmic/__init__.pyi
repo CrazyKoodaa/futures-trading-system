@@ -21,6 +21,22 @@ class InstrumentType(Enum):
     OPTION = auto()
     SPREAD = auto()
 
+class ReconnectionSettings:
+    def __init__(
+        self,
+        max_attempts: int = 3,
+        retry_delay: float = 5.0,
+        backoff_factor: float = 1.5
+    ) -> None: ...
+
+class RetrySettings:
+    def __init__(
+        self,
+        max_attempts: int = 3,
+        retry_delay: float = 1.0,
+        backoff_factor: float = 1.5
+    ) -> None: ...
+
 class RithmicClient:
     def __init__(
         self, 
@@ -34,6 +50,7 @@ class RithmicClient:
     
     async def connect(self) -> None: ...
     async def disconnect(self) -> None: ...
+    def is_connected(self) -> bool: ...
     
     # Historical data methods
     async def get_historical_time_bars(
