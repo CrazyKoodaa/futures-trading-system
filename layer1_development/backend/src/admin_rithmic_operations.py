@@ -39,7 +39,7 @@ class RithmicOperationsManager:
     the main business logic.
     """
 
-    def __init__(self, progress_callback: Callable = None):
+    def __init__(self, progress_callback: Optional[Callable] = None):
         """
         Initialize the Rithmic operations coordinator.
 
@@ -52,14 +52,18 @@ class RithmicOperationsManager:
         # Initialize all Rithmic managers
         logger.info("Initializing Rithmic operations coordinator")
 
-        self.connection_manager = RithmicConnectionManager(progress_callback)
+        # Create a no-op callback if none provided
+        def noop_callback(*args, **kwargs):
+            pass
+        
+        self.connection_manager = RithmicConnectionManager(progress_callback if callable(progress_callback) else noop_callback)
         self.symbol_manager = RithmicSymbolManager(
-            self.connection_manager, progress_callback
+            self.connection_manager, progress_callback if callable(progress_callback) else noop_callback
         )
         self.historical_manager = RithmicHistoricalManager(
             self.connection_manager,
             None,  # database_ops injected later
-            progress_callback,
+            progress_callback if callable(progress_callback) else None,
         )
 
         logger.info("Rithmic operations coordinator initialized successfully")
@@ -483,7 +487,7 @@ class RithmicOperationsManager:
             message: Progress message
             progress: Optional progress percentage (0-100)
         """
-        if self.progress_callback is not None:
+        if self.progress_callback is not None and callable(self.progress_callback):
             try:
                 if progress is not None:
                     self.progress_callback(message, progress)
@@ -514,13 +518,10 @@ class RithmicOperationsManager:
             logger.warning(f"Error cleaning up historical manager: {e}")
             cleanup_results.append(f"Historical manager cleanup error: {e}")
 
-        # Cleanup symbol manager
+        # Cleanup symbol manager  
         try:
-            if hasattr(self.symbol_manager, "cleanup") and callable(getattr(self.symbol_manager, "cleanup", None)):
-                await self.symbol_manager.cleanup()
-                cleanup_results.append("Symbol manager cleaned up")
-            else:
-                cleanup_results.append("Symbol manager cleanup not available")
+            # Symbol manager doesn't have cleanup method, skip
+            cleanup_results.append("Symbol manager cleanup not needed")
         except Exception as e:
             logger.warning(f"Error cleaning up symbol manager: {e}")
             cleanup_results.append(f"Symbol manager cleanup error: {e}")
@@ -552,7 +553,7 @@ class RithmicOperationsManager:
 
 # Utility functions for standalone usage
 async def create_rithmic_operations(
-    progress_callback: Callable = None,
+    progress_callback: Optional[Callable] = None,
 ) -> RithmicOperationsManager:
     """
     Factory function to create and initialize RithmicOperations.

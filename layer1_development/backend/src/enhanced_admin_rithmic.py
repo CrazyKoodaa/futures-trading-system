@@ -89,16 +89,18 @@ class RithmicAdminTUI:
             self.console, self.tui_components, self.status
         )
 
+        # Initialize database operations first
+        self.database_ops = DatabaseOperations(self._progress_callback)
+        
         # Initialize specialized operation managers with proper callback
         self.connection_manager = RithmicConnectionManager(self._progress_callback)
         self.symbol_manager = RithmicSymbolManager(
             self.connection_manager, self._progress_callback
         )
         self.historical_manager = RithmicHistoricalManager(
-            self.connection_manager, self._progress_callback
+            self.connection_manager, self.database_ops, self._progress_callback
         )
         self.operations_manager = RithmicOperationsManager(self._progress_callback)
-        self.database_ops = DatabaseOperations(self._progress_callback)
 
         # Navigation state
         self.selected_menu_index = 0
@@ -383,33 +385,61 @@ class RithmicAdminTUI:
                 }
 
             elif operation_key == "search_symbols":
-                # Use a method that actually exists or provide fallback
-                if hasattr(self.symbol_manager, "search_symbols"):
-                    result = await self.symbol_manager.search_symbols("NQ*", "CME")
-                else:
+                # Use symbol search with proper formatting
+                try:
+                    self._update_status("Searching for symbols...", "info")
+                    raw_results = await self.symbol_manager.search_symbols("NQ*", "CME")
+                    
+                    if raw_results:
+                        formatted_result = self.symbol_manager.format_contracts_for_display(raw_results)
+                        result = {
+                            "status": "success",
+                            "message": formatted_result
+                        }
+                    else:
+                        result = {
+                            "status": "info",
+                            "message": "No symbols found matching pattern 'NQ*' on CME"
+                        }
+                except Exception as e:
                     result = {
                         "status": "error",
-                        "message": "Symbol search method not available",
+                        "message": f"Symbol search failed: {str(e)}"
                     }
 
             elif operation_key == "download_data":
-                if hasattr(self.historical_manager, "download_historical_data"):
-                    result = await self.historical_manager.download_historical_data(
-                        ["NQZ24"], days=7
+                try:
+                    self._update_status("Starting historical data download...", "info")
+                    # Use default contracts or prompt for selection
+                    contracts = ["NQZ24", "ESZ24"]
+                    days = 7
+                    
+                    summary = await self.historical_manager.download_historical_data(
+                        contracts, days=days, download_seconds=True, download_minutes=True
                     )
-                else:
+                    
+                    result = {
+                        "status": "success",
+                        "message": f"# Historical Data Download Complete\n\n{summary}\n\n**Downloaded data for:** {', '.join(contracts)}\n**Period:** Last {days} days"
+                    }
+                except Exception as e:
                     result = {
                         "status": "error",
-                        "message": "Download method not available",
+                        "message": f"Download failed: {str(e)}"
                     }
 
             elif operation_key == "view_database":
-                if hasattr(self.database_ops, "get_database_summary"):
-                    result = await self.database_ops.get_database_summary()
-                else:
+                try:
+                    self._update_status("Retrieving database summary...", "info")
+                    summary = await self.database_ops.get_database_summary()
+                    result = {
+                        "status": "success",
+                        "message": summary
+                    }
+                except Exception as e:
                     result = {
                         "status": "error",
-                        "message": "View database method not available",
+                        "message": f"Failed to get database summary: {str(e)}"
                     }
 
             elif operation_key == "initialize_db":

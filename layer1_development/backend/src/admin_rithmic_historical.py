@@ -5,6 +5,7 @@ Handles downloading and processing historical market data from Rithmic API.
 
 import asyncio
 import logging
+import traceback
 from datetime import datetime, timedelta, time
 from typing import Dict, List, Tuple, Callable, Optional, Any
 import pytz
@@ -100,7 +101,7 @@ class DownloadStats:
 
     def __post_init__(self):
         if self.errors is None:
-            self.errors: List[str] = []
+            self.errors = []
 
 
 class RithmicHistoricalError(Exception):
@@ -129,6 +130,10 @@ class RithmicHistoricalManager:
         self.progress_callback = progress_callback
         self.download_stats = {}
         self.timezone = pytz.timezone("US/Central")
+        
+        # Initialize missing attributes
+        self.active_tasks = set()
+        self.cache = {}
 
         logger.info("RithmicHistoricalManager initialized")
 
@@ -249,6 +254,7 @@ class RithmicHistoricalManager:
             except Exception as e:
                 error_msg = f"Error downloading data for {contract}: {str(e)}"
                 logger.error(error_msg)
+                logger.error(f"Full traceback: {traceback.format_exc()}")
                 results.append(f"{contract}: ERROR - {str(e)}")
 
                 if contract in self.download_stats:
@@ -484,10 +490,9 @@ class RithmicHistoricalManager:
             current_timeframe=timeframe,
             start_time=datetime.now(),
         )
-        # Calculate completion percentage separately
-        progress.completion_percentage = round((current_chunk / total_chunks) * 100, 1)
+        # Progress object will calculate completion percentage automatically via property
 
-        if self.progress_callback is not None:
+        if self.progress_callback is not None and callable(self.progress_callback):
             try:
                 self.progress_callback(symbol, progress)
             except Exception as e:
@@ -636,7 +641,7 @@ class RithmicHistoricalManager:
 
                 # Make API call
                 chunk_bars = await self.connection_manager.client.get_historical_time_bars(
-                    contract, exchange, start_time, end_time, bar_type, interval
+                    contract or "", exchange or "", start_time, end_time, bar_type, interval
                 )
 
                 if chunk_bars:

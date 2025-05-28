@@ -26,6 +26,7 @@ Version: 1.0.0
 import asyncio
 import logging
 import os
+import traceback
 from datetime import datetime, timedelta
 from typing import Dict, List, Tuple, Optional, Callable, Any, AsyncGenerator
 import pandas as pd
